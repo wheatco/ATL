@@ -182,6 +182,14 @@ calculator.view = function(ctrl) {
                 label: 'Need list of finishes',
             }]),
 
+            m('h2', 'Quantity'),
+            calc.range({
+                header: 'Number of labels',
+                val: vm.quantity,
+                type: 'number',
+                range: [0, 1000000, 100]
+            }),
+
             m('h2', 'Other information'),
             calc.range({
                 header: 'Number of designs',

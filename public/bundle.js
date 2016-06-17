@@ -170,7 +170,12 @@
 	        }]), m('.label-header', 'Finish'), calc.radios(vm.finish, [{
 	            val: 'Need list of finishes',
 	            label: 'Need list of finishes'
-	        }]), m('h2', 'Other information'), calc.range({
+	        }]), m('h2', 'Quantity'), calc.range({
+	            header: 'Number of labels',
+	            val: vm.quantity,
+	            type: 'number',
+	            range: [0, 1000000, 100]
+	        }), m('h2', 'Other information'), calc.range({
 	            header: 'Number of designs',
 	            hint: 'Each additional design causes',
 	            val: vm.numDesigns,
