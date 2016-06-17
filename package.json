@@ -1,0 +1,55 @@
+{
+  "name": "inv-system",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src/",
+  "keywords": [
+    "feathers"
+  ],
+  "license": "MIT",
+  "repository": {},
+  "author": {},
+  "contributors": [],
+  "bugs": {},
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "scripts": {
+    "test": "npm run jshint && npm run mocha",
+    "jshint": "jshint src/. test/. --config",
+    "start": "node src/",
+    "mocha": "mocha test/ --recursive"
+  },
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "body-parser": "^1.15.1",
+    "compression": "^1.6.2",
+    "cors": "^2.7.1",
+    "feathers": "^2.0.1",
+    "feathers-authentication": "^0.7.8",
+    "feathers-client": "^1.3.2",
+    "feathers-configuration": "^0.2.3",
+    "feathers-errors": "^2.2.0",
+    "feathers-hooks": "^1.5.4",
+    "feathers-mongoose": "^3.3.7",
+    "feathers-rest": "^1.4.2",
+    "feathers-socketio": "^1.4.1",
+    "file-loader": "^0.8.5",
+    "mongoose": "^4.5.0",
+    "node-sass": "^3.7.0",
+    "passport": "^0.3.2",
+    "serve-favicon": "^2.3.0",
+    "style-loader": "^0.13.1",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
+    "request": "^2.72.0"
+  }
+}

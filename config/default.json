@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "mongodb": "mongodb://localhost:27017/invSystem",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "JMZQWvQKX2ro04M/RAj9PvDuShXBycEOx2uKuOlAMf7O0kZsNSOqCH2Kl1HLtMjy1rcSDLQb80JHDY2Jfgd4Vg=="
+    },
+    "local": {}
+  }
+}

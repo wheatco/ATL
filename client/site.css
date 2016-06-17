@@ -1,0 +1,441 @@
+body {
+  background-color: #E8E7E7;
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  padding: 30px 0;
+}
+
+/***************
+  CALCULATOR BORDER
+***************/
+.calc {
+  background-color: #fff;
+  max-width: 332px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.07);
+  margin: 0 auto;
+}
+
+.calc:after, .calc:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 13px;
+  background-size: 12px;
+  background-repeat: repeat-x;
+}
+.calc:after {
+  background-image: url(../img/util-triangle-bottom.png);
+  background-position: left top;
+  top: 100%;
+}
+.calc:before {
+  background-image: url(../img/util-triangle-top.png);
+  background-position: left bottom;
+  bottom: 100%;
+}
+
+.no-borders:before, .no-borders:after {
+  background-image: none;
+}
+
+.logo {
+  text-align: center;
+  opacity: 0.4;
+  margin-top: 20px;
+  display: block;
+}
+.logo>svg {
+  height: 30px;
+}
+
+.reviews .logo>svg {
+  height: 20px;
+}
+
+.logo svg.desktop g {
+  fill: #22354C;
+  transition: fill 0.2s;
+}
+
+.logo svg.desktop:hover g {
+    /* fill: rgba(24, 196, 141, 1); */
+    /* transition: fill 0.2s; */
+}
+
+/***************
+  GENERAL FORM ITEMS
+***************/
+.calc-item {
+  margin-top: 15px;
+}
+
+/* all code fonts */
+.calc>h1, .calc>h2, .calc>h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link {
+  font-family: "Source Code Pro", Courier, monospace;
+  font-size: 16px;
+  margin: 0;
+}
+
+.hint {
+  display: block;
+  color: #888;
+  font-size: 14px;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.active .hint {
+  color: #fff;
+}
+
+/***************
+  HEADER STYLES
+***************/
+.calc>h1 {
+  text-align: center;
+}
+
+.calc>h2 {
+  margin-top: 15px;
+  padding-top: 8px;
+  border-top: 3px solid #ddd;
+}
+
+.calc>h3 {
+  margin-top: 15px;
+  padding-top: 8px;
+  border-top: 2px solid #ddd;
+  font-size:14px;
+}
+
+.checkbox-label>strong, .range-header {
+  font-size: 14px;
+  text-transform: uppercase;
+  display: block;
+}
+
+
+/***************
+  CHECKBOXES, OPTIONS AND RADIOS
+***************/
+.checkbox {
+  border-bottom-width: 0;
+  border-radius: 0;
+  cursor: pointer;
+  border: 1px rgba(24, 196, 141,0.4) solid;
+  border-bottom-width: 0;
+  display: block;
+  padding: 8px;
+}
+
+.reviews .checkbox {
+  border: 1px rgba(5,133,204, 0.4) solid;
+}
+
+.checkbox:hover {
+  background-color:  rgba(24, 196, 141, 0.1);
+}
+
+.reviews .checkbox:hover {
+  background-color: rgba(5,133,204,0.1);
+}
+
+.reviews .checkbox.active {
+  background-color: rgba(5,133,204, 0.1)
+}
+.checkbox.active {
+  background-color: rgb(24, 196, 141);
+  color: #fff;
+}
+.reviews .checkbox.active {
+  background-color: rgb(5,133,204);
+}
+
+.checkbox:last-child {
+  border-bottom-width: 2px;
+}
+
+.checkbox-label {
+  margin-left: 22px;
+}
+
+.checkbox-dot, .checkbox-box {
+  float: left;
+  margin-top: 1px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 2px rgb(24, 196, 141) solid;
+}
+
+.reviews .checkbox-dot, .checkbox-box {
+  border: 2px rgb(5,133,204) solid;
+}
+
+.checkbox.active>.checkbox-dot, .checkbox.active>.checkbox-box {
+  border: 5px #fff solid;
+}
+
+.checkbox-dot {
+  border-radius: 50%;
+}
+
+.checkbox>input {
+  display: none;
+}
+
+.option {
+  cursor: pointer;
+  border: 1px rgba(24, 196, 141,0.4) solid;
+  border-bottom-width: 0;
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 97% -1px;
+  height: 31px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(24, 196, 141,0.4);
+  padding-left: 8px;
+}
+
+.reviews .option {
+  border: 1px rgba(5,133,204,0.4) solid;
+  border-bottom: 1px solid rgba(5,133,204,0.4);
+}
+
+.option select {
+  background: transparent;
+  border: none;
+}
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    border-radius: 0
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+select:focus {
+    outline: none;
+}
+
+/***************
+  INPUTS
+***************/
+.input-text {
+  padding: 0;
+  margin: 0;
+  font-size: 1.2em;
+  border: 1px solid transparent;
+  padding: 3px;
+  width: 98%;
+}
+.input-text.good { color: rgb(24, 196, 141); }
+.reviews .input-text.good { color: rgb(5,133,204); }
+.input-text.good:hover, .input-text.good:focus, .input-text.good.border { border-color: rgb(24, 196, 141); }
+.input-text.bad { color: #B50013; }
+.input-text.bad:hover, .input-text.bad:focus, .input-text.bad.border { border-color: #B50013; }
+.input-text:focus {
+  outline: none;
+  box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+}
+
+/***************
+  RANGE-LIKE RESULT DISPLAY
+***************/
+
+.result {
+  background-color: #f4f4f4;
+  padding: 12px 2px;
+}
+.result-text {
+  font-size: 1.2em;
+  text-align: right;
+}
+
+.plus-sign {
+  font-size: 25px;
+  padding-left: 10px;
+  color: rgb(24, 196, 141);
+}
+
+.reviews .plus-sign {
+  color: rgb(5,133,204);
+}
+
+.addline {
+  border-bottom: 2px solid #E8E7E7;
+}
+
+/***************
+  RANGES
+***************/
+.range {
+}
+.range-header {
+  color: #000;
+  display: block;
+  line-height: 1;
+}
+.range>.hint {
+}
+.range-input {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.range-text {
+  margin: 0;
+  font-size: 1.2em;
+  border: 1px solid transparent;
+  padding: 3px;
+  text-align: right;
+}
+.range-text.good { color: rgb(24, 196, 141); }
+.reviews .range-text.good { color: rgb(5,133,204); }
+.range-text.good:hover, .range-text.good:focus, .range-text.good.border { border-color: rgb(24, 196, 141); }
+.range-text.bad { color: #B50013; }
+.range-text.bad:hover, .range-text.bad:focus, .range-text.bad.border { border-color: #B50013; }
+.range-text:focus {
+  outline: none;
+  box-shadow: 0px 0px 1px rgba(0,0,0,0.4);
+}
+
+/***************
+  PIE CHART
+***************/
+.pie-chart {
+  height: 150px;
+  width: 150px;
+  display: inline-block;
+}
+
+/***************
+  LINE CHART
+***************/
+svg.line-chart {
+  overflow: visible;
+}
+.chart-line {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+.chart-axis path, .chart-axis line {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+.chart-axis text {
+  stroke: #aaa;
+  font-size: 0.7em;
+}
+
+/***************
+  GENERIC LEGEND
+***************/
+.legend {
+  font-size: 14px;
+}
+.legend-item {
+  margin: 5px 0;
+}
+.legend-square {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(0,0,0,0.2);
+  display: inline-block;
+  vertical-align: -1px;
+  margin-right: 5px;
+}
+
+/***************
+  TABLE STYLES
+***************/
+
+.table {
+  width: 100%;
+  font-size: 0.9em;
+}
+
+.table-header {
+  font-size: 0.9em;
+  background-color: #eee;
+}
+.table-row {
+  border-top: 1px solid #ccc;
+}
+.table-cell {
+  padding: 4px;
+}
+
+.table-wrap.collapse {
+  max-height: 160px;
+  overflow: hidden;
+  position: relative;
+}
+
+.table-wrap.collapse::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0; left: 0;
+  background-image: linear-gradient(-180deg, rgba(255,255,255,0.00) 0%, #FFFFFF 100%);
+  height: 100px;
+}
+
+.table-expand-link, .table-collapse-link{
+  position: absolute;
+  left: 0; right: 0;
+  text-align: center;
+  z-index: 1;
+  font-size: 0.8em;
+  color: rgba(24, 196, 141,1);
+  text-decoration: none;
+}
+
+.reviews .table-expand-link, .reviews .table-collapse-link {
+  color: rgba(5,133,204,1);
+}
+
+.table-expand-link{
+  bottom: 0;
+}
+
+.table-collapse-link {
+  margin-top: -3px;
+
+}
+
+.table-expand-link:hover, .table-collapse-link:hover {
+  text-decoration: underline;
+}
+
+
+/***************
+  DISCLAIMER
+***************/
+.disclaimer {
+  font-size: 12px;
+  color: #999;
+  padding: 10px 5px;
+}
+
+/*misc*/
+.label-header {
+  color: #000;
+  display: block;
+  line-height: 1;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  display: block;
+  font-family: "Source Code Pro", Courier, monospace;
+}
