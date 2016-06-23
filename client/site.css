@@ -9,7 +9,7 @@ body {
 ***************/
 .calc {
   background-color: #fff;
-  max-width: 332px;
+  /*max-width: 332px;*/
   padding: 20px;
   position: relative;
   box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.07);
@@ -72,7 +72,7 @@ body {
 }
 
 /* all code fonts */
-.calc>h1, .calc>h2, .calc>h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link {
+h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link {
   font-family: "Source Code Pro", Courier, monospace;
   font-size: 16px;
   margin: 0;
@@ -93,17 +93,17 @@ body {
 /***************
   HEADER STYLES
 ***************/
-.calc>h1 {
+h1 {
   text-align: center;
 }
 
-.calc>h2 {
+h2 {
   margin-top: 15px;
   padding-top: 8px;
   border-top: 3px solid #ddd;
 }
 
-.calc>h3 {
+h3 {
   margin-top: 15px;
   padding-top: 8px;
   border-top: 2px solid #ddd;
@@ -438,4 +438,8 @@ svg.line-chart {
   text-transform: uppercase;
   display: block;
   font-family: "Source Code Pro", Courier, monospace;
+}
+
+.red {
+  background-color: red;
 }

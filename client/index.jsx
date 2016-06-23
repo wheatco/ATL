@@ -86,148 +86,160 @@ calculator.view = function(ctrl) {
 
     return calc.calc(function() {
         return [
-            m('h1', 'American Tape and Label Quote'),
-            m('h2', 'Client Information'),
-            m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'Name'),
+            // COLUMN 1: CLIENT INFO
+            m('div', [
+                m('h1', 'Client Information'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Name'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.name),
+                        value: vm.name()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.name),
-                    value: vm.name()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'Address'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Address'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.addressStreet),
+                        value: vm.addressStreet()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.addressStreet),
-                    value: vm.addressStreet()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'City'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'City'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.addressCity),
+                        value: vm.addressCity()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.addressCity),
-                    value: vm.addressCity()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'State'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'State'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.addressState),
+                        value: vm.addressState()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.addressState),
-                    value: vm.addressState()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'Zip Code'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Zip Code'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.addressZip),
+                        value: vm.addressZip()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.addressZip),
-                    value: vm.addressZip()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'Phone'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Phone'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.phone),
+                        value: vm.phone()
+                    })
                 ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.phone),
-                    value: vm.phone()
-                })
-            ]),m('.calc-item.col.gap-2.justify', [
-                m('div', [
-                    m('.label-header', 'Email'),
-                ]),
-                m('input.input-text.good border', {
-                    onchange: m.withAttr('value', vm.email),
-                    value: vm.email()
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Email'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.email),
+                        value: vm.email()
+                    })
+                ])
+            ]),
+            // COLUMN 2: EQUIPMENT / PAPER / FINISH
+            m('div', [
+                m('h1', 'Printing Details'),
+                m('.label-header', 'Shape'),
+                calc.radios(vm.shape, [{
+                    val: 'Rectangle',
+                    label: 'Rectangle',
+                }, {
+                    val: 'Circle',
+                    label: 'Circle',
+                }]),
+                m('.label-header', 'Corner'),
+                calc.radios(vm.corner, [{
+                    val: 'Square',
+                    label: 'Square',
+                }, {
+                    val: 'Rounded',
+                    label: 'Rounded',
+                }]),
+                m('.label-header', 'Tool'),
+                calc.radios(vm.tool, [{
+                    val: 'Need list of tools',
+                    label: 'Need list of tools',
+                }]),
+
+                m('h2', 'Paper & Finish'),
+                m('.label-header', 'Substrate'),
+                calc.radios(vm.substrate, [{
+                    val: 'Need list of substrates',
+                    label: 'Need list of substrates',
+                }]),
+                m('.label-header', 'Finish'),
+                calc.radios(vm.finish, [{
+                    val: 'Need list of finishes',
+                    label: 'Need list of finishes',
+                }])
+            ]),
+            // COLUMN 3: QUANTITY AND ADDITIONAL INFO
+            m('div', [
+                m('h1', 'Order Details'),
+                m('h2', 'Quantity'),
+                calc.range({
+                    header: 'Number of labels',
+                    val: vm.quantity,
+                    type: 'number',
+                    range: [0, 1000000, 100]
+                }),
+                m('h2', 'Designs'),
+                calc.range({
+                    header: 'Number of designs',
+                    hint: 'Each additional design causes',
+                    val: vm.numDesigns,
+                    range: [1, 8, 1]
+                }),
+                calc.range({
+                    header: 'Cost Per Design',
+                    type: 'money',
+                    val: vm.costPerDesign,
+                    range: [0, 30, 1]
+                }),
+                calc.range({
+                    header: 'Margin',
+                    type: 'percent',
+                    val: vm.margin,
+                    range: [0, 200, 1]
+                }),
+                calc.range({
+                    header: 'Prepress Charges',
+                    type: 'money',
+                    val: vm.prepressCharges,
+                    range: [0, 500, 1]
+                }),
+                calc.range({
+                    header: 'Copy Charges',
+                    type: 'money',
+                    val: vm.copyCharges,
+                    range: [0, 500, 1]
                 })
             ]),
-
-            m('h2', 'Equipment'),
-
-            m('.label-header', 'Shape'),
-            calc.radios(vm.shape, [{
-                val: 'Rectangle',
-                label: 'Rectangle',
-            }, {
-                val: 'Circle',
-                label: 'Circle',
-            }]),
-            m('.label-header', 'Corner'),
-            calc.radios(vm.corner, [{
-                val: 'Square',
-                label: 'Square',
-            }, {
-                val: 'Rounded',
-                label: 'Rounded',
-            }]),
-            m('.label-header', 'Tool'),
-            calc.radios(vm.tool, [{
-                val: 'Need list of tools',
-                label: 'Need list of tools',
-            }]),
-
-            m('h2', 'Paper & Finish'),
-            m('.label-header', 'Substrate'),
-            calc.radios(vm.substrate, [{
-                val: 'Need list of substrates',
-                label: 'Need list of substrates',
-            }]),
-            m('.label-header', 'Finish'),
-            calc.radios(vm.finish, [{
-                val: 'Need list of finishes',
-                label: 'Need list of finishes',
-            }]),
-
-            m('h2', 'Quantity'),
-            calc.range({
-                header: 'Number of labels',
-                val: vm.quantity,
-                type: 'number',
-                range: [0, 1000000, 100]
-            }),
-
-            m('h2', 'Other information'),
-            calc.range({
-                header: 'Number of designs',
-                hint: 'Each additional design causes',
-                val: vm.numDesigns,
-                range: [1, 8, 1]
-            }),
-            calc.range({
-                header: 'Cost Per Design',
-                type: 'money',
-                val: vm.costPerDesign,
-                range: [0, 30, 1]
-            }),
-            calc.range({
-                header: 'Margin',
-                type: 'percent',
-                val: vm.margin,
-                range: [0, 200, 1]
-            }),
-
-            calc.range({
-                header: 'Prepress Charges',
-                type: 'money',
-                val: vm.prepressCharges,
-                range: [0, 500, 1]
-            }),
-
-            calc.range({
-                header: 'Copy Charges',
-                type: 'money',
-                val: vm.copyCharges,
-                range: [0, 500, 1]
-            }),
-
-            m('h2', 'Results'),
-            calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
-
-            m('button.submit', 'Submit')
+            // COLUMN 4: RESULTS AND SUBMISSION
+            m('div', [
+                m('h2', 'Results'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
+                m('h2', 'Submit'),
+                m('button.submit', 'Submit')
+            ])
+            
 
 
             // calc.range({

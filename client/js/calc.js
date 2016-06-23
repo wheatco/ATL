@@ -358,7 +358,7 @@ window.calc.range = function(opts) {
 window.calc.calc = function(inside, opts) {
     var noBorders = opts && opts.noBorders;
     var reviews = opts && opts.reviews;
-    var calcClass = ".calc";
+    var calcClass = ".calc.row.center.justify";
     if (noBorders === true) calcClass = calcClass + ".no-borders";
     if (reviews === true) calcClass = calcClass + ".reviews";
 
