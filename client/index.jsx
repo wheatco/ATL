@@ -54,6 +54,7 @@ calculator.vm.init = function() {
         "tool1": false,
         "tool2": false
     });
+    vm.customTool = m.prop('');
 
     vm.quantity = m.prop(100);
 
@@ -207,14 +208,24 @@ calculator.view = function(ctrl) {
                         label: 'Rounded',
                     }]),
                     m('.label-header', 'Tools'),
-                    calc.checklist(vm.tools, [{
-                        val: 'tool1',
-                        label: 'Tool 1',
-                    }, {
-                        val: 'tool2',
-                        label: 'Tool 2',
-                    }]),
-
+                    populateTools(),
+                    m('input', {
+                        type: 'text',
+                        placeholder: "Add a tool...",
+                        onchange: m.withAttr("value", vm.customTool),
+                        value: vm.customTool()
+                    }),
+                    m('button', {
+                        onclick: function () {
+                            if (vm.customTool().length) {
+                                // Add custom tool to tool dict
+                                var tools = vm.tools();
+                                tools[vm.customTool()] = false;
+                                vm.tools(tools);
+                                vm.customTool("");
+                            }
+                        }
+                    }, "Add"),
                     m('h2', 'Paper & Finish'),
                     m('.label-header', 'Substrate'),
                     calc.radios(vm.substrate, [{
@@ -279,6 +290,18 @@ calculator.view = function(ctrl) {
         ])
     ]);
 };
+
+var populateTools = function () {
+    var tools = Object.keys(calculator.vm.tools());
+    var populate = []
+    for (var i in tools) {
+        populate.push({
+            val: tools[i],
+            label: tools[i]
+        });
+    }
+    return  calc.checklist(calculator.vm.tools, populate);
+}
 
 //initialize the application
 m.mount(document, calculator);
