@@ -295,7 +295,6 @@ select:focus {
 }
 .range-input {
   display: block;
-  /*width: 100%;*/
   padding: 0;
   margin: 0;
 }
@@ -479,4 +478,5 @@ svg.line-chart {
 
 .select-wrapper {
   margin-top: 15px;
+  max-width: 235px;
 }
