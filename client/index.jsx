@@ -209,23 +209,25 @@ calculator.view = function(ctrl) {
                     }]),
                     m('.label-header', 'Tools'),
                     calc.checklist(calculator.vm.tools),
-                    m('input', {
-                        type: 'text',
-                        placeholder: "Add a tool...",
-                        onchange: m.withAttr("value", vm.customTool),
-                        value: vm.customTool()
-                    }),
-                    m('button', {
-                        onclick: function () {
-                            if (vm.customTool().length) {
-                                // Add custom tool to tool dict
-                                var tools = vm.tools();
-                                tools[vm.customTool()] = false;
-                                vm.tools(tools);
-                                vm.customTool("");
+                    m('.calc-item.row.gap-2.justify', [
+                        m('input.input-text.good border', {
+                            type: 'text',
+                            placeholder: "Add a tool...",
+                            onchange: m.withAttr("value", vm.customTool),
+                            value: vm.customTool()
+                        }),
+                        m('button.addButton', {
+                            onclick: function () {
+                                if (vm.customTool().length) {
+                                    // Add custom tool to tool dict
+                                    var tools = vm.tools();
+                                    tools[vm.customTool()] = false;
+                                    vm.tools(tools);
+                                    vm.customTool("");
+                                }
                             }
-                        }
-                    }, "Add"),
+                        }, "+"),
+                    ]),
                     m('h2', 'Paper & Finish'),
                     m('.label-header', 'Substrate'),
                     calc.radios(vm.substrate, [{

@@ -439,7 +439,20 @@ svg.line-chart {
   background-color: rgb(24, 196, 141);
   box-shadow: none;
   border: none;
-  border-radius: 3px;
+  border-radius: 2px;
+}
+
+.addButton {
+  text-transform: uppercase;
+  font-size: 1.2em;
+  height: 32px;
+  width: 38px;
+  float: right;
+  color: white;
+  background-color: rgb(24, 196, 141);
+  box-shadow: none;
+  border: none;
+  border-radius: 2px;
 }
 
 /***************
