@@ -476,3 +476,7 @@ svg.line-chart {
   display: block;
   font-family: "Source Code Pro", Courier, monospace;
 }
+
+.select-wrapper {
+  margin-top: 15px;
+}

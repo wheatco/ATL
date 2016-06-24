@@ -39,9 +39,9 @@ var Select2 = {
             var el = $(element);
             if (!isInitialized) {
                  el.select2({
+                    tags: true,
                     data: ctrl.data,
                     width: '100%',
-                    dropdownAutoWidth : true,
                     multiple: "multiple"
                 }).on("change", function(e) {
                     var val = el.select2("val");
@@ -74,9 +74,10 @@ calculator.vm.init = function() {
     vm.corner = m.prop('Square'); // Round
 
     vm.tools = [
-        {id: 0, text: "Band Saw"},
-        {id: 1, text: "Router"}
+        "Router",
+        "Band Saw"
     ]
+
     vm.selectedTools = m.prop([]);
 
     vm.quantity = m.prop(100);
