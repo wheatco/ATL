@@ -53,6 +53,35 @@ window.calc.radios = function(valProp, items, customOnClick) {
     }));
 };
 
+window.calc.checklist = function(valProp, items) {
+    // Assumes prop is an object with properties either true or false
+    // items is obj of {val, label, hint}
+
+    return m('.calc-item', items.map(function(item) {
+        return m('label.checkbox', {
+            class: valProp()[item.val] || false ? 'active' : ''
+        }, [
+            m('input', {
+                type: 'checkbox',
+                checked: valProp()[item.val] || false,
+                value: item.val,
+                onclick: function (e) {
+                    var items = valProp();
+                    m.withAttr('value', function (value) {
+                        items[value] = !items[value]; // toggle this item
+                        valProp(items);
+                    })(e);
+                }
+            }),
+            m('span.checkbox-dot'),
+            m('div.checkbox-label', [
+                m('strong', item.label || ''),
+                m('span.hint', item.hint || ''),
+            ])
+        ]);
+    }));
+};
+
 window.calc.pieChart = function(values) {
     // values should be an array of {val: 129, color: "#ff0000", label: "meow food"}
     return m(".calc-item.row.gap-2.middle", [

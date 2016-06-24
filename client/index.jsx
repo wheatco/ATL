@@ -50,7 +50,10 @@ calculator.vm.init = function() {
 
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
     vm.corner = m.prop('Square'); // Round
-    vm.tool = m.prop('');
+    vm.tools = m.prop({
+        "tool1": false,
+        "tool2": false
+    });
 
     vm.quantity = m.prop(100);
 
@@ -203,10 +206,13 @@ calculator.view = function(ctrl) {
                         val: 'Rounded',
                         label: 'Rounded',
                     }]),
-                    m('.label-header', 'Tool'),
-                    calc.radios(vm.tool, [{
-                        val: 'Need list of tools',
-                        label: 'Need list of tools',
+                    m('.label-header', 'Tools'),
+                    calc.checklist(vm.tools, [{
+                        val: 'tool1',
+                        label: 'Tool 1',
+                    }, {
+                        val: 'tool2',
+                        label: 'Tool 2',
                     }]),
 
                     m('h2', 'Paper & Finish'),
@@ -267,16 +273,15 @@ calculator.view = function(ctrl) {
                 m('div', [
                     m('h1', 'Results'),
                     calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
-                    m('button.submit', 'Submit')
+                    m('button.submit', 'Submit'),
                 ])
-            ])
+            ])  
         ])
     ]);
 };
 
 //initialize the application
 m.mount(document, calculator);
-
 
 
 // app.authenticate().then(function() {
