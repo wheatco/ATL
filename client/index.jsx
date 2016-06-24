@@ -208,7 +208,7 @@ calculator.view = function(ctrl) {
                         label: 'Rounded',
                     }]),
                     m('.label-header', 'Tools'),
-                    populateTools(),
+                    calc.checklist(calculator.vm.tools),
                     m('input', {
                         type: 'text',
                         placeholder: "Add a tool...",
@@ -291,17 +291,17 @@ calculator.view = function(ctrl) {
     ]);
 };
 
-var populateTools = function () {
-    var tools = Object.keys(calculator.vm.tools());
-    var populate = []
-    for (var i in tools) {
-        populate.push({
-            val: tools[i],
-            label: tools[i]
-        });
-    }
-    return  calc.checklist(calculator.vm.tools, populate);
-}
+// var populateTools = function () {
+//     var tools = Object.keys(calculator.vm.tools());
+//     var populate = []
+//     for (var i in tools) {
+//         populate.push({
+//             val: tools[i],
+//             label: tools[i]
+//         });
+//     }
+//     return  calc.checklist(calculator.vm.tools, populate);
+// }
 
 //initialize the application
 m.mount(document, calculator);

@@ -55,28 +55,30 @@ window.calc.radios = function(valProp, items, customOnClick) {
 
 window.calc.checklist = function(valProp, items) {
     // Assumes prop is an object with properties either true or false
-    // items is obj of {val, label, hint}
+    // eg {value1: false, value2: true}
+
+    var items = Object.keys(valProp());
 
     return m('.calc-item', items.map(function(item) {
         return m('label.checkbox', {
-            class: valProp()[item.val] || false ? 'active' : ''
+            class: valProp()[item] || false ? 'active' : ''
         }, [
             m('input', {
                 type: 'checkbox',
-                checked: valProp()[item.val] || false,
-                value: item.val,
+                checked: valProp()[item] || false,
+                value: item,
                 onclick: function (e) {
                     var items = valProp();
                     m.withAttr('value', function (value) {
                         items[value] = !items[value]; // toggle this item
                         valProp(items);
+                        console.log(valProp());
                     })(e);
                 }
             }),
             m('span.checkbox-dot'),
             m('div.checkbox-label', [
-                m('strong', item.label || ''),
-                m('span.hint', item.hint || ''),
+                m('strong', item || '')
             ])
         ]);
     }));
