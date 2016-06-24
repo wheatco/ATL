@@ -16,6 +16,9 @@ require('file?name=[name].[ext]!./site.css');
 var io = require('socket.io-client');
 var feathers = require('feathers-client');
 
+var $ = require('jquery');
+var select2 = require('select2');
+
 const socket = io();
 // Initialize our Feathers client application through Socket.io
 // with hooks and authentication.
@@ -27,9 +30,28 @@ window.app = feathers()
       storage: window.localStorage
     }));
 
-// var App = require('./components/App.jsx');
-// const container = document.getElementById('container');
-// ReactDOM.render(<App />, container);
+var Select2 = {
+    view: function(ctrl, attrs) {
+        return m("select", {config: Select2.config(attrs)});
+    },
+    config: function(ctrl) {
+        return function(element, isInitialized) {
+            var el = $(element);
+            if (!isInitialized) {
+                 el.select2({
+                    data: ctrl.data,
+                    width: '100%',
+                    dropdownAutoWidth : true,
+                    multiple: "multiple"
+                }).on("change", function(e) {
+                    var val = el.select2("val");
+                    ctrl.value(val);
+                    ctrl.onchange(val);
+                });
+            }
+        };
+    }
+};
 
 //this application only has one component: calculator
 var calculator = {};
@@ -50,11 +72,12 @@ calculator.vm.init = function() {
 
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
     vm.corner = m.prop('Square'); // Round
-    vm.tools = m.prop({
-        "tool1": false,
-        "tool2": false
-    });
-    vm.customTool = m.prop('');
+
+    vm.tools = [
+        {id: 0, text: "Band Saw"},
+        {id: 1, text: "Router"}
+    ]
+    vm.selectedTools = m.prop([]);
 
     vm.quantity = m.prop(100);
 
@@ -93,6 +116,10 @@ calculator.view = function(ctrl) {
             m("link", {
                 rel: 'stylesheet',
                 href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
             }),
             m("link", {
                 rel: 'stylesheet',
@@ -208,25 +235,14 @@ calculator.view = function(ctrl) {
                         label: 'Rounded',
                     }]),
                     m('.label-header', 'Tools'),
-                    calc.checklist(calculator.vm.tools),
-                    m('.calc-item.row.gap-2.justify', [
-                        m('input.input-text.good border', {
-                            type: 'text',
-                            placeholder: "Add a tool...",
-                            onchange: m.withAttr("value", vm.customTool),
-                            value: vm.customTool()
+                    m('.select-wrapper', [
+                        m.component(Select2, {
+                            data: vm.tools,
+                            value: vm.selectedTools,
+                            onchange: function (val) {
+                                console.log(vm.selectedTools());
+                            } 
                         }),
-                        m('button.addButton', {
-                            onclick: function () {
-                                if (vm.customTool().length) {
-                                    // Add custom tool to tool dict
-                                    var tools = vm.tools();
-                                    tools[vm.customTool()] = false;
-                                    vm.tools(tools);
-                                    vm.customTool("");
-                                }
-                            }
-                        }, "+"),
                     ]),
                     m('h2', 'Paper & Finish'),
                     m('.label-header', 'Substrate'),
@@ -293,29 +309,8 @@ calculator.view = function(ctrl) {
     ]);
 };
 
-// var populateTools = function () {
-//     var tools = Object.keys(calculator.vm.tools());
-//     var populate = []
-//     for (var i in tools) {
-//         populate.push({
-//             val: tools[i],
-//             label: tools[i]
-//         });
-//     }
-//     return  calc.checklist(calculator.vm.tools, populate);
-// }
 
 //initialize the application
 m.mount(document, calculator);
-
-
-// app.authenticate().then(function() {
-
-
-// }).catch(function(err) {
-//     if (err) console.log(err);
-//     if (window.location.hostname == 'boltiq.com') window.location = window.location.href + 'login.html';
-// });
-
 
 module.exports = app;
