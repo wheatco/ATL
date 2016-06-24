@@ -84,274 +84,194 @@ calculator.view = function(ctrl) {
 
     vm.calculate();
 
-    return calc.calc(function() {
-        return [
-            // COLUMN 1: CLIENT INFO
-            m('div', [
-                m('h1', 'Client Information'),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Name'),
+    return m("html", [
+        m("head", [
+            m("link", {
+                rel: 'stylesheet',
+                href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'normalize.css'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'flexblocks.css'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'site.css'
+            }),
+            m("meta", {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1'
+            })
+        ]),
+        m("body", {
+            config: function(el) {
+                window.setInterval(function() {
+                    parent.postMessage((el.offsetHeight || el.clientHeight), '*');
+                }, 500);
+            }
+        }, [
+            m('h1.title', 'ATL Order Form'),
+            m('.calc.row.center.gap-5', [
+
+                // COLUMN 1: CLIENT INFO
+                m('div', [
+                    m('h1', 'Client Information'),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'Name'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.name),
+                            value: vm.name()
+                        })
                     ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.name),
-                        value: vm.name()
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'Address'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.addressStreet),
+                            value: vm.addressStreet()
+                        })
+                    ]),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'City'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.addressCity),
+                            value: vm.addressCity()
+                        })
+                    ]),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'State'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.addressState),
+                            value: vm.addressState()
+                        })
+                    ]),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'Zip Code'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.addressZip),
+                            value: vm.addressZip()
+                        })
+                    ]),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'Phone'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.phone),
+                            value: vm.phone()
+                        })
+                    ]),
+                    m('.calc-item.col.gap-2.justify', [
+                        m('div', [
+                            m('.label-header', 'Email'),
+                        ]),
+                        m('input.input-text.good border', {
+                            onchange: m.withAttr('value', vm.email),
+                            value: vm.email()
+                        })
+                    ])
+                ]),
+                // COLUMN 2: EQUIPMENT / PAPER / FINISH
+                m('div', [
+                    m('h1', 'Printing Details'),
+                    m('.label-header', 'Shape'),
+                    calc.radios(vm.shape, [{
+                        val: 'Rectangle',
+                        label: 'Rectangle',
+                    }, {
+                        val: 'Circle',
+                        label: 'Circle',
+                    }]),
+                    m('.label-header', 'Corner'),
+                    calc.radios(vm.corner, [{
+                        val: 'Square',
+                        label: 'Square',
+                    }, {
+                        val: 'Rounded',
+                        label: 'Rounded',
+                    }]),
+                    m('.label-header', 'Tool'),
+                    calc.radios(vm.tool, [{
+                        val: 'Need list of tools',
+                        label: 'Need list of tools',
+                    }]),
+
+                    m('h2', 'Paper & Finish'),
+                    m('.label-header', 'Substrate'),
+                    calc.radios(vm.substrate, [{
+                        val: 'Need list of substrates',
+                        label: 'Need list of substrates',
+                    }]),
+                    m('.label-header', 'Finish'),
+                    calc.radios(vm.finish, [{
+                        val: 'Need list of finishes',
+                        label: 'Need list of finishes',
+                    }])
+                ]),
+                // COLUMN 3: QUANTITY AND ADDITIONAL INFO
+                m('div', [
+                    m('h1', 'Order Details'),
+                    m('h2', 'Quantity'),
+                    calc.range({
+                        header: 'Number of labels',
+                        val: vm.quantity,
+                        type: 'number',
+                        range: [0, 1000000, 100]
+                    }),
+                    m('h2', 'Designs'),
+                    calc.range({
+                        header: 'Number of designs',
+                        hint: 'Each additional design causes',
+                        val: vm.numDesigns,
+                        range: [1, 8, 1]
+                    }),
+                    calc.range({
+                        header: 'Cost Per Design',
+                        type: 'money',
+                        val: vm.costPerDesign,
+                        range: [0, 30, 1]
+                    }),
+                    calc.range({
+                        header: 'Margin',
+                        type: 'percent',
+                        val: vm.margin,
+                        range: [0, 200, 1]
+                    }),
+                    calc.range({
+                        header: 'Prepress Charges',
+                        type: 'money',
+                        val: vm.prepressCharges,
+                        range: [0, 500, 1]
+                    }),
+                    calc.range({
+                        header: 'Copy Charges',
+                        type: 'money',
+                        val: vm.copyCharges,
+                        range: [0, 500, 1]
                     })
                 ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Address'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressStreet),
-                        value: vm.addressStreet()
-                    })
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'City'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressCity),
-                        value: vm.addressCity()
-                    })
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'State'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressState),
-                        value: vm.addressState()
-                    })
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Zip Code'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressZip),
-                        value: vm.addressZip()
-                    })
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Phone'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.phone),
-                        value: vm.phone()
-                    })
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Email'),
-                    ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.email),
-                        value: vm.email()
-                    })
+                // COLUMN 4: RESULTS AND SUBMISSION
+                m('div', [
+                    m('h1', 'Results'),
+                    calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
+                    m('button.submit', 'Submit')
                 ])
-            ]),
-            // COLUMN 2: EQUIPMENT / PAPER / FINISH
-            m('div', [
-                m('h1', 'Printing Details'),
-                m('.label-header', 'Shape'),
-                calc.radios(vm.shape, [{
-                    val: 'Rectangle',
-                    label: 'Rectangle',
-                }, {
-                    val: 'Circle',
-                    label: 'Circle',
-                }]),
-                m('.label-header', 'Corner'),
-                calc.radios(vm.corner, [{
-                    val: 'Square',
-                    label: 'Square',
-                }, {
-                    val: 'Rounded',
-                    label: 'Rounded',
-                }]),
-                m('.label-header', 'Tool'),
-                calc.radios(vm.tool, [{
-                    val: 'Need list of tools',
-                    label: 'Need list of tools',
-                }]),
-
-                m('h2', 'Paper & Finish'),
-                m('.label-header', 'Substrate'),
-                calc.radios(vm.substrate, [{
-                    val: 'Need list of substrates',
-                    label: 'Need list of substrates',
-                }]),
-                m('.label-header', 'Finish'),
-                calc.radios(vm.finish, [{
-                    val: 'Need list of finishes',
-                    label: 'Need list of finishes',
-                }])
-            ]),
-            // COLUMN 3: QUANTITY AND ADDITIONAL INFO
-            m('div', [
-                m('h1', 'Order Details'),
-                m('h2', 'Quantity'),
-                calc.range({
-                    header: 'Number of labels',
-                    val: vm.quantity,
-                    type: 'number',
-                    range: [0, 1000000, 100]
-                }),
-                m('h2', 'Designs'),
-                calc.range({
-                    header: 'Number of designs',
-                    hint: 'Each additional design causes',
-                    val: vm.numDesigns,
-                    range: [1, 8, 1]
-                }),
-                calc.range({
-                    header: 'Cost Per Design',
-                    type: 'money',
-                    val: vm.costPerDesign,
-                    range: [0, 30, 1]
-                }),
-                calc.range({
-                    header: 'Margin',
-                    type: 'percent',
-                    val: vm.margin,
-                    range: [0, 200, 1]
-                }),
-                calc.range({
-                    header: 'Prepress Charges',
-                    type: 'money',
-                    val: vm.prepressCharges,
-                    range: [0, 500, 1]
-                }),
-                calc.range({
-                    header: 'Copy Charges',
-                    type: 'money',
-                    val: vm.copyCharges,
-                    range: [0, 500, 1]
-                })
-            ]),
-            // COLUMN 4: RESULTS AND SUBMISSION
-            m('div', [
-                m('h1', 'Results'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
-                m('button.submit', 'Submit')
             ])
-            
-
-
-            // calc.range({
-            //     header: 'Number of Children including this baby',
-            //     hint: 'Each additional child typically reduces the cost.',
-            //     val: vm.numChildren,
-            //     range: [1, 8, 1]
-            // }),
-
-
-            // calc.range({
-            //     header: 'Number of Children including this baby',
-            //     hint: 'Each additional child typically reduces the cost.',
-            //     val: vm.numChildren,
-            //     range: [1, 8, 1]
-            // }),
-            // m('.calc-item.col.gap-2.justify', [
-            //     m('div', [
-            //         m('.label-header', 'ZIP Code'),
-            //         m('.hint', 'Different areas have different costs of living.'),
-            //     ]),
-            //     m('input.input-text.good border', {
-            //         onchange: m.withAttr('value', vm.zipCode),
-            //         value: vm.zipCode()
-            //     })
-            // ]),
-            // m('h2', 'Logistics'),
-
-            // calc.radios(vm.daycare, [{
-            //     val: 0,
-            //     label: 'No Daycare',
-            // }, {
-            //     val: 973,
-            //     label: 'Full-time',
-            //     hint: 'Full time daycare costs $973/month',
-            // }, {
-            //     val: 487,
-            //     label: 'Part-time',
-            //     hint: 'Part time daycare costs $487/month',
-            // }]),
-
-            // calc.checkbox(vm.oneParentWillTakeTimeOff, 'taking unpaid time off work', 'Taking time off can allow families to avoid some or even all daycare, but not all companies have PTO for new parents, and this could result in lost income.'),
-
-            // vm.oneParentWillTakeTimeOff() ?
-            // calc.range({
-            //     header: 'Unpaid wage losses from time off',
-            //     hint: 'If unpaid time must be taken off, this is lost income, and we'll add it to your logistics expenses.',
-            //     val: vm.lossesFromTimeOff,
-            //     type: 'money',
-            //     range: [20000, 250000, 5000]
-            // }) : null,
-            // m('h2', 'Medical'),
-            // calc.checkbox(vm.hasInsurance, 'We Have Insurance', 'Medical insurance often reduces the hospital costs of having a baby.'), !vm.hasInsurance() ? calc.checkbox(vm.cSection, 'We're getting a C-Section', 'A C-Section is a surgical procedure. If it is not covered by insurance, costs $6,500 extra on average.') : null,
-            // m('h2', 'Clothing'),
-            // calc.radios(vm.clothing, [{
-            //     val: 1000,
-            //     label: 'New Clothing',
-            //     hint: 'Clothing costs about $1,000 for the first year.'
-            // }, {
-            //     val: 1500,
-            //     label: 'Premium New Clothing',
-            //     hint: 'Premium clothing costs about $1,500 for the first year.'
-            // }, {
-            //     val: 0,
-            //     label: 'hand-me-downs'
-            // }, ]),
-            // m('h2', 'Equipment'),
-            // m('.calc-item', [
-            //     m('.hint', 'Each of these items is essential, but you may already have some leftover from another baby or family member. If you already have an item, check it, and we'll take it off your final bill.')
-            // ]),
-            // calc.checkbox(vm.hasCarSeat, 'Already Have Car Seat'),
-            // calc.checkbox(vm.hasCribAndMattress, 'Already Have crib + mattress'),
-            // calc.checkbox(vm.hasBabyBag, 'Already have Baby Bag + Nursing Supplies'),
-            // calc.checkbox(vm.hasStroller, 'Already have Stroller'),
-            // m('h2', 'Consumables'),
-            // calc.checkbox(vm.babyFormula, 'Using Baby Formula?', 'Baby formula costs $1,750 for the first year.'),
-
-            // calc.radios(vm.diapers, [{
-            //     val: 2400,
-            //     label: 'Disposable diapers',
-            //     hint: 'Disposable diapers cost about $2,400 for the first year.'
-            // }, {
-            //     val: 1680,
-            //     label: 'Reusable (w/ washing service)',
-            //     hint: 'Reusable diapers with a premium washing service is $1,680 for the first year.'
-            // }, {
-            //     val: 600,
-            //     label: 'Reusable (hand washing)',
-            //     hint: 'Reusable diapers cost about $300 for the first year and detergent, water, and energy will also be about $300 for the first year.'
-            // }]),
-
-
-            // m('h2', 'Results'),
-            // calc.resultDisplay(calc.formatMoney(vm.totalChildCost()), 'Baby Cost', 'This is the total first-year cost of having this baby.'),
-            // calc.pieChart([{
-            //     label: 'Logistics: ' + calc.formatMoney(vm.logisticCost()),
-            //     val: vm.logisticCost(),
-            //     color: '#E09E4D'
-            // }, {
-            //     label: 'Medical: ' + calc.formatMoney(vm.medicalCost()),
-            //     val: vm.medicalCost(),
-            //     color: '#4A90E2'
-            // }, {
-            //     label: 'Equipment: ' + calc.formatMoney(vm.equipmentCost()),
-            //     val: vm.equipmentCost(),
-            //     color: '#90DFA7'
-            // }, {
-            //     label: 'Consumables: ' + calc.formatMoney(vm.consumablesCost()),
-            //     val: vm.consumablesCost(),
-            //     color: 'rgba(24, 196, 141, 1)'
-            // }]),
-        ];
-    });
+        ])
+    ]);
 };
 
 //initialize the application

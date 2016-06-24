@@ -93,6 +93,13 @@ h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .in
 /***************
   HEADER STYLES
 ***************/
+
+.title {
+  font-size: 20px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
 h1 {
   text-align: center;
   padding-bottom: 0.5em;

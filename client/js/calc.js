@@ -355,52 +355,52 @@ window.calc.range = function(opts) {
     ]);
 };
 
-window.calc.calc = function(inside, opts) {
-    var noBorders = opts && opts.noBorders;
-    var reviews = opts && opts.reviews;
-    var calcClass = ".calc.row.center.gap-5";
-    if (noBorders === true) calcClass = calcClass + ".no-borders";
-    if (reviews === true) calcClass = calcClass + ".reviews";
+// window.calc.calc = function(inside, opts) {
+//     var noBorders = opts && opts.noBorders;
+//     var reviews = opts && opts.reviews;
+//     var calcClass = ".calc.row.center.gap-5";
+//     if (noBorders === true) calcClass = calcClass + ".no-borders";
+//     if (reviews === true) calcClass = calcClass + ".reviews";
 
-    return m("html", [
-        m("head", [
-            m("link", {
-                rel: 'stylesheet',
-                href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
-            }),
-            m("link", {
-                rel: 'stylesheet',
-                href: 'normalize.css'
-            }),
-            m("link", {
-                rel: 'stylesheet',
-                href: 'flexblocks.css'
-            }),
-            m("link", {
-                rel: 'stylesheet',
-                href: 'site.css'
-            }),
-            m("meta", {
-                name: 'viewport',
-                content: 'width=device-width, initial-scale=1'
-            })
-        ]),
-        m("body", {
-            config: function(el) {
-                window.setInterval(function() {
-                    parent.postMessage((el.offsetHeight || el.clientHeight), '*');
-                }, 500);
-            }
-        }, [
-            m(calcClass, {}, [
-                inside(),
-    // m('div.logo', {
-    //     // href: 'http://www.thesimpledollar.com'
-    // }, reviews ? reviewsLogo : tsdLogo)
-            ])
-        ])
-    ]);
-};
+//     return m("html", [
+//         m("head", [
+//             m("link", {
+//                 rel: 'stylesheet',
+//                 href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
+//             }),
+//             m("link", {
+//                 rel: 'stylesheet',
+//                 href: 'normalize.css'
+//             }),
+//             m("link", {
+//                 rel: 'stylesheet',
+//                 href: 'flexblocks.css'
+//             }),
+//             m("link", {
+//                 rel: 'stylesheet',
+//                 href: 'site.css'
+//             }),
+//             m("meta", {
+//                 name: 'viewport',
+//                 content: 'width=device-width, initial-scale=1'
+//             })
+//         ]),
+//         m("body", {
+//             config: function(el) {
+//                 window.setInterval(function() {
+//                     parent.postMessage((el.offsetHeight || el.clientHeight), '*');
+//                 }, 500);
+//             }
+//         }, [
+//             m(calcClass, {}, [
+//                 inside(),
+//     // m('div.logo', {
+//     //     // href: 'http://www.thesimpledollar.com'
+//     // }, reviews ? reviewsLogo : tsdLogo)
+//             ])
+//         ])
+//     ]);
+// };
 
 Number.prototype.format = function(n, x) {
     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
