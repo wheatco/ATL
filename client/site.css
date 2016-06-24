@@ -425,6 +425,19 @@ svg.line-chart {
   text-decoration: underline;
 }
 
+/******
+ SELECT
+*******/
+
+.select-wrapper {
+  margin-top: 15px;
+  max-width: 235px;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+     background-color: rgb(24, 196, 141);
+}
+
 /***************
   BUTTONS
 ***************/
@@ -474,9 +487,4 @@ svg.line-chart {
   text-transform: uppercase;
   display: block;
   font-family: "Source Code Pro", Courier, monospace;
-}
-
-.select-wrapper {
-  margin-top: 15px;
-  max-width: 235px;
 }
