@@ -335,11 +335,11 @@ window.calc.range = function(opts) {
     return m(".calc-item", [
         m(".range.col.justify.gap-2", [
             m(".row.gap-3.middle", [
-                m("input.range-text.fill-2.good" + (opts.range ? "" : " border"), {
+                m("input.range-text.good" + (opts.range ? "" : " border"), {
                     onchange: inputToRange(inputVal, rangeVal, customOnInput),
                     value: inputVal()
                 }),
-                m(".col.justify.fill-3.gap-1", [
+                m(".col.justify.fill-4.gap-1", [
                     m(".range-header", header || ''),
                     hint ? m(".hint", hint || '') : null,
                     opts.range ? m("input[type=range].range-input", {
@@ -358,7 +358,7 @@ window.calc.range = function(opts) {
 window.calc.calc = function(inside, opts) {
     var noBorders = opts && opts.noBorders;
     var reviews = opts && opts.reviews;
-    var calcClass = ".calc.row.center.justify";
+    var calcClass = ".calc.row.center.gap-5";
     if (noBorders === true) calcClass = calcClass + ".no-borders";
     if (reviews === true) calcClass = calcClass + ".reviews";
 

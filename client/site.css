@@ -72,7 +72,7 @@ body {
 }
 
 /* all code fonts */
-h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link {
+h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link, .submit {
   font-family: "Source Code Pro", Courier, monospace;
   font-size: 16px;
   margin: 0;
@@ -95,6 +95,7 @@ h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .in
 ***************/
 h1 {
   text-align: center;
+  padding-bottom: 0.5em;
 }
 
 h2 {
@@ -287,7 +288,7 @@ select:focus {
 }
 .range-input {
   display: block;
-  width: 100%;
+  /*width: 100%;*/
   padding: 0;
   margin: 0;
 }
@@ -297,6 +298,7 @@ select:focus {
   border: 1px solid transparent;
   padding: 3px;
   text-align: right;
+  max-width: 5em;
 }
 .range-text.good { color: rgb(24, 196, 141); }
 .reviews .range-text.good { color: rgb(5,133,204); }
@@ -417,6 +419,21 @@ svg.line-chart {
   text-decoration: underline;
 }
 
+/***************
+  BUTTONS
+***************/
+
+.submit {
+  text-transform: uppercase;
+  margin-top: 15px;
+  padding: 8px 0px 8px 0px;
+  width: 100%;
+  color: white;
+  background-color: rgb(24, 196, 141);
+  box-shadow: none;
+  border: none;
+  border-radius: 3px;
+}
 
 /***************
   DISCLAIMER
@@ -438,8 +455,4 @@ svg.line-chart {
   text-transform: uppercase;
   display: block;
   font-family: "Source Code Pro", Courier, monospace;
-}
-
-.red {
-  background-color: red;
 }

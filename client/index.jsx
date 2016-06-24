@@ -234,9 +234,8 @@ calculator.view = function(ctrl) {
             ]),
             // COLUMN 4: RESULTS AND SUBMISSION
             m('div', [
-                m('h2', 'Results'),
+                m('h1', 'Results'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
-                m('h2', 'Submit'),
                 m('button.submit', 'Submit')
             ])
             
