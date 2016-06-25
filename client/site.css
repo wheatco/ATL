@@ -306,7 +306,7 @@ select:focus {
   text-align: right;
   max-width: 5em;
 }
-.range-text.good { color: rgb(24, 196, 141); }
+.range-text.good { color: rgb(24, 196, 141); border-color: rgb(24, 196, 141); }
 .reviews .range-text.good { color: rgb(5,133,204); }
 .range-text.good:hover, .range-text.good:focus, .range-text.good.border { border-color: rgb(24, 196, 141); }
 .range-text.bad { color: #B50013; }

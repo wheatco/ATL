@@ -15,6 +15,7 @@ require('file?name=[name].[ext]!./site.css');
 
 var io = require('socket.io-client');
 var feathers = require('feathers-client');
+var _ = require('lodash');
 
 var $ = require('jquery');
 var select2 = require('select2');
@@ -39,7 +40,7 @@ var Select2 = {
             var el = $(element);
             if (!isInitialized) {
                  el.select2({
-                    tags: true,
+                    tags: false,
                     data: ctrl.data,
                     width: '100%',
                     multiple: "multiple"
@@ -62,6 +63,16 @@ calculator.vm = {};
 calculator.vm.init = function() {
     var vm = calculator.vm;
 
+    vm.defaultMSI = {
+        "Semi Gloss AT20 - 53269":  0.41,
+        "White Bopp - 79536":  0.57,
+        "Clear Bopp - 79560":  0.59,
+        "Silver Paper - 53909":  0.69,
+        "Silver Bopp - 79248":  0.68,
+        "Paper Perm - 53272":  0.43,
+        "Matte Litho - 19958":  0.44
+    }
+
     vm.name = m.prop('');
     vm.addressStreet = m.prop('');
     vm.addressCity = m.prop('');
@@ -83,7 +94,9 @@ calculator.vm.init = function() {
     vm.quantity = m.prop(100);
 
     vm.substrate = m.prop('White Paper');
-    vm.finish = m.prop('Glossy'); // TODO may be plural?
+    vm.substrateMSI = m.prop(0.45);
+    vm.finish = m.prop('Gloss'); // TODO may be plural?
+    vm.finishMSI = m.prop(0.20);
 
     vm.numDesigns = m.prop(1);
     vm.costPerDesign = m.prop(15);
@@ -247,15 +260,38 @@ calculator.view = function(ctrl) {
                     ]),
                     m('h2', 'Paper & Finish'),
                     m('.label-header', 'Substrate'),
-                    calc.radios(vm.substrate, [{
-                        val: 'Need list of substrates',
-                        label: 'Need list of substrates',
-                    }]),
+                    calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key){
+                        console.log(value, key);
+                        return {
+                            val: key,
+                            label: key
+                        };
+                    }), function() {
+                        vm.substrateMSI(vm.defaultMSI[vm.substrate()]);
+                    }),
+                    calc.range({
+                        header: 'Substrate MSI',
+                        hint: 'Each additional design causes',
+                        val: vm.substrateMSI,
+                        range: [0.0, 1.5, 0.01]
+                    }),
                     m('.label-header', 'Finish'),
                     calc.radios(vm.finish, [{
-                        val: 'Need list of finishes',
-                        label: 'Need list of finishes',
-                    }])
+                        val: 'Gloss',
+                        label: 'Gloss',
+                    },{
+                        val: 'Matte',
+                        label: 'Matte',
+                    }], function() {
+                        if (vm.finish() == "Gloss") vm.finishMSI(0.20);
+                        else vm.finishMSI(0.40);
+                    }),
+                    calc.range({
+                        header: 'Finish MSI',
+                        hint: 'Each additional design causes',
+                        val: vm.finishMSI,
+                        range: [0.0, 1.5, 0.01]
+                    }),
                 ]),
                 // COLUMN 3: QUANTITY AND ADDITIONAL INFO
                 m('div', [
