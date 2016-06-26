@@ -1,8 +1,10 @@
 require('file?name=js/[name].[ext]!./js/mithril.js');
 require('file?name=js/[name].[ext]!./js/calc.js');
+require('file?name=js/[name].[ext]!./js/select2.js');
 
 require('./js/mithril.js');
 require('./js/calc.js');
+require('./js/select2.js');
 
 // Move static files to the right place
 require('file?name=[name].[ext]!./index.html');
@@ -17,9 +19,6 @@ var io = require('socket.io-client');
 var feathers = require('feathers-client');
 var _ = require('lodash');
 
-var $ = require('jquery');
-var select2 = require('select2');
-
 const socket = io();
 // Initialize our Feathers client application through Socket.io
 // with hooks and authentication.
@@ -31,28 +30,6 @@ window.app = feathers()
       storage: window.localStorage
     }));
 
-var Select2 = {
-    view: function(ctrl, attrs) {
-        return m("select", {config: Select2.config(attrs)});
-    },
-    config: function(ctrl) {
-        return function(element, isInitialized) {
-            var el = $(element);
-            if (!isInitialized) {
-                 el.select2({
-                    tags: false,
-                    data: ctrl.data,
-                    width: '100%',
-                    multiple: "multiple"
-                }).on("change", function(e) {
-                    var val = el.select2("val");
-                    ctrl.value(val);
-                    ctrl.onchange(val);
-                });
-            }
-        };
-    }
-};
 
 //this application only has one component: calculator
 var calculator = {};
@@ -254,14 +231,16 @@ calculator.view = function(ctrl) {
                             data: vm.tools,
                             value: vm.selectedTools,
                             onchange: function (val) {
-                                console.log(vm.selectedTools());
-                            } 
+                                console.log(val);
+                            },
+                            tags: false,
+                            width: '100%',
+                            multiple: "multiple"
                         }),
                     ]),
                     m('h2', 'Paper & Finish'),
                     m('.label-header', 'Substrate'),
                     calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key){
-                        console.log(value, key);
                         return {
                             val: key,
                             label: key
