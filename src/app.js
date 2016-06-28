@@ -1,4 +1,7 @@
 'use strict';
+//IMPORTANT
+//phantomjs has hidden dependency:
+// sudo apt-get install libfontconfig
 
 const path = require('path');
 const serveStatic = require('feathers').static;
@@ -13,6 +16,21 @@ const bodyParser = require('body-parser');
 const socketio = require('feathers-socketio');
 const middleware = require('./middleware');
 const services = require('./services');
+
+const childProcess = require('child_process');
+const phantomjs = require('phantomjs-prebuilt');
+const pjsBinPath = phantomjs.path;
+
+var pjsChildArgs = [
+  path.join(__dirname, 'phantomjs-script.js'),
+  'some other argument'
+]
+
+childProcess.execFile(pjsBinPath, pjsChildArgs, function(err, stdout, sterr) {
+  console.log(err);
+  console.log(stdout);
+  console.log(sterr)
+});
 
 const app = feathers();
 
@@ -29,6 +47,19 @@ app.use(compress())
   .configure(rest())
   .configure(socketio())
   .configure(services)
-  .configure(middleware);
+  .configure(middleware)
+  .use('/forms', {
+    //check it with localhost:3030/forms/123?format=pdf
+
+    get: function(id, params) {
+      if (params.query.format == 'pdf') {
+        console.log("nice!")
+      }
+      return Promise.resolve({
+        wow: id
+      });
+    }
+  })
+  // .listen(3030);
 
 module.exports = app;
