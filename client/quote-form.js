@@ -80,14 +80,19 @@ QuoteForm.vm.init = function() {
 
 };
 
+QuoteForm.vm.config = function(attrs) {
+  var vm = QuoteForm.vm;
+  console.log(attrs);
+}
+
 QuoteForm.controller = function() {
     QuoteForm.vm.init();
 };
 
 //here's the view
-QuoteForm.view = function(ctrl) {
+QuoteForm.view = function(ctrl, attrs) {
     var vm = QuoteForm.vm;
-
+    vm.config(attrs);
     vm.calculate();
 
     return m("div", [

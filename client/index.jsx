@@ -1,9 +1,3 @@
-require('file?name=js/[name].[ext]!./js/mithril.js');
-require('file?name=js/[name].[ext]!./js/calc.js');
-require('file?name=js/[name].[ext]!./js/select2.js');
-require('file?name=js/[name].[ext]!./quote-form.js');
-
-require('./js/mithril.js');
 require('./js/calc.js');
 require('./js/select2.js');
 require('./quote-form.js');
@@ -17,8 +11,10 @@ require('file?name=[name].[ext]!./flexblocks.css');
 require('file?name=[name].[ext]!./site.css');
 // require('!style!css!sass!./styles/main.scss');
 
+var m = require('mithril');
 var io = require('socket.io-client');
 var feathers = require('feathers-client');
+var fm = require('./js/feathers-mithril.js');
 var _ = require('lodash');
 
 const socket = io();
@@ -27,6 +23,7 @@ const socket = io();
 window.app = feathers()
     .configure(feathers.socketio(socket))
     .configure(feathers.hooks())
+    .configure(fm())
     // Use localStorage to store our login token
     .configure(feathers.authentication({
       storage: window.localStorage
@@ -68,7 +65,9 @@ var main = {
                     }, 500);
                 }
             }, [
-                m.component(QuoteForm)
+                m.component(QuoteForm, {
+                    test: "test"
+                })
             ])
         ]);
     }
