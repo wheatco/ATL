@@ -36,7 +36,7 @@
     "feathers-configuration": "^0.2.3",
     "feathers-errors": "^2.2.0",
     "feathers-hooks": "^1.5.4",
-    "feathers-mongoose": "^3.3.7",
+    "feathers-mongoose": "^3.4.1",
     "feathers-rest": "^1.4.2",
     "feathers-socketio": "^1.4.1",
     "file-loader": "^0.8.5",
