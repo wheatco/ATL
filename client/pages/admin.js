@@ -4,27 +4,24 @@ var Checklist = {
   vm: {},
   controller: function (args) {
     var vm = Checklist.vm;
-    if (args.items) vm.items = args.items().data;
+    vm.items = args.items;
   },
   view: function (ctrl, args) {
     var vm = Checklist.vm;
-    return m('.calc-item', vm.items.map(function(item) {
+    return m('.calc-item', vm.items().map(function(item) {
         return m('label.checkbox', {
-            // class: valProp() == item.val ? 'active' : ''
+
         }, [
             m('button', {
-                // type: 'radio',
-                // checked: valProp() == item.val,
-                // value: item.val,
-                // onclick: runCallbacks(customOnClick)
+                onclick: function (e) {
+                    return args.onclick(item);
+                }
             }, 'x'),
             m('div.checkbox-label', [
-                m('strong', item.name || ''),
-                // m('span.hint', item.hint || ''),
+                m('strong', item.name || '')
             ])
         ]);
     }));
-    // return m("p", vm.data[0]);
   }
 }
 
@@ -37,7 +34,20 @@ AdminPage.controller = function(args) {
     var vm = AdminPage.vm;
     const app = window.app;
 
-    vm.tools = app.service('tools').find();
+    vm.tools = m.prop([]);
+
+    app.service('tools').find().then(tools => {
+        vm.tools(tools.data);
+    });
+}
+
+function deleteTool(tool) {
+    var vm = AdminPage.vm;
+    app.service('tools').remove({_id: tool._id}).then(removed => {
+        app.service('tools').find().then(tools => {
+            vm.tools(tools.data);
+        });
+    });
 }
 
 //here's the view
@@ -47,8 +57,13 @@ AdminPage.view = function(ctrl, args) {
     return m("div", [
         m('h1.title', 'Admin Page'),
         m('.calc.row.center.gap-5', [
-          m('div.fill', [
-            m.component(Checklist, {items: vm.tools})
+            m('div.fill', [
+                m.component(Checklist, {
+                    items: vm.tools,
+                    onclick: function (item) {
+                        deleteTool(item);
+                    }
+                })
             ])
         ])
     ]);
