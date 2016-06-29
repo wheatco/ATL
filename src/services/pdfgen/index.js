@@ -10,7 +10,7 @@ module.exports = function() {
   var service = {
     get: function(id, params) {
       if (params.query.format == 'pdf') {
-        console.log("nice!")
+        console.log("go find a pdf")
       }
       return Promise.resolve({
         id: id
@@ -19,16 +19,11 @@ module.exports = function() {
   }
 
   var renderTemplate = function(req, res, next) {
-    res.data = '<html><body><h1>Form Number '+res.data.id+'</h1></body></html>';
-    console.log(res.data);
-    next();
-
-    // had trouble getting pug to work on my machine,
-    // but it may work for you:
-    // app.render('./test-form.pug', res.data, function(err, html) {
-    //   res.data = html;
-    //   next();
-    // });
+    //this is relative to the ATL/views/ directory
+    app.render('pdfs/test-form.pug', res.data, function(err, html) {
+      res.data = html;
+      next();
+    });
   }
 
   var renderPDF = function (req, res, next) {
