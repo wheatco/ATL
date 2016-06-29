@@ -9,10 +9,10 @@ var Checklist = {
   view: function (ctrl, args) {
     var vm = Checklist.vm;
     return m('.calc-item', vm.items().map(function(item) {
-        return m('label.checkbox', {
+        return m('label.checklist-label.middle.row', {
 
         }, [
-            m('button', {
+            m('button.deleteButton', {
                 onclick: function (e) {
                     return args.onclick(item);
                 }
@@ -46,6 +46,7 @@ function addTool() {
     var toolName = vm.newTool();
     if (toolName.length) {
         app.service('tools').create({name: toolName}).then(tool => {
+            // TODO: make this update automatic
             app.service('tools').find().then(tools => {
                 vm.newTool("");
                 vm.tools(tools.data);
@@ -69,7 +70,7 @@ AdminPage.view = function(ctrl, args) {
 
     return m("div", [
         m('h1.title', 'Admin Page'),
-        m('.calc.row.center.gap-5', [
+        m('.calc.row.center.gap-5.admin-page', [
             m('div.fill', [
                 m.component(Checklist, {
                     items: vm.tools,
