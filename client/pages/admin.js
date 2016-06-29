@@ -8,7 +8,7 @@ AdminPage.vm = {};
 
 AdminPage.vm.init = function() {
     var vm = AdminPage.vm;
-    // Init
+    vm.tools = m.prop([]);
 }
 
 var initialized = false;
@@ -16,7 +16,10 @@ var initialized = false;
 AdminPage.vm.config = function(attrs) {
   if (!initialized) {
     initialized = true;
-    // Config
+    var vm = AdminPage.vm;
+    var app = attrs.app;
+    console.log(app);
+    // vm.tools = app.service('tools').find();
   }
 }
 
@@ -28,6 +31,8 @@ AdminPage.controller = function() {
 AdminPage.view = function(ctrl, attrs) {
     var vm = AdminPage.vm;
     vm.config(attrs);
+
+    console.log(vm.tools());
 
     return m("div", [
         m('h1.title', 'Admin Page'),
