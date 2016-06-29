@@ -17,10 +17,6 @@ const socketio = require('feathers-socketio');
 const middleware = require('./middleware');
 const services = require('./services');
 
-const childProcess = require('child_process');
-const phantomjs = require('phantomjs-prebuilt');
-const pjsBinPath = phantomjs.path;
-
 const app = feathers();
 
 app.configure(configuration(path.join(__dirname, '..')));
