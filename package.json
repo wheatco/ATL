@@ -36,6 +36,7 @@
     "feathers-configuration": "^0.2.3",
     "feathers-errors": "^2.2.0",
     "feathers-hooks": "^1.5.4",
+    "feathers-mithril": "^1.0.0",
     "feathers-mongoose": "^3.4.1",
     "feathers-reactive": "^0.2.0",
     "feathers-rest": "^1.4.2",

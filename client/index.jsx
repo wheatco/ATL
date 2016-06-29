@@ -15,7 +15,9 @@ require('file?name=[name].[ext]!./site.css');
 var m = require('mithril');
 var io = require('socket.io-client');
 var feathers = require('feathers-client');
-var fm = require('./lib/feathers-mithril.js');
+var reactive = require('feathers-reactive');
+var rxjs = require('rxjs');
+var fm = require('feathers-mithril');
 var _ = require('lodash');
 
 const socket = io();
@@ -24,7 +26,8 @@ const socket = io();
 window.app = feathers()
     .configure(feathers.socketio(socket))
     .configure(feathers.hooks())
-    .configure(fm())
+    .configure(reactive(rxjs))
+    .configure(fm(m))
     // Use localStorage to store our login token
     .configure(feathers.authentication({
       storage: window.localStorage
@@ -80,12 +83,12 @@ Main.view = function(ctrl) {
                 }, 500);
             }
         }, [
-            m('button', { 
+            m('button', {
                 onclick: function (e) {
                     vm.page(pageEnum.QUOTE);
                 }
             }, 'Quote Page'),
-            m('button', { 
+            m('button', {
                 onclick: function (e) {
                     vm.page(pageEnum.ADMIN);
                 }
