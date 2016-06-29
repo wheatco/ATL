@@ -35,10 +35,23 @@ AdminPage.controller = function(args) {
     const app = window.app;
 
     vm.tools = m.prop([]);
-
+    vm.newTool = m.prop("");
     app.service('tools').find().then(tools => {
         vm.tools(tools.data);
     });
+}
+
+function addTool() {
+    var vm = AdminPage.vm;
+    var toolName = vm.newTool();
+    if (toolName.length) {
+        app.service('tools').create({name: toolName}).then(tool => {
+            app.service('tools').find().then(tools => {
+                vm.newTool("");
+                vm.tools(tools.data);
+            });
+        });
+    }
 }
 
 function deleteTool(tool) {
@@ -63,7 +76,20 @@ AdminPage.view = function(ctrl, args) {
                     onclick: function (item) {
                         deleteTool(item);
                     }
-                })
+                }),
+                m('.calc-item.row.gap-2.justify', [
+                    m('input.input-text.good border', {
+                        type: 'text',
+                        placeholder: "Add a tool...",
+                        onchange: m.withAttr("value", vm.newTool),
+                        value: vm.newTool()
+                    }),
+                    m('button.addButton', {
+                        onclick: function () {
+                            addTool();
+                        }
+                    }, "+")
+                ])
             ])
         ])
     ]);
