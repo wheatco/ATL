@@ -41,7 +41,7 @@ Main.vm = {}
 
 Main.controller = function() {
     var vm = Main.vm;
-    vm.page = m.prop(pageEnum.ADMIN);
+    vm.page = m.prop(pageEnum.QUOTE);
 }
 
 Main.view = function(ctrl) {
