@@ -1,6 +1,7 @@
-require('./js/calc.js');
-require('./js/select2.js');
-require('./quote-form.js');
+require('./lib/calc.js');
+require('./lib/select2.js');
+require('./pages/quote.js');
+require('./pages/admin.js');
 
 // Move static files to the right place
 require('file?name=[name].[ext]!./index.html');
@@ -14,7 +15,7 @@ require('file?name=[name].[ext]!./site.css');
 var m = require('mithril');
 var io = require('socket.io-client');
 var feathers = require('feathers-client');
-var fm = require('./js/feathers-mithril.js');
+var fm = require('./lib/feathers-mithril.js');
 var _ = require('lodash');
 
 const socket = io();
@@ -29,51 +30,83 @@ window.app = feathers()
       storage: window.localStorage
     }));
 
-var main = {
-    view: function(ctrl) {
-        return m("html", [
-            m("head", [
-                m("link", {
-                    rel: 'stylesheet',
-                    href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
-                }),
-                m("link", {
-                    rel: 'stylesheet',
-                    href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
-                }),
-                m("link", {
-                    rel: 'stylesheet',
-                    href: 'normalize.css'
-                }),
-                m("link", {
-                    rel: 'stylesheet',
-                    href: 'flexblocks.css'
-                }),
-                m("link", {
-                    rel: 'stylesheet',
-                    href: 'site.css'
-                }),
-                m("meta", {
-                    name: 'viewport',
-                    content: 'width=device-width, initial-scale=1'
-                })
-            ]),
-            m("body", {
-                config: function(el) {
-                    window.setInterval(function() {
-                        parent.postMessage((el.offsetHeight || el.clientHeight), '*');
-                    }, 500);
+const pageEnum = {
+    QUOTE: 0,
+    ADMIN: 1
+}
+
+var Main = {}
+
+Main.vm = {}
+
+Main.controller = function() {
+    var vm = Main.vm;
+    vm.page = m.prop(pageEnum.QUOTE);
+}
+
+Main.view = function(ctrl) {
+    var vm = Main.vm;
+    return m("html", [
+        m("head", [
+            m("link", {
+                rel: 'stylesheet',
+                href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'normalize.css'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'flexblocks.css'
+            }),
+            m("link", {
+                rel: 'stylesheet',
+                href: 'site.css'
+            }),
+            m("meta", {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1'
+            })
+        ]),
+        m("body", {
+            config: function(el) {
+                window.setInterval(function() {
+                    parent.postMessage((el.offsetHeight || el.clientHeight), '*');
+                }, 500);
+            }
+        }, [
+            m('button', { 
+                onclick: function (e) {
+                    vm.page(pageEnum.QUOTE);
                 }
-            }, [
-                m.component(QuoteForm, {
-                    test: "test"
-                })
-            ])
-        ]);
+            }, 'Quote Page'),
+            m('button', { 
+                onclick: function (e) {
+                    vm.page(pageEnum.ADMIN);
+                }
+            }, 'Admin Page'),
+            renderPage(vm.page())
+        ])
+    ]);
+}
+
+function renderPage (page) {
+    switch (page) {
+        case pageEnum.QUOTE:
+            return m.component(QuoteForm, { 'app': app });
+        case pageEnum.ADMIN:
+            return m.component(AdminPage, { 'app': app });
+        default:
+            return null;
     }
 }
 
 //initialize the application
-m.mount(document, main);
+m.mount(document, Main);
 
 module.exports = app;

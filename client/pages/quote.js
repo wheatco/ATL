@@ -80,9 +80,15 @@ QuoteForm.vm.init = function() {
 
 };
 
+var initialized = false;
+
 QuoteForm.vm.config = function(attrs) {
-  var vm = QuoteForm.vm;
-  console.log(attrs);
+  if (!initialized) {
+    initialized = true;
+    var vm = QuoteForm.vm;
+    var app = attrs.app;
+    vm.tools = app.service('tools').find();
+  }
 }
 
 QuoteForm.controller = function() {
@@ -93,6 +99,7 @@ QuoteForm.controller = function() {
 QuoteForm.view = function(ctrl, attrs) {
     var vm = QuoteForm.vm;
     vm.config(attrs);
+    // console.log(vm.tools());
     vm.calculate();
 
     return m("div", [
