@@ -98,9 +98,9 @@ Main.view = function(ctrl) {
 function renderPage (page) {
     switch (page) {
         case pageEnum.QUOTE:
-            return m.component(QuoteForm, { 'app': app });
+            return m.component(QuoteForm);
         case pageEnum.ADMIN:
-            return m.component(AdminPage, { 'app': app });
+            return m(AdminPage);
         default:
             return null;
     }

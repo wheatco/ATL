@@ -5,8 +5,10 @@ var QuoteForm = {};
 //for simplicity, we use this component to namespace the model classes
 QuoteForm.vm = {};
 
-QuoteForm.vm.init = function() {
+
+QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
+    const app = window.app;
 
     vm.defaultMSI = {
         "Semi Gloss AT20 - 53269":  0.41,
@@ -29,30 +31,7 @@ QuoteForm.vm.init = function() {
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
     vm.corner = m.prop('Square'); // Round
 
-    vm.tools = [
-        "3/4 x 5 3/4 rectangle",
-        "2 x 8 rectangle",
-        "2 1/16 x 3 1/4 rectangle",
-        "2 1/8 x 3 1/2 rectangle",
-        "3 x 9 rectangle",
-        "3 x 9 rectangle",
-        "3 1/4 x 2 1/8 rectangle",
-        "4 x 5 rectangle",
-        "4 1/2 x 2 1/2 rectangle",
-        "4 1/2 x 3 rectangle",
-        "4 7/8 x 3 rectangle",
-        "4.2836 x 5.5 special",
-        "11.45 x 7.3303 special",
-        "4 1/8 x 4 1/4 special",
-        "10 1/2 x 3 1/4 special",
-        "3.8431 x 4.3281 special",
-        "2.019 x 4 special",
-        "2.4033 x 8.25 special",
-        "2.0404 x 5.5107 special",
-        "1 11/16 circle",
-        "2 circle",
-        "3 circle",
-    ]
+    vm.tools = app.service('tools').find();
 
     vm.selectedTools = m.prop([]);
 
@@ -77,29 +56,11 @@ QuoteForm.vm.init = function() {
     vm.calculate = function() {
 
     };
-
-};
-
-var initialized = false;
-
-QuoteForm.vm.config = function(attrs) {
-  if (!initialized) {
-    initialized = true;
-    var vm = QuoteForm.vm;
-    var app = attrs.app;
-    vm.tools = app.service('tools').find();
-  }
-}
-
-QuoteForm.controller = function() {
-    QuoteForm.vm.init();
 };
 
 //here's the view
-QuoteForm.view = function(ctrl, attrs) {
+QuoteForm.view = function(ctrl, args) {
     var vm = QuoteForm.vm;
-    vm.config(attrs);
-    // console.log(vm.tools());
     vm.calculate();
 
     return m("div", [
