@@ -31,8 +31,7 @@ module.exports = function() {
     renderQuoteHTML(app),
     renderPDF(app));
 
-  // is addQuote supposed to be a layer over /quotes? It doesn't work rn.
-  // --joe
+  app.get('/previewQuote', previewQuote(app));
   app.post('/addQuote', addQuote(app));
 
   app.use(notFound());

@@ -52,7 +52,7 @@ QuoteForm.vm.submitForm = function() {
         dataType: 'json',
         success: function(data, textStatus, jqXHR) {
             console.log(data);
-            window.location.href = '/preview/' + data._id;
+            window.location.href = '/previewQuote?q=' + data._id;
         }
     });
 };
