@@ -5,7 +5,7 @@
   Usage: 
   m.component(Select2, {
       data: array of dropdown options from a feathers service
-      dataKey: property with name of object in data
+      format: function (dataitem) that returns string to display
       value: m.prop to store selected value(s)
       onchange: callback with selected value
       ...PLUS...
@@ -28,7 +28,7 @@ window.Select2 = {
 
         // Special values
         var data = attrs.data.data;
-        var dataKey = attrs.dataKey;
+        var format = attrs.format;
         var value = attrs.value;
         var onchange = attrs.onchange;
         delete attrs.data;
@@ -38,7 +38,7 @@ window.Select2 = {
 
         // Get strings from service objects
         for (var i = 0; i < data.length; i++) {
-          data[i] = data[i][dataKey];
+          data[i] = format(data[i]);
         };
 
         attrs.data = data;

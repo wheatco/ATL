@@ -157,7 +157,9 @@ QuoteForm.view = function(ctrl, args) {
                 m('.select-wrapper', [
                     m.component(Select2, {
                         data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
-                        dataKey: 'name',
+                        format: function(tool) {
+                            return tool.name;
+                        },
                         value: vm.selectedTools,
                         onchange: function (val) {
                             console.log(val);

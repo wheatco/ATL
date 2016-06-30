@@ -103,7 +103,7 @@ function renderPage (page) {
         case pageEnum.QUOTE:
             return m.component(QuoteForm);
         case pageEnum.ADMIN:
-            return m(AdminPage);
+            return m.component(AdminPage);
         default:
             return null;
     }
