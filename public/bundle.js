@@ -16365,16 +16365,64 @@
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
-	// Mithril component for quote generation
+	var _jquery = __webpack_require__(3);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var QuoteForm = {};
 	
 	//for simplicity, we use this component to namespace the model classes
+	// Mithril component for quote generation
 	QuoteForm.vm = {};
+	
+	QuoteForm.vm.submitForm = function () {
+	    _jquery2.default.ajax({
+	        url: '/addQuote',
+	        type: 'POST',
+	        data: {
+	            name: vm.name(),
+	            addressStreet: vm.addressStreet(),
+	            addressCity: vm.addressCity(),
+	            addressState: vm.addressState(),
+	            addressZip: vm.addressZip(),
+	            phone: vm.phone(),
+	            email: vm.email(),
+	            shape: vm.shape(),
+	            corner: vm.corner(),
+	            selectedTools: vm.selectedTools(),
+	            quantity1: vm.quantity1(),
+	            quantity2: vm.quantity2(),
+	            quantity3: vm.quantity3(),
+	            quantity4: vm.quantity4(),
+	            quantity5: vm.quantity5(),
+	            substrate: vm.substrate(),
+	            substrateMSI: vm.substrateMSI(),
+	            finish: vm.finish(),
+	            finishMSI: vm.finishMSI(),
+	            numDesigns: vm.numDesigns(),
+	            costPerDesign: vm.costPerDesign(),
+	            margin: vm.margin(),
+	            prepressCharges: vm.prepressCharges(),
+	            copyCharges: vm.copyCharges(),
+	            overallCost1: vm.overallCost1(),
+	            overallCost2: vm.overallCost2(),
+	            overallCost3: vm.overallCost3(),
+	            overallCost4: vm.overallCost4(),
+	            overallCost5: vm.overallCost5()
+	        },
+	        dataType: 'json',
+	        success: function success(data, textStatus, jqXHR) {
+	            console.log(data);
+	            window.location('/preview/' + data._id);
+	        }
+	    });
+	};
 	
 	QuoteForm.controller = function (args) {
 	    var vm = QuoteForm.vm;
@@ -16405,7 +16453,11 @@
 	
 	    vm.selectedTools = m.prop([]);
 	
-	    vm.quantity = m.prop(100);
+	    vm.quantity1 = m.prop(100);
+	    vm.quantity2 = m.prop(100);
+	    vm.quantity3 = m.prop(100);
+	    vm.quantity4 = m.prop(100);
+	    vm.quantity5 = m.prop(100);
 	
 	    vm.substrate = m.prop('White Paper');
 	    vm.substrateMSI = m.prop(0.45);
@@ -16420,7 +16472,11 @@
 	    vm.prepressCharges = m.prop(0);
 	    vm.copyCharges = m.prop(0);
 	
-	    vm.overallCost = m.prop(0);
+	    vm.overallCost1 = m.prop(0);
+	    vm.overallCost2 = m.prop(0);
+	    vm.overallCost3 = m.prop(0);
+	    vm.overallCost4 = m.prop(0);
+	    vm.overallCost5 = m.prop(0);
 	
 	    // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
 	    vm.calculate = function () {};
@@ -16472,7 +16528,7 @@
 	    }]), m('.label-header', 'Tools'), m('.select-wrapper', [m.component(Select2, {
 	        data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
 	        format: function format(tool) {
-	            return tool.name + " " + tool.acrossWeb + "x" + tool.aroundWeb;
+	            return tool.name + ' ' + tool.acrossWeb + 'x' + tool.aroundWeb;
 	        },
 	        value: vm.selectedTools,
 	        onchange: function onchange(val) {
@@ -16509,8 +16565,28 @@
 	    })]),
 	    // COLUMN 3: QUANTITY AND ADDITIONAL INFO
 	    m('div', [m('h1', 'Order Details'), m('h2', 'Quantity'), calc.range({
-	        header: 'Number of labels',
-	        val: vm.quantity,
+	        header: 'Number of labels (quantity 1)',
+	        val: vm.quantity1,
+	        type: 'number',
+	        range: [0, 1000000, 100]
+	    }), calc.range({
+	        header: 'Number of labels (quantity 2)',
+	        val: vm.quantity2,
+	        type: 'number',
+	        range: [0, 1000000, 100]
+	    }), calc.range({
+	        header: 'Number of labels (quantity 3)',
+	        val: vm.quantity3,
+	        type: 'number',
+	        range: [0, 1000000, 100]
+	    }), calc.range({
+	        header: 'Number of labels (quantity 4)',
+	        val: vm.quantity4,
+	        type: 'number',
+	        range: [0, 1000000, 100]
+	    }), calc.range({
+	        header: 'Number of labels (quantity 5)',
+	        val: vm.quantity5,
 	        type: 'number',
 	        range: [0, 1000000, 100]
 	    }), m('h2', 'Designs'), calc.range({
@@ -16540,7 +16616,9 @@
 	        range: [0, 500, 1]
 	    })]),
 	    // COLUMN 4: RESULTS AND SUBMISSION
-	    m('div', [m('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'), m('button.submit', 'Submit')])])]);
+	    m('div', [m('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'), calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'), calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'), calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'), calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'), m('button.submit', 'Submit', {
+	        onclick: vm.submitForm
+	    })])])]);
 	};
 	
 	window.QuoteForm = QuoteForm;
