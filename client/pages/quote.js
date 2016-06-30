@@ -26,7 +26,9 @@ QuoteForm.vm.submitForm = function() {
             email: vm.email(),
             shape: vm.shape(),
             corner: vm.corner(),
-            selectedTools: vm.selectedTools(),
+            selectedTool: vm.selectedTool(),
+            toolAcross: vm.toolAcross(),
+            toolAround: vm.toolAround(),
             quantity1: vm.quantity1(),
             quantity2: vm.quantity2(),
             quantity3: vm.quantity3(),
@@ -83,7 +85,9 @@ QuoteForm.controller = function(args) {
 
     vm.tools = app.service('tools').find();
 
-    vm.selectedTools = m.prop([]);
+    vm.selectedTool = m.prop([]);
+    vm.toolAcross = m.prop([]);
+    vm.toolAround = m.prop([]);
 
     vm.quantity1 = m.prop(100);
     vm.quantity2 = m.prop(100);
@@ -216,9 +220,13 @@ QuoteForm.view = function(ctrl, args) {
                     m.component(Select2, {
                         data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
                         format: function(tool) {
+                            // TODO: this is a bit jank
+                            vm.selectedTool(tool.name);
+                            vm.toolAcross(tooll.acrossWeb);
+                            vm.toolAround(tooll.aroundWeb);
                             return `${tool.name} ${tool.acrossWeb}x${tool.aroundWeb}`;
                         },
-                        value: vm.selectedTools,
+                        value: vm.selectedTool,
                         onchange: function(val) {
                             console.log(val);
                         },
