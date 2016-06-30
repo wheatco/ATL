@@ -11,7 +11,7 @@ var Checklist = {
   view: function(ctrl, args) {
     var vm = Checklist.vm;
     return m('.calc-item', vm.items().map(function(item) {
-      return m('label.checklist-label.middle.row', {
+      return m('div.checklist-label.middle.row', {
 
       }, [
         m('button.deleteButton', {
