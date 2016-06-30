@@ -11,7 +11,8 @@ html(lang="en")
   head
     title= 'Quote '+id+' for '+name
   body
-    header
+    header(style="text-align:center; border-top: 50px solid white;")
+      img(src="http://www.at-l.com/wp-content/uploads/2014/05/atl_logo_frontpage.jpg", style="width: 300px;display:block; margin: 0 auto")
       h1 American Tape and Label
       h2 Service and Quality for Less
       h3= 'Quote opened on ' + prettyDate(createdAt)
@@ -44,53 +45,70 @@ html(lang="en")
             th Job Info
         tbody
           tr
+            td Shape
+            td= shape
+          tr
+            td Corner
+            td= corner
+          tr
+            td Tools
+            td= selectedTools
+          tr
+            td Substrate
+            td= substrate
+          tr
             td Finishing
             td= finish
           tr
             td Number of designs
             td= numDesigns
 
-      table(style="width:100%")
+      table(style="width:100%; border-collapse:collapse")
         thead
           tr
             th Pricing
         tbody(style="border: solid black 1px; display: block")
           tr
-            td Quantity:
+            td(style="width: 100%") Quantity:
             if quantity1
-              td= quantity1
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity1
             if quantity2
-              td= quantity2
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity2
             if quantity3
-              td= quantity3
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity3
             if quantity4
-              td= quantity4
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity4
             if quantity5
-              td= quantity5
-          tr
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity5
+          tr(style="border-bottom: solid black 1px;")
             td Price Per Thousand:
             if quantity1 && overallCost1
-              td= '$'+(overallCost1/1000).toFixed(2)
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
             if quantity2 && overallCost2
-              td= '$'+(overallCost1/1000).toFixed(2)
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
             if quantity3 && overallCost3
-              td= '$'+(overallCost1/1000).toFixed(2)
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
             if quantity4 && overallCost4
-              td= '$'+(overallCost1/1000).toFixed(2)
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
             if quantity5 && overallCost5
-              td= '$'+(overallCost1/1000).toFixed(2)
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
           tr
             td Job Total:
             if overallCost1
-              td= '$'+overallCost1.toFixed(2) 
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost1.toFixed(2) 
             if overallCost2
-              td= '$'+overallCost2.toFixed(2) 
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost2.toFixed(2) 
             if overallCost3
-              td= '$'+overallCost3.toFixed(2) 
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost3.toFixed(2) 
             if overallCost4
-              td= '$'+overallCost4.toFixed(2) 
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost4.toFixed(2) 
             if overallCost5
-              td= '$'+overallCost5.toFixed(2) 
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost5.toFixed(2) 
+      
+      ul
+        li= 'Cost Per Design: $' + costPerDesign
+        li= 'Prepress Charges: $' +prepressCharges
+        li= 'Copy Charges: $' +copyCharges
 
     footer
       h3 DISCLAIMER:
@@ -102,36 +120,8 @@ html(lang="en")
 
       p Joe Heguy
 
-      small
+      small(style="text-align: center;")
         p 6390 North Broadway | Denver, Colorado 80216
         p (303) 427-0588 | FAX (303) 650-6271 | Visit us at www.AT-L.com
         br
         p &copy; 2007 American Tape &amp; Label. ALl Rights Reserved.
-
-//-   shape: String,
-//-   corner: String,
-//-   selectedTools: String,
-//-   quantity1: Number,
-//-   quantity2: Number,
-//-   quantity3: Number,
-//-   quantity4: Number,
-//-   quantity5: Number,
-//-   substrate: String,
-//-   substrateMSI: Number,
-//-   finishMSI: Number,
-//-   costPerDesign: Number,
-//-   margin: Number,
-//-   prepressCharges: Number,
-//-   copyCharges: Number,
-//-   overallCost1: Number,
-//-   overallCost2: Number,
-//-   overallCost3: Number,
-//-   overallCost4: Number,
-//-   overallCost5: Number,
-//-   createdAt: {
-//-     type: Date,
-//-     'default': Date.now
-//-   },
-//-   updatedAt: {
-//-     type: Date,
-//-     'default': Date.now

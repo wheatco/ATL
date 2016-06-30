@@ -21,7 +21,7 @@ html(lang="en")
   body
     h1 Preview Quote Number #{q_id}
     p Here's the preview?
-    iframe.frame(src="/viewQuote?q="+q_id)
+    iframe.frame(src="/viewQuote?q="+q_id, style='width: 850px; height: 1100px', width=1100, height = 850)
     p Do you want to send it?
     button.send(onClick=function(){console.log('need to implement')}) Send!
     //- this button doesn't work yet and needs to be implemented with the email system -ac
