@@ -10636,7 +10636,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16546,9 +16546,9 @@
 	        format: function format(tool) {
 	            // TODO: this is a bit jank
 	            vm.selectedTool(tool.name);
-	            vm.toolAcross(tooll.acrossWeb);
-	            vm.toolAround(tooll.aroundWeb);
-	            return tool.name + ' ' + tool.acrossWeb + 'x' + tool.aroundWeb;
+	            vm.toolAcross(tool.acrossWeb);
+	            vm.toolAround(tool.aroundWeb);
+	            return tool.acrossWeb + 'x' + tool.aroundWeb + ' - ' + tool.name;
 	        },
 	        value: vm.selectedTool,
 	        onchange: function onchange(val) {
@@ -16575,6 +16575,9 @@
 	    }, {
 	        val: 'Matte',
 	        label: 'Matte'
+	    }, {
+	        val: 'UV',
+	        label: 'UV'
 	    }], function () {
 	        if (vm.finish() == 'Gloss') vm.finishMSI(0.20);else if (vm.finish() == 'UV') vm.finishMSI(0.50);else vm.finishMSI(0.40);
 	    }), calc.range({
@@ -35319,7 +35322,6 @@
 	// Mithril component for tool management and maybe other things
 	
 	var m = __webpack_require__(6);
-	var app = window.app;
 	
 	var Checklist = {
 	  vm: {},

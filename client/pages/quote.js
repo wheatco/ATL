@@ -222,9 +222,9 @@ QuoteForm.view = function(ctrl, args) {
                         format: function(tool) {
                             // TODO: this is a bit jank
                             vm.selectedTool(tool.name);
-                            vm.toolAcross(tooll.acrossWeb);
-                            vm.toolAround(tooll.aroundWeb);
-                            return `${tool.name} ${tool.acrossWeb}x${tool.aroundWeb}`;
+                            vm.toolAcross(tool.acrossWeb);
+                            vm.toolAround(tool.aroundWeb);
+                            return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                         },
                         value: vm.selectedTool,
                         onchange: function(val) {
@@ -258,6 +258,9 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'Matte',
                     label: 'Matte',
+                }, {
+                    val: 'UV',
+                    label: 'UV',
                 }], function() {
                     if (vm.finish() == 'Gloss') vm.finishMSI(0.20);
                     else if (vm.finish() == 'UV') vm.finishMSI(0.50);

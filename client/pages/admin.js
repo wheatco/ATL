@@ -1,7 +1,6 @@
 // Mithril component for tool management and maybe other things
 
 var m = require('mithril');
-var app = window.app;
 
 var Checklist = {
   vm: {},
