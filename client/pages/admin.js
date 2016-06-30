@@ -92,7 +92,6 @@ AdminPage.controller = function(args) {
   const app = window.app;
 
   vm.tools = m.prop([]);
-  vm.newTool = m.prop('');
   app.service('tools').find().then(tools => {
     vm.tools(tools.data);
   });
@@ -100,6 +99,7 @@ AdminPage.controller = function(args) {
   vm.quotes = m.prop([]);
   app.service('quotes').find().then(quotes => {
     vm.quotes(quotes.data);
+    console.log(vm.quotes());
   });
 };
 
@@ -108,7 +108,6 @@ function addTool(tool) {
   app.service('tools').create(tool).then(tool => {
     // TODO: make this update automatic
     app.service('tools').find().then(tools => {
-      vm.newTool('');
       vm.tools(tools.data);
     });
   });
