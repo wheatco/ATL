@@ -368,20 +368,25 @@ svg.line-chart {
   TABLE STYLES
 ***************/
 
-.table {
+.table, table {
+  margin-top: 1em;
   width: 100%;
   font-size: 0.9em;
+  table-layout: fixed;
 }
 
-.table-header {
+.table-header, th {
   font-size: 0.9em;
   background-color: #eee;
+  padding: 6px;
 }
-.table-row {
-  border-top: 1px solid #ccc;
+.table-row, tr {
+  border: 1px solid #ccc;
+  text-align: left;
 }
-.table-cell {
-  padding: 4px;
+.table-cell, td {
+  padding: 6px;
+  border-left: 1px #ccc solid;
 }
 
 .table-wrap.collapse {
@@ -477,6 +482,16 @@ svg.line-chart {
   box-shadow: none;
   border: none;
   border-radius: 2px;
+}
+
+.previewButton {
+  text-transform: uppercase;
+  color: white;
+  float: right;
+  border: none;
+  border-radius: 2px;
+  box-shadow: none;
+  margin: 3px;
 }
 
 /***************
