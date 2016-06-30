@@ -11,13 +11,13 @@ QuoteForm.controller = function(args) {
     const app = window.app;
 
     vm.defaultMSI = {
-        "Semi Gloss AT20 - 53269":  0.41,
-        "White Bopp - 79536":  0.57,
-        "Clear Bopp - 79560":  0.59,
-        "Silver Paper - 53909":  0.69,
-        "Silver Bopp - 79248":  0.68,
-        "Paper Perm - 53272":  0.43,
-        "Matte Litho - 19958":  0.44
+        "Semi Gloss AT20 - 53269": 0.41,
+        "White Bopp - 79536": 0.57,
+        "Clear Bopp - 79560": 0.59,
+        "Silver Paper - 53909": 0.69,
+        "Silver Bopp - 79248": 0.68,
+        "Paper Perm - 53272": 0.43,
+        "Matte Litho - 19958": 0.44
     }
 
     vm.name = m.prop('');
@@ -161,7 +161,7 @@ QuoteForm.view = function(ctrl, args) {
                             return `${tool.name} ${tool.acrossWeb}x${tool.aroundWeb}`;
                         },
                         value: vm.selectedTools,
-                        onchange: function (val) {
+                        onchange: function(val) {
                             console.log(val);
                         },
                         tags: false,
@@ -171,7 +171,7 @@ QuoteForm.view = function(ctrl, args) {
                 ]),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
-                calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key){
+                calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
                     return {
                         val: key,
                         label: key
@@ -189,11 +189,12 @@ QuoteForm.view = function(ctrl, args) {
                 calc.radios(vm.finish, [{
                     val: 'Gloss',
                     label: 'Gloss',
-                },{
+                }, {
                     val: 'Matte',
                     label: 'Matte',
                 }], function() {
                     if (vm.finish() == "Gloss") vm.finishMSI(0.20);
+                    else if (vm.finish() == "UV") vm.finishMSI(0.50);
                     else vm.finishMSI(0.40);
                 }),
                 calc.range({
@@ -251,9 +252,8 @@ QuoteForm.view = function(ctrl, args) {
                 calc.resultDisplay(calc.formatMoney(vm.overallCost()), 'Overall Cost'),
                 m('button.submit', 'Submit'),
             ])
-        ])  
+        ])
     ])
 }
 
 window.QuoteForm = QuoteForm;
-

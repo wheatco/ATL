@@ -1,5 +1,7 @@
 'use strict';
 
+const quote = require('./quote');
+
 const tools = require('./tools');
 
 const authentication = require('./authentication');
@@ -15,4 +17,5 @@ module.exports = function() {
   app.configure(user);
   app.configure(tools);
   app.configure(tools);
+  app.configure(quote);
 };
