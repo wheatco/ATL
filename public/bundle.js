@@ -16385,7 +16385,7 @@
 	    var vm = QuoteForm.vm;
 	    console.log('running submit');
 	    _jquery2.default.ajax({
-	        url: '/addQuote',
+	        url: '/addquote',
 	        type: 'POST',
 	        data: {
 	            name: vm.name(),

@@ -2,6 +2,7 @@
 import $ from "jquery";
 var QuoteForm = {};
 
+
 //for simplicity, we use this component to namespace the model classes
 QuoteForm.vm = {};
 
@@ -9,7 +10,9 @@ QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
     console.log('running submit');
     $.ajax({
-        url: '/addQuote',
+        //I changed this from /addQuote to actually connect to the endpoint
+        // --joe
+        url: '/quotes',
         type: 'POST',
         data: {
             name: vm.name(),

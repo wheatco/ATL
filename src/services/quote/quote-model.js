@@ -24,7 +24,7 @@ const quoteSchema = new Schema({
   quantity3: Number,
   quantity4: Number,
   quantity5: Number,
-  substrate: Number,
+  substrate: String,
   substrateMSI: Number,
   finish: String,
   finishMSI: Number,
