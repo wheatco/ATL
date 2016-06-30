@@ -1,6 +1,103 @@
+-function prettyDate(dateString){
+  -var d = dateString.getDate();
+  -var monthNames = [ "Jan", "Feb", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  -var m = monthNames[dateString.getMonth()];
+  -var y = dateString.getFullYear();
+  -return d+' '+m+' '+y;
+-}
+
 doctype html
 html(lang="en")
   head
     title= pageTitle
   body
-    h1= 'Your ID: '+name
+    header
+      h1 American Tape and Label
+      h2 Service and Quality for Less
+      h3= 'Quote opened on ' + prettyDate(createdAt)
+      h3= 'Quote last modified on ' + prettyDate(updatedAt)
+    main(style="width:100%; overflow:auto")
+      table(style="float:left; width:50vw")
+        thead
+          tr
+            th Client Info
+        tbody
+          tr
+            td Proposal For
+            td= name
+          tr
+            td Address
+            td= addressStreet
+          tr
+            td City, St, Zip:
+            td= addressCity + ', ' + addressState + ' ' + addressZip
+          tr
+            td Telephone
+            td= phone
+          tr
+            td Email
+            td= email
+
+      table(style="float:right;")
+        thead
+          tr
+            th Job Info
+        tbody
+          tr
+            td Finishing
+            td= finish
+          tr
+            td Number of designs
+            td= numDesigns
+
+      table(style="width:100%")
+        thead
+          tr
+            th Pricing
+        tbody(style="border: solid black 1px; display: block")
+          tr
+            td Cost:
+
+    footer
+      h3 DISCLAIMER:
+      p Prices are based on artwork supplied by customer. Pre Press charges may apply. Prices are subject to change. An exact quote may be given upon receiving your artwork or computer disk. Quotes are valid for 30 dats. All orders are subject to a 10% over/under run unless Orders are C.O.D., MASTERCARD/VISA accepted.
+
+      p AT&amp;L is in no way responsible for any (written or implied) products, labor, container, or costs incurred due to incorrect printing or material deficiencies. ALl proofing before and after printing is the sole responsibility of the customer. Please report any discrepancies on this ticket immediately.
+
+      p Thank You.
+
+      p Joe Heguy
+
+      small
+        p 6390 North Broadway | Denver, Colorado 80216
+        p (303) 427-0588 | FAX (303) 650-6271 | Visit us at www.AT-L.com
+        br
+        p &copy; 2007 American Tape &amp; Label. ALl Rights Reserved.
+
+//-   shape: String,
+//-   corner: String,
+//-   selectedTools: String,
+//-   quantity1: Number,
+//-   quantity2: Number,
+//-   quantity3: Number,
+//-   quantity4: Number,
+//-   quantity5: Number,
+//-   substrate: String,
+//-   substrateMSI: Number,
+//-   finishMSI: Number,
+//-   costPerDesign: Number,
+//-   margin: Number,
+//-   prepressCharges: Number,
+//-   copyCharges: Number,
+//-   overallCost1: Number,
+//-   overallCost2: Number,
+//-   overallCost3: Number,
+//-   overallCost4: Number,
+//-   overallCost5: Number,
+//-   createdAt: {
+//-     type: Date,
+//-     'default': Date.now
+//-   },
+//-   updatedAt: {
+//-     type: Date,
+//-     'default': Date.now
