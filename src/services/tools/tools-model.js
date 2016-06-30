@@ -10,6 +10,8 @@ const Schema = mongoose.Schema;
 
 const toolsSchema = new Schema({
   name: { type: String, required: true },
+  acrossWeb: { type: Number, required: true },
+  aroundWeb: { type: Number, required: true },
   createdAt: { type: Date, 'default': Date.now },
   updatedAt: { type: Date, 'default': Date.now }
 });
