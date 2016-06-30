@@ -9,7 +9,7 @@
 doctype html
 html(lang="en")
   head
-    title= pageTitle
+    title= 'Quote '+id+' for '+name
   body
     header
       h1 American Tape and Label
@@ -56,7 +56,41 @@ html(lang="en")
             th Pricing
         tbody(style="border: solid black 1px; display: block")
           tr
-            td Cost:
+            td Quantity:
+            if quantity1
+              td= quantity1
+            if quantity2
+              td= quantity2
+            if quantity3
+              td= quantity3
+            if quantity4
+              td= quantity4
+            if quantity5
+              td= quantity5
+          tr
+            td Price Per Thousand:
+            if quantity1 && overallCost1
+              td= '$'+(overallCost1/1000).toFixed(2)
+            if quantity2 && overallCost2
+              td= '$'+(overallCost1/1000).toFixed(2)
+            if quantity3 && overallCost3
+              td= '$'+(overallCost1/1000).toFixed(2)
+            if quantity4 && overallCost4
+              td= '$'+(overallCost1/1000).toFixed(2)
+            if quantity5 && overallCost5
+              td= '$'+(overallCost1/1000).toFixed(2)
+          tr
+            td Job Total:
+            if overallCost1
+              td= '$'+overallCost1.toFixed(2) 
+            if overallCost2
+              td= '$'+overallCost2.toFixed(2) 
+            if overallCost3
+              td= '$'+overallCost3.toFixed(2) 
+            if overallCost4
+              td= '$'+overallCost4.toFixed(2) 
+            if overallCost5
+              td= '$'+overallCost5.toFixed(2) 
 
     footer
       h3 DISCLAIMER:
