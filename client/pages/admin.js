@@ -99,11 +99,11 @@ QUOTE TABLE
 
 function tableWithQuotes(quotes, callback) {
   var header = [
-        m('tr', [
-          m('th', 'ID'),
-          m('th', 'Name'),
-          m('th', '')
-        ])
+    m('tr', [
+      m('th', 'ID'),
+      m('th', 'Name'),
+      m('th', '')
+    ])
   ];
   var rows = []
   if (quotes) {
@@ -112,7 +112,7 @@ function tableWithQuotes(quotes, callback) {
         m('td', quote._id),
         m('td', quote.name),
         m('button.previewButton', {
-          onclick: function (e) {
+          onclick: function(e) {
             callback(quote);
           }
         }, 'preview')
@@ -187,7 +187,7 @@ window.AdminPage = {
         ]),
         m('h2', 'Quotes'),
         m('table', tableWithQuotes(vm.quotes(), quote => {
-          window.open('/preview/'+quote._id);
+          window.open('/preview/' + quote._id);
         }))
       ])
     ]);

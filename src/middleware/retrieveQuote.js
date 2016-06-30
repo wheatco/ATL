@@ -12,14 +12,20 @@ module.exports = function(app) {
 
     var viewType = req.query.view || 'html';
 
+    console.log(req.query);
     app.service('/quotes')
       // will eventually change to a real query using
       // quoteNo but it doesn't exist on the server
       // yet.
-      .find({})
+      .find({
+        query: {
+          _id: req.query.q
+        }
+      })
       .then(function(result) {
-        res.data = result.data[1];
-        console.log(res.data);
+        console.log(result);
+        res.data = result.data[0];
+        // console.log(res.data);
         next();
       });
   };
