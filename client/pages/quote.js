@@ -90,10 +90,10 @@ QuoteForm.controller = function(args) {
     vm.toolAround = m.prop([]);
 
     vm.quantity1 = m.prop(100);
-    vm.quantity2 = m.prop(100);
-    vm.quantity3 = m.prop(100);
-    vm.quantity4 = m.prop(100);
-    vm.quantity5 = m.prop(100);
+    vm.quantity2 = m.prop(0);
+    vm.quantity3 = m.prop(0);
+    vm.quantity4 = m.prop(0);
+    vm.quantity5 = m.prop(0);
 
     vm.substrate = m.prop('White Paper');
     vm.substrateMSI = m.prop(0.45);
@@ -171,27 +171,35 @@ QuoteForm.controller = function(args) {
         var totalDigitalConsumablesCost = multiColorCostImpression * totalImpressions;
 
         var totalSubstrateCost = vm.substrateMSI() * msi;
-        var totalFinishingCost = vm.finishingMSI() * msi;
+        var totalFinishingCost = vm.finishMSI() * msi;
 
-        var totalPhysicalConsumablesCost = totalSubstrateCost + totalFinishingCost;
-        var totalExtraneousCosts = vm.numDesigns() * vm.costPerDesign() + vm.prepressCharges() + vm.copyCharges();
+        var totalPhysicalConsumablesCost =
+            totalSubstrateCost +
+            totalFinishingCost;
 
-        var totalCost = totalTimeCost +
-            totalDigitalConsumablesCost +
-            totalPhysicalConsumablesCost +
-            totalExtraneousCosts;
+        var totalExtraneousCosts =
+            (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
+            Number(vm.prepressCharges()) +
+            Number(vm.copyCharges());
+
+        // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
+
+        var totalCost = Number(totalTimeCost) +
+            Number(totalDigitalConsumablesCost) +
+            Number(totalPhysicalConsumablesCost) +
+            Number(totalExtraneousCosts);
 
         // calculate in margin
-        return (1 + vm.margin()) * totalCost;
+        return (1 + vm.margin() / 100) * totalCost;
     };
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
     vm.calculate = function() {
-        vm.overallCost1 = vm.calculateForQuantity(vm.quantity1());
-        vm.overallCost2 = vm.calculateForQuantity(vm.quantity2());
-        vm.overallCost3 = vm.calculateForQuantity(vm.quantity3());
-        vm.overallCost4 = vm.calculateForQuantity(vm.quantity4());
-        vm.overallCost5 = vm.calculateForQuantity(vm.quantity5());
+        vm.overallCost1(vm.calculateForQuantity(vm.quantity1()));
+        vm.overallCost2(vm.calculateForQuantity(vm.quantity2()));
+        vm.overallCost3(vm.calculateForQuantity(vm.quantity3()));
+        vm.overallCost4(vm.calculateForQuantity(vm.quantity4()));
+        vm.overallCost5(vm.calculateForQuantity(vm.quantity5()));
     };
 };
 

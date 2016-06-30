@@ -16470,10 +16470,10 @@
 	    vm.toolAround = _mithril2.default.prop([]);
 	
 	    vm.quantity1 = _mithril2.default.prop(100);
-	    vm.quantity2 = _mithril2.default.prop(100);
-	    vm.quantity3 = _mithril2.default.prop(100);
-	    vm.quantity4 = _mithril2.default.prop(100);
-	    vm.quantity5 = _mithril2.default.prop(100);
+	    vm.quantity2 = _mithril2.default.prop(0);
+	    vm.quantity3 = _mithril2.default.prop(0);
+	    vm.quantity4 = _mithril2.default.prop(0);
+	    vm.quantity5 = _mithril2.default.prop(0);
 	
 	    vm.substrate = _mithril2.default.prop('White Paper');
 	    vm.substrateMSI = _mithril2.default.prop(0.45);
@@ -16494,8 +16494,80 @@
 	    vm.overallCost4 = _mithril2.default.prop(0);
 	    vm.overallCost5 = _mithril2.default.prop(0);
 	
+	    vm.calculateForQuantity = function (quantity) {
+	        var inchesInFoot = 12;
+	        var minHr = 60;
+	
+	        // Hardcoded entries based on their exact job requirements and specific machine type.
+	        var maxImageAreaWebWidth = 11.84;
+	        var maxImageAreaRepeatLength = 17.70;
+	        var acrossGutter = 0.1250;
+	        var aroundGutter = 0.1250;
+	        var prepressRateHr = 25;
+	        var prepressMins = 15;
+	        var pressCostHr = 123.27;
+	        var pressSpeed = 50; // linFt/Min
+	        var finishingCostHr = 45.00;
+	        var finishingSpeed = 120;
+	        var rewindCostHr = 45.00;
+	        var rewindSpeed = 150;
+	        var setupFt = 60;
+	        var wasteLinFt = 0.01; // percent
+	        var substrateWidth = 13.00;
+	        var multiColorCostImpression = 0.0175;
+	
+	        var labelsAcrossTheWeb = Math.floor(maxImageAreaWebWidth / (vm.toolAcross() + acrossGutter));
+	        var labelsAroundTheWeb = Math.floor(maxImageAreaRepeatLength / (vm.toolAround() + aroundGutter));
+	
+	        var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
+	        var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
+	
+	        var productionFrames = Math.ceil(quantity / labelsPerFrame);
+	        var productionLinFt = productionFrames * repeatLength / inchesInFoot;
+	
+	        var totalLinFt = (productionLinFt + setupFt) * (1 + wasteLinFt);
+	        var msi = totalLinFt * inchesInFoot * substrateWidth / 1000; // milli-square-inches?
+	
+	        var totalPrePressTimeCost = prepressRateHr * prepressMins / minHr;
+	
+	        var totalPressRunMinutes = totalLinFt / pressSpeed;
+	        var totalPressRunTimeCost = totalPressRunMinutes / minHr * pressCostHr;
+	
+	        var totalFinishingMiniutes = totalLinFt / finishingSpeed;
+	        var totalFinishingTimeCost = totalFinishingMiniutes / minHr * finishingCostHr;
+	
+	        var totalRewindMinutes = totalLinFt / rewindSpeed;
+	        var totalRewindTimeCost = totalRewindMinutes / minHr * rewindCostHr;
+	
+	        var totalTimeCost = totalPrePressTimeCost + totalPressRunTimeCost + totalFinishingTimeCost + totalRewindTimeCost;
+	
+	        var totalImpressions = labelsPerFrame * productionFrames;
+	
+	        var totalDigitalConsumablesCost = multiColorCostImpression * totalImpressions;
+	
+	        var totalSubstrateCost = vm.substrateMSI() * msi;
+	        var totalFinishingCost = vm.finishMSI() * msi;
+	
+	        var totalPhysicalConsumablesCost = totalSubstrateCost + totalFinishingCost;
+	
+	        var totalExtraneousCosts = Number(vm.numDesigns()) * Number(vm.costPerDesign()) + Number(vm.prepressCharges()) + Number(vm.copyCharges());
+	
+	        // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
+	
+	        var totalCost = Number(totalTimeCost) + Number(totalDigitalConsumablesCost) + Number(totalPhysicalConsumablesCost) + Number(totalExtraneousCosts);
+	
+	        // calculate in margin
+	        return (1 + vm.margin() / 100) * totalCost;
+	    };
+	
 	    // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
-	    vm.calculate = function () {};
+	    vm.calculate = function () {
+	        vm.overallCost1(vm.calculateForQuantity(vm.quantity1()));
+	        vm.overallCost2(vm.calculateForQuantity(vm.quantity2()));
+	        vm.overallCost3(vm.calculateForQuantity(vm.quantity3()));
+	        vm.overallCost4(vm.calculateForQuantity(vm.quantity4()));
+	        vm.overallCost5(vm.calculateForQuantity(vm.quantity5()));
+	    };
 	};
 	
 	//here's the view
