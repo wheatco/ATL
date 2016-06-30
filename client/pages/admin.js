@@ -123,7 +123,7 @@ function deleteTool(tool) {
   });
 }
 
-function tableWithQuotes(quotes) {
+function tableWithQuotes(quotes, callback) {
   var header = [
         m('tr', [
           m('th', 'ID'),
@@ -137,7 +137,11 @@ function tableWithQuotes(quotes) {
       return m('tr', [
         m('td', quote._id),
         m('td', quote.name),
-        m('button', 'preview')
+        m('button', {
+          onclick: function (e) {
+            callback(quote);
+          }
+        }, 'preview')
       ]);
     });
   }
@@ -168,7 +172,9 @@ AdminPage.view = function(ctrl, args) {
         })
       ]),
       m('h2', 'Quotes'),
-      m('table', tableWithQuotes(vm.quotes()))
+      m('table', tableWithQuotes(vm.quotes(), quote => {
+        window.open('/preview/'+quote._id);
+      }))
     ])
   ]);
 };
