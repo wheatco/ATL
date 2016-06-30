@@ -18,7 +18,8 @@ module.exports = function(app) {
       // yet.
       .find({})
       .then(function(result){
-        res.data = result.data[0];
+        res.data = result.data[1];
+        console.log(res.data)
         next();
         })
   };
