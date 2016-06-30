@@ -35404,11 +35404,16 @@
 	  view: function view(ctrl, args) {
 	    var vm = Checklist.vm;
 	    return m('.calc-item', vm.items().map(function (item) {
-	      return m('label.checklist-label.middle.row', {}, [m('button.deleteButton', {
+	      return m('label.checklist-label.middle.row', {}, [args.delete ? m('button.deleteButton', {
 	        onclick: function onclick(e) {
 	          return args.onclick(item);
 	        }
-	      }, 'x'), m('div.checkbox-label', [m('strong', item.name || '')])]);
+	      }, 'x') : null, m('div.checkbox-label', [m('strong', item.name || '')]), args.button ? m('button.viewButton', {
+	        onclick: function onclick(e) {
+	          return args.onclick(item);
+	        },
+	        style: 'position: absolute;right: 15px;top: 2px;'
+	      }, 'View Quote') : null]);
 	    }));
 	  }
 	};
@@ -35503,6 +35508,8 @@
 	
 	  return m('div', [m('h1.title', 'Administration'), m('.calc.row.center.gap-5.admin-page', [m('div.fill', [m('h1', 'Manage Tools'), m.component(Checklist, {
 	    items: vm.tools,
+	    delete: true,
+	    button: false,
 	    onclick: function onclick(item) {
 	      deleteTool(item);
 	    }
@@ -35512,7 +35519,10 @@
 	    }
 	  })])]), m('.calc.row.center.gap-5.admin-page', m('div.fill', [m('h1', 'View Quotes'), m.component(Checklist, {
 	    items: vm.quotes,
+	    delete: false,
+	    button: true,
 	    onclick: function onclick(item) {
+	      window.location = '/viewQuote?q=' + item._id;
 	      console.log('clicked', item);
 	    }
 	  })]))]);

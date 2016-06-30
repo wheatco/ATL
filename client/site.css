@@ -516,6 +516,10 @@ svg.line-chart {
   border-bottom-width: 2px;
 }
 
+.checklist-label:hover {
+  background-color: #EEE;
+}
+
 .tool-entry label {
   font-size: 14px;
   text-transform: uppercase;

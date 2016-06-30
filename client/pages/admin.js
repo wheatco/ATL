@@ -14,14 +14,20 @@ var Checklist = {
       return m('label.checklist-label.middle.row', {
 
       }, [
-        m('button.deleteButton', {
+        args.delete ? m('button.deleteButton', {
           onclick: function(e) {
             return args.onclick(item);
           }
-        }, 'x'),
+        }, 'x') : null,
         m('div.checkbox-label', [
           m('strong', item.name || '')
-        ])
+        ]),
+        args.button ? m('button.viewButton', {
+          onclick: function(e) {
+            return args.onclick(item);
+          },
+          style: 'position: absolute;right: 15px;top: 2px;'
+        }, 'View Quote') : null
       ]);
     }));
   }
@@ -136,6 +142,8 @@ AdminPage.view = function(ctrl, args) {
         m('h1', 'Manage Tools'),
         m.component(Checklist, {
           items: vm.tools,
+          delete: true,
+          button: false,
           onclick: function(item) {
             deleteTool(item);
           }
@@ -154,7 +162,10 @@ AdminPage.view = function(ctrl, args) {
         m('h1', 'View Quotes'),
         m.component(Checklist, {
           items: vm.quotes,
+          delete: false,
+          button: true,
           onclick: function(item) {
+            window.location = '/viewQuote?q=' + item._id;
             console.log('clicked', item);
           }
         })
