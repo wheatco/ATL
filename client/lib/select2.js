@@ -38,7 +38,10 @@ window.Select2 = {
 
         // Get strings from service objects
         for (var i = 0; i < data.length; i++) {
-          data[i] = format(data[i]);
+          data[i] = {
+            id: data[i]._id,
+            text: format(data[i])
+          } 
         };
 
         attrs.data = data;

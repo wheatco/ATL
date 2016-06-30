@@ -158,7 +158,7 @@ QuoteForm.view = function(ctrl, args) {
                     m.component(Select2, {
                         data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
                         format: function(tool) {
-                            return tool.name;
+                            return `${tool.name} ${tool.acrossWeb}x${tool.aroundWeb}`;
                         },
                         value: vm.selectedTools,
                         onchange: function (val) {
