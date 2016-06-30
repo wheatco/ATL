@@ -1,4 +1,7 @@
 'use strict';
+//IMPORTANT
+//phantomjs has hidden dependency:
+// sudo apt-get install libfontconfig
 
 const path = require('path');
 const serveStatic = require('feathers').static;
@@ -29,6 +32,6 @@ app.use(compress())
   .configure(rest())
   .configure(socketio())
   .configure(services)
-  .configure(middleware);
+  .configure(middleware)
 
 module.exports = app;
