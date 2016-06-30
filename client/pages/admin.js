@@ -168,7 +168,7 @@ AdminPage.view = function(ctrl, args) {
         })
       ]),
       m('h2', 'Quotes'),
-      m('table', tableWithQuotes(vm.quotes())
+      m('table', tableWithQuotes(vm.quotes()))
     ])
   ]);
 };
