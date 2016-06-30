@@ -93,25 +93,25 @@
 	
 	Main.view = function (ctrl) {
 	    var vm = Main.vm;
-	    return m("html", [m("head", [m("link", {
+	    return m('html', [m('head', [m('link', {
 	        rel: 'stylesheet',
 	        href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
-	    }), m("link", {
+	    }), m('link', {
 	        rel: 'stylesheet',
 	        href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
-	    }), m("link", {
+	    }), m('link', {
 	        rel: 'stylesheet',
 	        href: 'normalize.css'
-	    }), m("link", {
+	    }), m('link', {
 	        rel: 'stylesheet',
 	        href: 'flexblocks.css'
-	    }), m("link", {
+	    }), m('link', {
 	        rel: 'stylesheet',
 	        href: 'site.css'
-	    }), m("meta", {
+	    }), m('meta', {
 	        name: 'viewport',
 	        content: 'width=device-width, initial-scale=1'
-	    })]), m("body", {
+	    })]), m('body', {
 	        config: function config(el) {
 	            window.setInterval(function () {
 	                parent.postMessage(el.offsetHeight || el.clientHeight, '*');
@@ -16373,6 +16373,14 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _mithril = __webpack_require__(13);
+	
+	var _mithril2 = _interopRequireDefault(_mithril);
+	
+	var _lodash = __webpack_require__(450);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var QuoteForm = {};
@@ -16433,54 +16441,54 @@
 	    var app = window.app;
 	
 	    vm.defaultMSI = {
-	        "Semi Gloss AT20 - 53269": 0.41,
-	        "White Bopp - 79536": 0.57,
-	        "Clear Bopp - 79560": 0.59,
-	        "Silver Paper - 53909": 0.69,
-	        "Silver Bopp - 79248": 0.68,
-	        "Paper Perm - 53272": 0.43,
-	        "Matte Litho - 19958": 0.44
+	        'Semi Gloss AT20 - 53269': 0.41,
+	        'White Bopp - 79536': 0.57,
+	        'Clear Bopp - 79560': 0.59,
+	        'Silver Paper - 53909': 0.69,
+	        'Silver Bopp - 79248': 0.68,
+	        'Paper Perm - 53272': 0.43,
+	        'Matte Litho - 19958': 0.44
 	    };
 	
-	    vm.name = m.prop('');
-	    vm.addressStreet = m.prop('');
-	    vm.addressCity = m.prop('');
-	    vm.addressState = m.prop('');
-	    vm.addressZip = m.prop('');
-	    vm.phone = m.prop('');
-	    vm.email = m.prop('');
+	    vm.name = _mithril2.default.prop('');
+	    vm.addressStreet = _mithril2.default.prop('');
+	    vm.addressCity = _mithril2.default.prop('');
+	    vm.addressState = _mithril2.default.prop('');
+	    vm.addressZip = _mithril2.default.prop('');
+	    vm.phone = _mithril2.default.prop('');
+	    vm.email = _mithril2.default.prop('');
 	
-	    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star
-	    vm.corner = m.prop('Square'); // Round
+	    vm.shape = _mithril2.default.prop('Rectangle'); // Circle, Triangle, Star
+	    vm.corner = _mithril2.default.prop('Square'); // Round
 	
 	    vm.tools = app.service('tools').find();
 	
-	    vm.selectedTools = m.prop([]);
+	    vm.selectedTools = _mithril2.default.prop([]);
 	
-	    vm.quantity1 = m.prop(100);
-	    vm.quantity2 = m.prop(100);
-	    vm.quantity3 = m.prop(100);
-	    vm.quantity4 = m.prop(100);
-	    vm.quantity5 = m.prop(100);
+	    vm.quantity1 = _mithril2.default.prop(100);
+	    vm.quantity2 = _mithril2.default.prop(100);
+	    vm.quantity3 = _mithril2.default.prop(100);
+	    vm.quantity4 = _mithril2.default.prop(100);
+	    vm.quantity5 = _mithril2.default.prop(100);
 	
-	    vm.substrate = m.prop('White Paper');
-	    vm.substrateMSI = m.prop(0.45);
-	    vm.finish = m.prop('Gloss'); // TODO may be plural?
-	    vm.finishMSI = m.prop(0.20);
+	    vm.substrate = _mithril2.default.prop('White Paper');
+	    vm.substrateMSI = _mithril2.default.prop(0.45);
+	    vm.finish = _mithril2.default.prop('Gloss'); // TODO may be plural?
+	    vm.finishMSI = _mithril2.default.prop(0.20);
 	
-	    vm.numDesigns = m.prop(1);
-	    vm.costPerDesign = m.prop(15);
+	    vm.numDesigns = _mithril2.default.prop(1);
+	    vm.costPerDesign = _mithril2.default.prop(15);
 	
-	    vm.margin = m.prop(40);
+	    vm.margin = _mithril2.default.prop(40);
 	
-	    vm.prepressCharges = m.prop(0);
-	    vm.copyCharges = m.prop(0);
+	    vm.prepressCharges = _mithril2.default.prop(0);
+	    vm.copyCharges = _mithril2.default.prop(0);
 	
-	    vm.overallCost1 = m.prop(0);
-	    vm.overallCost2 = m.prop(0);
-	    vm.overallCost3 = m.prop(0);
-	    vm.overallCost4 = m.prop(0);
-	    vm.overallCost5 = m.prop(0);
+	    vm.overallCost1 = _mithril2.default.prop(0);
+	    vm.overallCost2 = _mithril2.default.prop(0);
+	    vm.overallCost3 = _mithril2.default.prop(0);
+	    vm.overallCost4 = _mithril2.default.prop(0);
+	    vm.overallCost5 = _mithril2.default.prop(0);
 	
 	    // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
 	    vm.calculate = function () {};
@@ -16491,45 +16499,45 @@
 	    var vm = QuoteForm.vm;
 	    vm.calculate();
 	
-	    return m("div", [m('h1.title', 'ATL Order Form'), m('.calc.row.center.gap-5', [
+	    return (0, _mithril2.default)('div', [(0, _mithril2.default)('h1.title', 'ATL Order Form'), (0, _mithril2.default)('.calc.row.center.gap-5', [
 	
 	    // COLUMN 1: CLIENT INFO
-	    m('div', [m('h1', 'Client Information'), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'Name')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.name),
+	    (0, _mithril2.default)('div', [(0, _mithril2.default)('h1', 'Client Information'), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Name')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.name),
 	        value: vm.name()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'Address')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.addressStreet),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Address')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.addressStreet),
 	        value: vm.addressStreet()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'City')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.addressCity),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'City')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.addressCity),
 	        value: vm.addressCity()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'State')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.addressState),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'State')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.addressState),
 	        value: vm.addressState()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'Zip Code')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.addressZip),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Zip Code')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.addressZip),
 	        value: vm.addressZip()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'Phone')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.phone),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Phone')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.phone),
 	        value: vm.phone()
-	    })]), m('.calc-item.col.gap-2.justify', [m('div', [m('.label-header', 'Email')]), m('input.input-text.good border', {
-	        onchange: m.withAttr('value', vm.email),
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Email')]), (0, _mithril2.default)('input.input-text.good border', {
+	        onchange: _mithril2.default.withAttr('value', vm.email),
 	        value: vm.email()
 	    })])]),
 	    // COLUMN 2: EQUIPMENT / PAPER / FINISH
-	    m('div', [m('h1', 'Printing Details'), m('.label-header', 'Shape'), calc.radios(vm.shape, [{
+	    (0, _mithril2.default)('div', [(0, _mithril2.default)('h1', 'Printing Details'), (0, _mithril2.default)('.label-header', 'Shape'), calc.radios(vm.shape, [{
 	        val: 'Rectangle',
 	        label: 'Rectangle'
 	    }, {
 	        val: 'Circle',
 	        label: 'Circle'
-	    }]), m('.label-header', 'Corner'), calc.radios(vm.corner, [{
+	    }]), (0, _mithril2.default)('.label-header', 'Corner'), calc.radios(vm.corner, [{
 	        val: 'Square',
 	        label: 'Square'
 	    }, {
 	        val: 'Rounded',
 	        label: 'Rounded'
-	    }]), m('.label-header', 'Tools'), m('.select-wrapper', [m.component(Select2, {
+	    }]), (0, _mithril2.default)('.label-header', 'Tools'), (0, _mithril2.default)('.select-wrapper', [_mithril2.default.component(Select2, {
 	        data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
 	        format: function format(tool) {
 	            return tool.name + ' ' + tool.acrossWeb + 'x' + tool.aroundWeb;
@@ -16540,8 +16548,8 @@
 	        },
 	        tags: false,
 	        width: '100%',
-	        multiple: "multiple"
-	    })]), m('h2', 'Paper & Finish'), m('.label-header', 'Substrate'), calc.radios(vm.substrate, _.map(vm.defaultMSI, function (value, key) {
+	        multiple: 'multiple'
+	    })]), (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
 	        return {
 	            val: key,
 	            label: key
@@ -16553,14 +16561,14 @@
 	        hint: 'Each additional design causes',
 	        val: vm.substrateMSI,
 	        range: [0.0, 1.5, 0.01]
-	    }), m('.label-header', 'Finish'), calc.radios(vm.finish, [{
+	    }), (0, _mithril2.default)('.label-header', 'Finish'), calc.radios(vm.finish, [{
 	        val: 'Gloss',
 	        label: 'Gloss'
 	    }, {
 	        val: 'Matte',
 	        label: 'Matte'
 	    }], function () {
-	        if (vm.finish() == "Gloss") vm.finishMSI(0.20);else if (vm.finish() == "UV") vm.finishMSI(0.50);else vm.finishMSI(0.40);
+	        if (vm.finish() == 'Gloss') vm.finishMSI(0.20);else if (vm.finish() == 'UV') vm.finishMSI(0.50);else vm.finishMSI(0.40);
 	    }), calc.range({
 	        header: 'Finish MSI',
 	        hint: 'Each additional design causes',
@@ -16568,7 +16576,7 @@
 	        range: [0.0, 1.5, 0.01]
 	    })]),
 	    // COLUMN 3: QUANTITY AND ADDITIONAL INFO
-	    m('div', [m('h1', 'Order Details'), m('h2', 'Quantity'), calc.range({
+	    (0, _mithril2.default)('div', [(0, _mithril2.default)('h1', 'Order Details'), (0, _mithril2.default)('h2', 'Quantity'), calc.range({
 	        header: 'Number of labels (quantity 1)',
 	        val: vm.quantity1,
 	        type: 'number',
@@ -16593,7 +16601,7 @@
 	        val: vm.quantity5,
 	        type: 'number',
 	        range: [0, 1000000, 100]
-	    }), m('h2', 'Designs'), calc.range({
+	    }), (0, _mithril2.default)('h2', 'Designs'), calc.range({
 	        header: 'Number of designs',
 	        hint: 'Each additional design causes',
 	        val: vm.numDesigns,
@@ -16620,7 +16628,7 @@
 	        range: [0, 500, 1]
 	    })]),
 	    // COLUMN 4: RESULTS AND SUBMISSION
-	    m('div', [m('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'), calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'), calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'), calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'), calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'), m('button.submit', {
+	    (0, _mithril2.default)('div', [(0, _mithril2.default)('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'), calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'), calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'), calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'), calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'), (0, _mithril2.default)('button.submit', {
 	        onclick: vm.submitForm
 	    }, 'Submit')])])]);
 	};

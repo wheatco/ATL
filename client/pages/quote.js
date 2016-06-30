@@ -1,5 +1,7 @@
 // Mithril component for quote generation
-import $ from "jquery";
+import $ from 'jquery';
+import m from 'mithril';
+import _ from 'lodash';
 var QuoteForm = {};
 
 
@@ -59,14 +61,14 @@ QuoteForm.controller = function(args) {
     const app = window.app;
 
     vm.defaultMSI = {
-        "Semi Gloss AT20 - 53269": 0.41,
-        "White Bopp - 79536": 0.57,
-        "Clear Bopp - 79560": 0.59,
-        "Silver Paper - 53909": 0.69,
-        "Silver Bopp - 79248": 0.68,
-        "Paper Perm - 53272": 0.43,
-        "Matte Litho - 19958": 0.44
-    }
+        'Semi Gloss AT20 - 53269': 0.41,
+        'White Bopp - 79536': 0.57,
+        'Clear Bopp - 79560': 0.59,
+        'Silver Paper - 53909': 0.69,
+        'Silver Bopp - 79248': 0.68,
+        'Paper Perm - 53272': 0.43,
+        'Matte Litho - 19958': 0.44
+    };
 
     vm.name = m.prop('');
     vm.addressStreet = m.prop('');
@@ -119,7 +121,7 @@ QuoteForm.view = function(ctrl, args) {
     var vm = QuoteForm.vm;
     vm.calculate();
 
-    return m("div", [
+    return m('div', [
         m('h1.title', 'ATL Order Form'),
         m('.calc.row.center.gap-5', [
 
@@ -222,7 +224,7 @@ QuoteForm.view = function(ctrl, args) {
                         },
                         tags: false,
                         width: '100%',
-                        multiple: "multiple"
+                        multiple: 'multiple'
                     }),
                 ]),
                 m('h2', 'Paper & Finish'),
@@ -249,8 +251,8 @@ QuoteForm.view = function(ctrl, args) {
                     val: 'Matte',
                     label: 'Matte',
                 }], function() {
-                    if (vm.finish() == "Gloss") vm.finishMSI(0.20);
-                    else if (vm.finish() == "UV") vm.finishMSI(0.50);
+                    if (vm.finish() == 'Gloss') vm.finishMSI(0.20);
+                    else if (vm.finish() == 'UV') vm.finishMSI(0.50);
                     else vm.finishMSI(0.40);
                 }),
                 calc.range({

@@ -49,34 +49,34 @@ Main.controller = function() {
 
 Main.view = function(ctrl) {
     var vm = Main.vm;
-    return m("html", [
-        m("head", [
-            m("link", {
+    return m('html', [
+        m('head', [
+            m('link', {
                 rel: 'stylesheet',
                 href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
             }),
-            m("link", {
+            m('link', {
                 rel: 'stylesheet',
                 href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
             }),
-            m("link", {
+            m('link', {
                 rel: 'stylesheet',
                 href: 'normalize.css'
             }),
-            m("link", {
+            m('link', {
                 rel: 'stylesheet',
                 href: 'flexblocks.css'
             }),
-            m("link", {
+            m('link', {
                 rel: 'stylesheet',
                 href: 'site.css'
             }),
-            m("meta", {
+            m('meta', {
                 name: 'viewport',
                 content: 'width=device-width, initial-scale=1'
             })
         ]),
-        m("body", {
+        m('body', {
             config: function(el) {
                 window.setInterval(function() {
                     parent.postMessage((el.offsetHeight || el.clientHeight), '*');
@@ -96,7 +96,7 @@ Main.view = function(ctrl) {
             renderPage(vm.page())
         ])
     ]);
-}
+};
 
 function renderPage (page) {
     switch (page) {
