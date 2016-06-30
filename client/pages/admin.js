@@ -2,6 +2,10 @@
 
 var m = require('mithril');
 
+/********
+CHECKLIST
+********/
+
 var Checklist = {
   vm: {},
   controller: function(args) {
@@ -26,6 +30,10 @@ var Checklist = {
     }));
   }
 };
+
+/**********
+TOOL ENTRY
+**********/
 
 var ToolEntry = {
   vm: {},
@@ -75,6 +83,9 @@ var ToolEntry = {
 
           if (tool.name.length && args.onclick) {
             args.onclick(tool);
+            vm.name("");
+            vm.acrossWeb(0);
+            vm.aroundWeb(0);
           }
         }
       }, '+')
@@ -82,46 +93,9 @@ var ToolEntry = {
   }
 };
 
-var AdminPage = {};
-
-//for simplicity, we use this component to namespace the model classes
-AdminPage.vm = {};
-
-AdminPage.controller = function(args) {
-  var vm = AdminPage.vm;
-  const app = window.app;
-
-  vm.tools = m.prop([]);
-  app.service('tools').find().then(tools => {
-    vm.tools(tools.data);
-  });
-
-  vm.quotes = m.prop([]);
-  app.service('quotes').find().then(quotes => {
-    vm.quotes(quotes.data);
-  });
-};
-
-function addTool(tool) {
-  var vm = AdminPage.vm;
-  app.service('tools').create(tool).then(tool => {
-    // TODO: make this update automatic
-    app.service('tools').find().then(tools => {
-      vm.tools(tools.data);
-    });
-  });
-}
-
-function deleteTool(tool) {
-  var vm = AdminPage.vm;
-  app.service('tools').remove({
-    _id: tool._id
-  }).then(removed => {
-    app.service('tools').find().then(tools => {
-      vm.tools(tools.data);
-    });
-  });
-}
+/**********
+QUOTE TABLE
+**********/
 
 function tableWithQuotes(quotes, callback) {
   var header = [
@@ -137,7 +111,7 @@ function tableWithQuotes(quotes, callback) {
       return m('tr', [
         m('td', quote._id),
         m('td', quote.name),
-        m('button', {
+        m('button.previewButton', {
           onclick: function (e) {
             callback(quote);
           }
@@ -150,33 +124,72 @@ function tableWithQuotes(quotes, callback) {
   return header;
 }
 
-//here's the view
-AdminPage.view = function(ctrl, args) {
-  var vm = AdminPage.vm;
+/********
+MAIN PAGE
+********/
 
-  return m('div', [
-    m('h1.title', 'Administration'),
-    m('.calc.column.admin-page', [
-      m('h2', 'Tools'),
-      m('div', [
-        m.component(Checklist, {
-          items: vm.tools,
-          onclick: function(item) {
-            deleteTool(item);
-          }
-        }),
-        m.component(ToolEntry, {
-          onclick: function(tool) {
-            addTool(tool);
-          }
-        })
-      ]),
-      m('h2', 'Quotes'),
-      m('table', tableWithQuotes(vm.quotes(), quote => {
-        window.open('/preview/'+quote._id);
-      }))
-    ])
-  ]);
-};
+window.AdminPage = {
+  vm: {},
+  controller: function(args) {
+    var vm = AdminPage.vm;
+    const app = window.app;
 
-window.AdminPage = AdminPage;
+    vm.tools = m.prop([]);
+    app.service('tools').find().then(tools => {
+      vm.tools(tools.data);
+    });
+
+    vm.quotes = m.prop([]);
+    app.service('quotes').find().then(quotes => {
+      vm.quotes(quotes.data);
+    });
+
+    // Helpers
+    this.addTool = function(tool) {
+      var vm = AdminPage.vm;
+      app.service('tools').create(tool).then(tool => {
+        // TODO: make this update automatic
+        app.service('tools').find().then(tools => {
+          vm.tools(tools.data);
+        });
+      });
+    }
+    this.deleteTool = function(tool) {
+      var vm = AdminPage.vm;
+      app.service('tools').remove({
+        _id: tool._id
+      }).then(removed => {
+        app.service('tools').find().then(tools => {
+          vm.tools(tools.data);
+        });
+      });
+    }
+
+  },
+  view: function(ctrl, args) {
+    var vm = AdminPage.vm;
+    return m('div', [
+      m('h1.title', 'Administration'),
+      m('.calc.column.admin-page', [
+        m('h2', 'Tools'),
+        m('div', [
+          m.component(Checklist, {
+            items: vm.tools,
+            onclick: function(item) {
+              ctrl.deleteTool(item);
+            }
+          }),
+          m.component(ToolEntry, {
+            onclick: function(tool) {
+              ctrl.addTool(tool);
+            }
+          })
+        ]),
+        m('h2', 'Quotes'),
+        m('table', tableWithQuotes(vm.quotes(), quote => {
+          window.open('/preview/'+quote._id);
+        }))
+      ])
+    ]);
+  }
+}
