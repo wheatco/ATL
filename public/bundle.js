@@ -16382,6 +16382,8 @@
 	QuoteForm.vm = {};
 	
 	QuoteForm.vm.submitForm = function () {
+	    var vm = QuoteForm.vm;
+	    console.log('running submit');
 	    _jquery2.default.ajax({
 	        url: '/addQuote',
 	        type: 'POST',
@@ -16616,9 +16618,9 @@
 	        range: [0, 500, 1]
 	    })]),
 	    // COLUMN 4: RESULTS AND SUBMISSION
-	    m('div', [m('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'), calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'), calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'), calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'), calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'), m('button.submit', 'Submit', {
+	    m('div', [m('h1', 'Results'), calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'), calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'), calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'), calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'), calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'), m('button.submit', {
 	        onclick: vm.submitForm
-	    })])])]);
+	    }, 'Submit')])])]);
 	};
 	
 	window.QuoteForm = QuoteForm;

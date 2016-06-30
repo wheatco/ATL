@@ -6,6 +6,8 @@ var QuoteForm = {};
 QuoteForm.vm = {};
 
 QuoteForm.vm.submitForm = function() {
+    var vm = QuoteForm.vm;
+    console.log('running submit');
     $.ajax({
         url: '/addQuote',
         type: 'POST',
@@ -329,9 +331,9 @@ QuoteForm.view = function(ctrl, args) {
                 calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'),
-                m('button.submit', 'Submit', {
+                m('button.submit', {
                     onclick: vm.submitForm
-                }),
+                }, 'Submit'),
             ])
         ])
     ]);
