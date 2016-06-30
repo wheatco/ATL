@@ -7,7 +7,7 @@ module.exports = function(app) {
     if (!quoteNo) {
       //need to throw a better error
       res.status(400).end();
-      return
+      return;
     }
 
     var viewType = req.query.view || 'html';
@@ -17,10 +17,10 @@ module.exports = function(app) {
       // quoteNo but it doesn't exist on the server
       // yet.
       .find({})
-      .then(function(result){
+      .then(function(result) {
         res.data = result.data[1];
-        console.log(res.data)
+        console.log(res.data);
         next();
-        })
+      });
   };
 };
