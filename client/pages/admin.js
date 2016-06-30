@@ -35,36 +35,45 @@ var ToolEntry = {
   },
   view: function (ctrl, args) {
     var vm = Checklist.vm;
-    return m('.calc-item.row.gap-2.justify', [
-		          m('input.input-text.good border', {
-		              type: 'text',
-		              placeholder: "Add a tool...",
-		              onchange: m.withAttr("value", vm.name),
-		              value: vm.name()
-		          }),
-		          m('input.input-text.good border', {
-		              type: 'number',
-		              min: 0,
-		              onchange: m.withAttr("value", vm.acrossWeb),
-		              value: vm.acrossWeb()
-		          }),
-		          m('input.input-text.good border', {
-		              type: 'number',
-		              min: 0,
-		              onchange: m.withAttr("value", vm.aroundWeb),
-		              value: vm.aroundWeb()
-		          }),
-		          m('button.addButton', {
-		              onclick: function () {
-		              		var tool = {
-		              			name: vm.name(),
-		              			acrossWeb: vm.acrossWeb(),
-		              			aroundWeb: vm.aroundWeb()
-		              		}
-		                  if (tool.name.length && args.onclick) args.onclick(tool);
-		              }
-		          }, "+")
-		      ])
+    return m('.calc-item.tool-entry.row.gap-2.bottom', [
+      m('div.column', [
+        m('label', 'name'),
+        m('input.input-text.good border', {
+          type: 'text',
+          // placeholder: "Add a tool...",
+          onchange: m.withAttr("value", vm.name),
+          value: vm.name()
+        })
+      ]),
+      m('div.column', [
+        m('label', 'across the web (in)'),
+        m('input.input-text.good border', {
+          type: 'number',
+          min: 0,
+          onchange: m.withAttr("value", vm.acrossWeb),
+          value: vm.acrossWeb()
+        })
+      ]),
+      m('div.column', [
+        m('label', 'around the web (in)'),
+        m('input.input-text.good border', {
+          type: 'number',
+          min: 0,
+          onchange: m.withAttr("value", vm.aroundWeb),
+          value: vm.aroundWeb()
+        }),
+      ]),
+      m('button.addButton', {
+        onclick: function () {
+      		var tool = {
+      			name: vm.name(),
+      			acrossWeb: vm.acrossWeb(),
+      			aroundWeb: vm.aroundWeb()
+      		}
+          if (tool.name.length && args.onclick) args.onclick(tool);
+        }
+      }, "+")
+    ])
   }
 }
 
