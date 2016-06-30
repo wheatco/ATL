@@ -42,7 +42,7 @@ var ToolEntry = {
         m('label', 'name'),
         m('input.input-text.good border', {
           type: 'text',
-          // placeholder: 'Add a tool...',
+          placeholder: 'New tool',
           onchange: m.withAttr('value', vm.name),
           value: vm.name()
         })
@@ -99,7 +99,6 @@ AdminPage.controller = function(args) {
   vm.quotes = m.prop([]);
   app.service('quotes').find().then(quotes => {
     vm.quotes(quotes.data);
-    console.log(vm.quotes());
   });
 };
 
@@ -124,14 +123,38 @@ function deleteTool(tool) {
   });
 }
 
+function tableWithQuotes(quotes) {
+  var header = [
+        m('tr', [
+          m('th', 'ID'),
+          m('th', 'Name'),
+          m('th', '')
+        ])
+  ];
+  var rows = []
+  if (quotes) {
+    rows = quotes.map(function(quote) {
+      return m('tr', [
+        m('td', quote._id),
+        m('td', quote.name),
+        m('button', 'preview')
+      ]);
+    });
+  }
+
+  header.push.apply(header, rows);
+  return header;
+}
+
 //here's the view
 AdminPage.view = function(ctrl, args) {
   var vm = AdminPage.vm;
 
   return m('div', [
     m('h1.title', 'Administration'),
-    m('.calc.row.center.gap-5.admin-page', [
-      m('div.fill', [
+    m('.calc.column.admin-page', [
+      m('h2', 'Tools'),
+      m('div', [
         m.component(Checklist, {
           items: vm.tools,
           onclick: function(item) {
@@ -143,7 +166,9 @@ AdminPage.view = function(ctrl, args) {
             addTool(tool);
           }
         })
-      ])
+      ]),
+      m('h2', 'Quotes'),
+      m('table', tableWithQuotes(vm.quotes())
     ])
   ]);
 };
