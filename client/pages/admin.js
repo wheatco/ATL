@@ -1,47 +1,50 @@
 // Mithril component for tool management and maybe other things
 
+var m = require('mithril');
+var app = window.app;
+
 var Checklist = {
   vm: {},
-  controller: function (args) {
+  controller: function(args) {
     var vm = Checklist.vm;
     vm.items = args.items;
   },
-  view: function (ctrl, args) {
+  view: function(ctrl, args) {
     var vm = Checklist.vm;
     return m('.calc-item', vm.items().map(function(item) {
-        return m('label.checklist-label.middle.row', {
+      return m('label.checklist-label.middle.row', {
 
-        }, [
-            m('button.deleteButton', {
-                onclick: function (e) {
-                    return args.onclick(item);
-                }
-            }, 'x'),
-            m('div.checkbox-label', [
-                m('strong', item.name || '')
-            ])
-        ]);
+      }, [
+        m('button.deleteButton', {
+          onclick: function(e) {
+            return args.onclick(item);
+          }
+        }, 'x'),
+        m('div.checkbox-label', [
+          m('strong', item.name || '')
+        ])
+      ]);
     }));
   }
-}
+};
 
 var ToolEntry = {
   vm: {},
-  controller: function (args) {
+  controller: function(args) {
     var vm = Checklist.vm;
     vm.name = m.prop('');
     vm.acrossWeb = m.prop(0);
     vm.aroundWeb = m.prop(0);
   },
-  view: function (ctrl, args) {
+  view: function(ctrl, args) {
     var vm = Checklist.vm;
     return m('.calc-item.tool-entry.row.gap-2.bottom', [
       m('div.column', [
         m('label', 'name'),
         m('input.input-text.good border', {
           type: 'text',
-          // placeholder: "Add a tool...",
-          onchange: m.withAttr("value", vm.name),
+          // placeholder: 'Add a tool...',
+          onchange: m.withAttr('value', vm.name),
           value: vm.name()
         })
       ]),
@@ -50,7 +53,7 @@ var ToolEntry = {
         m('input.input-text.good border', {
           type: 'number',
           min: 0,
-          onchange: m.withAttr("value", vm.acrossWeb),
+          onchange: m.withAttr('value', vm.acrossWeb),
           value: vm.acrossWeb()
         })
       ]),
@@ -59,23 +62,26 @@ var ToolEntry = {
         m('input.input-text.good border', {
           type: 'number',
           min: 0,
-          onchange: m.withAttr("value", vm.aroundWeb),
+          onchange: m.withAttr('value', vm.aroundWeb),
           value: vm.aroundWeb()
         }),
       ]),
       m('button.addButton', {
-        onclick: function () {
-      		var tool = {
-      			name: vm.name(),
-      			acrossWeb: vm.acrossWeb(),
-      			aroundWeb: vm.aroundWeb()
-      		}
-          if (tool.name.length && args.onclick) args.onclick(tool);
+        onclick: function() {
+          var tool = {
+            name: vm.name(),
+            acrossWeb: vm.acrossWeb(),
+            aroundWeb: vm.aroundWeb()
+          };
+
+          if (tool.name.length && args.onclick) {
+            args.onclick(tool);
+          }
         }
-      }, "+")
-    ])
+      }, '+')
+    ]);
   }
-}
+};
 
 var AdminPage = {};
 
@@ -83,58 +89,65 @@ var AdminPage = {};
 AdminPage.vm = {};
 
 AdminPage.controller = function(args) {
-    var vm = AdminPage.vm;
-    const app = window.app;
+  var vm = AdminPage.vm;
+  const app = window.app;
 
-    vm.tools = m.prop([]);
-    vm.newTool = m.prop("");
-    app.service('tools').find().then(tools => {
-        vm.tools(tools.data);
-    });
-}
+  vm.tools = m.prop([]);
+  vm.newTool = m.prop('');
+  app.service('tools').find().then(tools => {
+    vm.tools(tools.data);
+  });
+
+  vm.quotes = m.prop([]);
+  app.service('quotes').find().then(quotes => {
+    vm.quotes(quotes.data);
+  });
+};
 
 function addTool(tool) {
-    var vm = AdminPage.vm;
-    app.service('tools').create(tool).then(tool => {
-        // TODO: make this update automatic
-        app.service('tools').find().then(tools => {
-            vm.newTool("");
-            vm.tools(tools.data);
-        });
+  var vm = AdminPage.vm;
+  app.service('tools').create(tool).then(tool => {
+    // TODO: make this update automatic
+    app.service('tools').find().then(tools => {
+      vm.newTool('');
+      vm.tools(tools.data);
     });
+  });
 }
 
 function deleteTool(tool) {
-    var vm = AdminPage.vm;
-    app.service('tools').remove({_id: tool._id}).then(removed => {
-        app.service('tools').find().then(tools => {
-            vm.tools(tools.data);
-        });
+  var vm = AdminPage.vm;
+  app.service('tools').remove({
+    _id: tool._id
+  }).then(removed => {
+    app.service('tools').find().then(tools => {
+      vm.tools(tools.data);
     });
+  });
 }
 
 //here's the view
 AdminPage.view = function(ctrl, args) {
-    var vm = AdminPage.vm;
+  var vm = AdminPage.vm;
 
-    return m("div", [
-        m('h1.title', 'Admin Page'),
-        m('.calc.row.center.gap-5.admin-page', [
-            m('div.fill', [
-                m.component(Checklist, {
-                    items: vm.tools,
-                    onclick: function (item) {
-                        deleteTool(item);
-                    }
-                }),
-                m.component(ToolEntry, {
-                	onclick: function (tool) {
-                		addTool(tool);
-                	}
-                })
-            ])
-        ])
-    ]);
-}
+  return m('div', [
+    m('h1.title', 'Administration'),
+    m('.calc.row.center.gap-5.admin-page', [
+      m('div.fill', [
+        m.component(Checklist, {
+          items: vm.tools,
+          onclick: function(item) {
+            deleteTool(item);
+          }
+        }),
+        m.component(ToolEntry, {
+          onclick: function(tool) {
+            addTool(tool);
+          }
+        })
+      ])
+    ])
+  ]);
+};
 
 window.AdminPage = AdminPage;

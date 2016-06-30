@@ -23,7 +23,10 @@ module.exports = function() {
 
   app.get('/viewQuote',
     //set default view
-    function(req, res, next) { req.query.view = req.query.view || 'html'; next() },
+    function(req, res, next) {
+      req.query.view = req.query.view || 'html';
+      next();
+    },
     retrieveQuote(app),
     renderQuoteHTML(app),
     renderPDF(app));

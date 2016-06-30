@@ -36,16 +36,16 @@ window.app = feathers()
 const pageEnum = {
     QUOTE: 0,
     ADMIN: 1
-}
+};
 
-var Main = {}
+var Main = {};
 
-Main.vm = {}
+Main.vm = {};
 
 Main.controller = function() {
     var vm = Main.vm;
     vm.page = m.prop(pageEnum.ADMIN);
-}
+};
 
 Main.view = function(ctrl) {
     var vm = Main.vm;
@@ -87,12 +87,12 @@ Main.view = function(ctrl) {
                 onclick: function (e) {
                     vm.page(pageEnum.QUOTE);
                 }
-            }, 'Quote Page'),
+            }, 'New Quote'),
             m('button', {
                 onclick: function (e) {
                     vm.page(pageEnum.ADMIN);
                 }
-            }, 'Admin Page'),
+            }, 'Administration'),
             renderPage(vm.page())
         ])
     ]);
