@@ -25,6 +25,49 @@ var Checklist = {
   }
 }
 
+var ToolEntry = {
+  vm: {},
+  controller: function (args) {
+    var vm = Checklist.vm;
+    vm.name = m.prop('');
+    vm.acrossWeb = m.prop(0);
+    vm.aroundWeb = m.prop(0);
+  },
+  view: function (ctrl, args) {
+    var vm = Checklist.vm;
+    return m('.calc-item.row.gap-2.justify', [
+		          m('input.input-text.good border', {
+		              type: 'text',
+		              placeholder: "Add a tool...",
+		              onchange: m.withAttr("value", vm.name),
+		              value: vm.name()
+		          }),
+		          m('input.input-text.good border', {
+		              type: 'number',
+		              min: 0,
+		              onchange: m.withAttr("value", vm.acrossWeb),
+		              value: vm.acrossWeb()
+		          }),
+		          m('input.input-text.good border', {
+		              type: 'number',
+		              min: 0,
+		              onchange: m.withAttr("value", vm.aroundWeb),
+		              value: vm.aroundWeb()
+		          }),
+		          m('button.addButton', {
+		              onclick: function () {
+		              		var tool = {
+		              			name: vm.name(),
+		              			acrossWeb: vm.acrossWeb(),
+		              			aroundWeb: vm.aroundWeb()
+		              		}
+		                  if (tool.name.length && args.onclick) args.onclick(tool);
+		              }
+		          }, "+")
+		      ])
+  }
+}
+
 var AdminPage = {};
 
 //for simplicity, we use this component to namespace the model classes
@@ -41,18 +84,15 @@ AdminPage.controller = function(args) {
     });
 }
 
-function addTool() {
+function addTool(tool) {
     var vm = AdminPage.vm;
-    var toolName = vm.newTool();
-    if (toolName.length) {
-        app.service('tools').create({name: toolName}).then(tool => {
-            // TODO: make this update automatic
-            app.service('tools').find().then(tools => {
-                vm.newTool("");
-                vm.tools(tools.data);
-            });
+    app.service('tools').create(tool).then(tool => {
+        // TODO: make this update automatic
+        app.service('tools').find().then(tools => {
+            vm.newTool("");
+            vm.tools(tools.data);
         });
-    }
+    });
 }
 
 function deleteTool(tool) {
@@ -78,19 +118,11 @@ AdminPage.view = function(ctrl, args) {
                         deleteTool(item);
                     }
                 }),
-                m('.calc-item.row.gap-2.justify', [
-                    m('input.input-text.good border', {
-                        type: 'text',
-                        placeholder: "Add a tool...",
-                        onchange: m.withAttr("value", vm.newTool),
-                        value: vm.newTool()
-                    }),
-                    m('button.addButton', {
-                        onclick: function () {
-                            addTool();
-                        }
-                    }, "+")
-                ])
+                m.component(ToolEntry, {
+                	onclick: function (tool) {
+                		addTool(tool);
+                	}
+                })
             ])
         ])
     ]);
