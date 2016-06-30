@@ -187,7 +187,7 @@ window.AdminPage = {
         ]),
         m('h2', 'Quotes'),
         m('table', tableWithQuotes(vm.quotes(), quote => {
-          window.open('/preview/' + quote._id);
+          window.open('/previewQuote?q=' + quote._id);
         }))
       ])
     ]);

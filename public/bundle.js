@@ -10636,7 +10636,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
+	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -35539,7 +35539,7 @@
 	        ctrl.addTool(tool);
 	      }
 	    })]), m('h2', 'Quotes'), m('table', tableWithQuotes(vm.quotes(), function (quote) {
-	      window.open('/preview/' + quote._id);
+	      window.open('/previewQuote?q=' + quote._id);
 	    }))])]);
 	  }
 	};
