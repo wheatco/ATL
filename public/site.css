@@ -502,7 +502,7 @@ svg.line-chart {
 }
 
 .admin-page {
-  width: 20em;
+  width: 40em;
 }
 
 .checklist-label {
@@ -514,4 +514,11 @@ svg.line-chart {
 
 .checklist-label:last-child {
   border-bottom-width: 2px;
+}
+
+.tool-entry label {
+  font-size: 14px;
+  text-transform: uppercase;
+  display: block;
+  font-family: "Source Code Pro", Courier, monospace;
 }

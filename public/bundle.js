@@ -16661,22 +16661,22 @@
 	    },
 	    view: function view(ctrl, args) {
 	        var vm = Checklist.vm;
-	        return m('.calc-item.row.gap-2.justify', [m('input.input-text.good border', {
+	        return m('.calc-item.tool-entry.row.gap-2.bottom', [m('div.column', [m('label', 'name'), m('input.input-text.good border', {
 	            type: 'text',
-	            placeholder: "Add a tool...",
+	            // placeholder: "Add a tool...",
 	            onchange: m.withAttr("value", vm.name),
 	            value: vm.name()
-	        }), m('input.input-text.good border', {
+	        })]), m('div.column', [m('label', 'across the web (in)'), m('input.input-text.good border', {
 	            type: 'number',
 	            min: 0,
 	            onchange: m.withAttr("value", vm.acrossWeb),
 	            value: vm.acrossWeb()
-	        }), m('input.input-text.good border', {
+	        })]), m('div.column', [m('label', 'around the web (in)'), m('input.input-text.good border', {
 	            type: 'number',
 	            min: 0,
 	            onchange: m.withAttr("value", vm.aroundWeb),
 	            value: vm.aroundWeb()
-	        }), m('button.addButton', {
+	        })]), m('button.addButton', {
 	            onclick: function onclick() {
 	                var tool = {
 	                    name: vm.name(),

@@ -1,5 +1,7 @@
 'use strict';
 
+const previewQuote = require('./previewQuote');
+
 const addQuote = require('./addQuote');
 
 const handler = require('feathers-errors/handler');
@@ -12,6 +14,7 @@ module.exports = function() {
   // handling middleware should go last.
   const app = this;
 
+  app.get('/preview/:quoteId', previewQuote(app));
   app.post('/addQuote', addQuote(app));
 
   app.use(notFound());
