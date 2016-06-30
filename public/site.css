@@ -25,7 +25,7 @@ body {
   background-size: 12px;
   background-repeat: repeat-x;
 }
-.calc:after {
+/*.calc:after {
   background-image: url(../img/util-triangle-bottom.png);
   background-position: left top;
   top: 100%;
@@ -34,7 +34,7 @@ body {
   background-image: url(../img/util-triangle-top.png);
   background-position: left bottom;
   bottom: 100%;
-}
+}*/
 
 .no-borders:before, .no-borders:after {
   background-image: none;
@@ -467,6 +467,18 @@ svg.line-chart {
   border-radius: 2px;
 }
 
+.deleteButton {
+  font-size: 1em;
+  height: 28px;
+  width: 25px;
+  padding-bottom: 10px;
+  color: red;
+  background-color: white;
+  box-shadow: none;
+  border: none;
+  border-radius: 2px;
+}
+
 /***************
   DISCLAIMER
 ***************/
@@ -483,6 +495,28 @@ svg.line-chart {
   line-height: 1;
   margin-top: 10px;
   margin-bottom: -10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  display: block;
+  font-family: "Source Code Pro", Courier, monospace;
+}
+
+.admin-page {
+  width: 40em;
+}
+
+.checklist-label {
+  border-bottom-width: 0;
+  border-radius: 0;
+  border: 1px rgba(24, 196, 141,0.4) solid;
+  padding: 8px;
+}
+
+.checklist-label:last-child {
+  border-bottom-width: 2px;
+}
+
+.tool-entry label {
   font-size: 14px;
   text-transform: uppercase;
   display: block;

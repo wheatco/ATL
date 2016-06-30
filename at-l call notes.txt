@@ -1,0 +1,13 @@
+top coatings, currently laminate only
+  want uv and a value for uv - 0.05 default msi
+  other button - put in name and msi (add to substrate too)
+
+new die - price for the die (50-$300 for the die [new die cost])
+
+put illustration of web in the calculator (across is always first)
+
+five quantity fields
+
+
+phase 2 - 
+full quote spec order tracked through the process

@@ -4,9 +4,10 @@
 /*
   Usage: 
   m.component(Select2, {
-      data: [array of options],
-      value: m.prop to store selected value(s),
-      onchange: callback with selected value,
+      data: array of dropdown options from a feathers service
+      format: function (dataitem) that returns string to display
+      value: m.prop to store selected value(s)
+      onchange: callback with selected value
       ...PLUS...
       any other select2 options such as width, multiple, tags etc.
       })
@@ -24,11 +25,26 @@ window.Select2 = {
       var el = $(element);
       // Only setup once
       if (!isInitialized) {
+
         // Special values
+        var data = attrs.data.data;
+        var format = attrs.format;
         var value = attrs.value;
         var onchange = attrs.onchange;
+        delete attrs.data;
+        delete attrs.dataKey;
         delete attrs.value;
         delete attrs.onchange;
+
+        // Get strings from service objects
+        for (var i = 0; i < data.length; i++) {
+          data[i] = {
+            id: data[i]._id,
+            text: format(data[i])
+          } 
+        };
+
+        attrs.data = data;
 
         el.select2(attrs).on('change', function (e) {
           var val = el.select2('val');
