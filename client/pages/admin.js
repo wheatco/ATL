@@ -133,6 +133,7 @@ AdminPage.view = function(ctrl, args) {
     m('h1.title', 'Administration'),
     m('.calc.row.center.gap-5.admin-page', [
       m('div.fill', [
+        m('h1', 'Manage Tools'),
         m.component(Checklist, {
           items: vm.tools,
           onclick: function(item) {
@@ -145,7 +146,19 @@ AdminPage.view = function(ctrl, args) {
           }
         })
       ])
-    ])
+
+
+    ]),
+    m('.calc.row.center.gap-5.admin-page',
+      m('div.fill', [
+        m('h1', 'View Quotes'),
+        m.component(Checklist, {
+          items: vm.quotes,
+          onclick: function(item) {
+            console.log('clicked', item);
+          }
+        })
+      ]))
   ]);
 };
 

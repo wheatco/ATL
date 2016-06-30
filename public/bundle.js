@@ -35501,7 +35501,7 @@
 	AdminPage.view = function (ctrl, args) {
 	  var vm = AdminPage.vm;
 	
-	  return m('div', [m('h1.title', 'Administration'), m('.calc.row.center.gap-5.admin-page', [m('div.fill', [m.component(Checklist, {
+	  return m('div', [m('h1.title', 'Administration'), m('.calc.row.center.gap-5.admin-page', [m('div.fill', [m('h1', 'Manage Tools'), m.component(Checklist, {
 	    items: vm.tools,
 	    onclick: function onclick(item) {
 	      deleteTool(item);
@@ -35510,7 +35510,12 @@
 	    onclick: function onclick(tool) {
 	      addTool(tool);
 	    }
-	  })])])]);
+	  })])]), m('.calc.row.center.gap-5.admin-page', m('div.fill', [m('h1', 'View Quotes'), m.component(Checklist, {
+	    items: vm.quotes,
+	    onclick: function onclick(item) {
+	      console.log('clicked', item);
+	    }
+	  })]))]);
 	};
 	
 	window.AdminPage = AdminPage;
