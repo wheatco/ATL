@@ -1,0 +1,127 @@
+-function prettyDate(dateString){
+  -var d = dateString.getDate();
+  -var monthNames = [ "Jan", "Feb", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  -var m = monthNames[dateString.getMonth()];
+  -var y = dateString.getFullYear();
+  -return d+' '+m+' '+y;
+-}
+
+doctype html
+html(lang="en")
+  head
+    title= 'Quote '+id+' for '+name
+  body
+    header(style="text-align:center; border-top: 50px solid white;")
+      img(src="http://www.at-l.com/wp-content/uploads/2014/05/atl_logo_frontpage.jpg", style="width: 300px;display:block; margin: 0 auto")
+      h1 American Tape and Label
+      h2 Service and Quality for Less
+      h3= 'Quote opened on ' + prettyDate(createdAt)
+      h3= 'Quote last modified on ' + prettyDate(updatedAt)
+    main(style="width:100%; overflow:auto")
+      table(style="float:left; width:50vw")
+        thead
+          tr
+            th Client Info
+        tbody
+          tr
+            td Proposal For
+            td= name
+          tr
+            td Address
+            td= addressStreet
+          tr
+            td City, St, Zip:
+            td= addressCity + ', ' + addressState + ' ' + addressZip
+          tr
+            td Telephone
+            td= phone
+          tr
+            td Email
+            td= email
+
+      table(style="float:right;")
+        thead
+          tr
+            th Job Info
+        tbody
+          tr
+            td Shape
+            td= shape
+          tr
+            td Corner
+            td= corner
+          tr
+            td Tools
+            td= selectedTools
+          tr
+            td Substrate
+            td= substrate
+          tr
+            td Finishing
+            td= finish
+          tr
+            td Number of designs
+            td= numDesigns
+
+      table(style="width:100%; border-collapse:collapse")
+        thead
+          tr
+            th Pricing
+        tbody(style="border: solid black 1px; display: block")
+          tr
+            td(style="width: 100%") Quantity:
+            if quantity1
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity1
+            if quantity2
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity2
+            if quantity3
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity3
+            if quantity4
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity4
+            if quantity5
+              td(style="padding: 10px 30px 0 0; text-align:right")= quantity5
+          tr(style="border-bottom: solid black 1px;")
+            td Price Per Thousand:
+            if quantity1 && overallCost1
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
+            if quantity2 && overallCost2
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
+            if quantity3 && overallCost3
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
+            if quantity4 && overallCost4
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
+            if quantity5 && overallCost5
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/1000).toFixed(2)
+          tr
+            td Job Total:
+            if overallCost1
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost1.toFixed(2) 
+            if overallCost2
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost2.toFixed(2) 
+            if overallCost3
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost3.toFixed(2) 
+            if overallCost4
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost4.toFixed(2) 
+            if overallCost5
+              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost5.toFixed(2) 
+      
+      ul
+        li= 'Cost Per Design: $' + costPerDesign
+        li= 'Prepress Charges: $' +prepressCharges
+        li= 'Copy Charges: $' +copyCharges
+
+    footer
+      h3 DISCLAIMER:
+      p Prices are based on artwork supplied by customer. Pre Press charges may apply. Prices are subject to change. An exact quote may be given upon receiving your artwork or computer disk. Quotes are valid for 30 days. All orders are subject to a 10% over/under run unless Orders are C.O.D., MASTERCARD/VISA accepted.
+
+      p AT&amp;L is in no way responsible for any (written or implied) products, labor, container, or costs incurred due to incorrect printing or material deficiencies. ALl proofing before and after printing is the sole responsibility of the customer. Please report any discrepancies on this ticket immediately.
+
+      p Thank You.
+
+      p Joe Heguy
+
+      small(style="text-align: center;")
+        p 6390 North Broadway | Denver, Colorado 80216
+        p (303) 427-0588 | FAX (303) 650-6271 | Visit us at www.AT-L.com
+        br
+        p &copy; 2007 American Tape &amp; Label. ALl Rights Reserved.

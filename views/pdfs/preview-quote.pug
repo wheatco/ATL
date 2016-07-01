@@ -1,0 +1,28 @@
+//- TODO: make this 
+
+-function prettyDate(dateString){
+  -var d = dateString.getDate();
+  -var monthNames = [ "Jan", "Feb", "Mar", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  -var m = monthNames[dateString.getMonth()];
+  -var y = dateString.getFullYear();
+  -return d+' '+m+' '+y;
+-}
+
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    style.
+      .frame {
+        width: 600;
+        height: 400;
+      }
+
+  body
+    h1 Preview Quote Number #{q_id}
+    p Here's the preview?
+    iframe.frame(src="/viewQuote?q="+q_id, style='width: 850px; height: 1100px', width=1100, height = 850)
+    p Do you want to send it?
+    button.send(onClick=function(){console.log('need to implement')}) Send!
+    //- this button doesn't work yet and needs to be implemented with the email system -ac
+

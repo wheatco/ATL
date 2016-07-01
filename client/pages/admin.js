@@ -2,6 +2,10 @@
 
 var m = require('mithril');
 
+/********
+CHECKLIST
+********/
+
 var Checklist = {
   vm: {},
   controller: function(args) {
@@ -11,27 +15,25 @@ var Checklist = {
   view: function(ctrl, args) {
     var vm = Checklist.vm;
     return m('.calc-item', vm.items().map(function(item) {
-      return m('label.checklist-label.middle.row', {
+      return m('div.checklist-label.middle.row', {
 
       }, [
-        args.delete ? m('button.deleteButton', {
+        m('button.deleteButton', {
           onclick: function(e) {
             return args.onclick(item);
           }
-        }, 'x') : null,
+        }, 'x'),
         m('div.checkbox-label', [
           m('strong', item.name || '')
-        ]),
-        args.button ? m('button.viewButton', {
-          onclick: function(e) {
-            return args.onclick(item);
-          },
-          style: 'position: absolute;right: 15px;top: 2px;'
-        }, 'View Quote') : null
+        ])
       ]);
     }));
   }
 };
+
+/**********
+TOOL ENTRY
+**********/
 
 var ToolEntry = {
   vm: {},
@@ -48,7 +50,7 @@ var ToolEntry = {
         m('label', 'name'),
         m('input.input-text.good border', {
           type: 'text',
-          // placeholder: 'Add a tool...',
+          placeholder: 'New tool',
           onchange: m.withAttr('value', vm.name),
           value: vm.name()
         })
@@ -81,6 +83,9 @@ var ToolEntry = {
 
           if (tool.name.length && args.onclick) {
             args.onclick(tool);
+            vm.name("");
+            vm.acrossWeb(0);
+            vm.aroundWeb(0);
           }
         }
       }, '+')
@@ -88,89 +93,103 @@ var ToolEntry = {
   }
 };
 
-var AdminPage = {};
+/**********
+QUOTE TABLE
+**********/
 
-//for simplicity, we use this component to namespace the model classes
-AdminPage.vm = {};
-
-AdminPage.controller = function(args) {
-  var vm = AdminPage.vm;
-  const app = window.app;
-
-  vm.tools = m.prop([]);
-  vm.newTool = m.prop('');
-  app.service('tools').find().then(tools => {
-    vm.tools(tools.data);
-  });
-
-  vm.quotes = m.prop([]);
-  app.service('quotes').find().then(quotes => {
-    vm.quotes(quotes.data);
-  });
-};
-
-function addTool(tool) {
-  var vm = AdminPage.vm;
-  app.service('tools').create(tool).then(tool => {
-    // TODO: make this update automatic
-    app.service('tools').find().then(tools => {
-      vm.newTool('');
-      vm.tools(tools.data);
+function tableWithQuotes(quotes, callback) {
+  var header = [
+    m('tr', [
+      m('th', 'ID'),
+      m('th', 'Name'),
+      m('th', '')
+    ])
+  ];
+  var rows = []
+  if (quotes) {
+    rows = quotes.map(function(quote) {
+      return m('tr', [
+        m('td', quote._id),
+        m('td', quote.name),
+        m('button.previewButton', {
+          onclick: function(e) {
+            callback(quote);
+          }
+        }, 'preview')
+      ]);
     });
-  });
+  }
+
+  header.push.apply(header, rows);
+  return header;
 }
 
-function deleteTool(tool) {
-  var vm = AdminPage.vm;
-  app.service('tools').remove({
-    _id: tool._id
-  }).then(removed => {
+/********
+MAIN PAGE
+********/
+
+window.AdminPage = {
+  vm: {},
+  controller: function(args) {
+    var vm = AdminPage.vm;
+    const app = window.app;
+
+    vm.tools = m.prop([]);
     app.service('tools').find().then(tools => {
       vm.tools(tools.data);
     });
-  });
-}
 
-//here's the view
-AdminPage.view = function(ctrl, args) {
-  var vm = AdminPage.vm;
+    vm.quotes = m.prop([]);
+    app.service('quotes').find().then(quotes => {
+      vm.quotes(quotes.data);
+    });
 
-  return m('div', [
-    m('h1.title', 'Administration'),
-    m('.calc.row.center.gap-5.admin-page', [
-      m('div.fill', [
-        m('h1', 'Manage Tools'),
-        m.component(Checklist, {
-          items: vm.tools,
-          delete: true,
-          button: false,
-          onclick: function(item) {
-            deleteTool(item);
-          }
-        }),
-        m.component(ToolEntry, {
-          onclick: function(tool) {
-            addTool(tool);
-          }
-        })
+    // Helpers
+    this.addTool = function(tool) {
+      var vm = AdminPage.vm;
+      app.service('tools').create(tool).then(tool => {
+        // TODO: make this update automatic
+        app.service('tools').find().then(tools => {
+          vm.tools(tools.data);
+        });
+      });
+    }
+    this.deleteTool = function(tool) {
+      var vm = AdminPage.vm;
+      app.service('tools').remove({
+        _id: tool._id
+      }).then(removed => {
+        app.service('tools').find().then(tools => {
+          vm.tools(tools.data);
+        });
+      });
+    }
+
+  },
+  view: function(ctrl, args) {
+    var vm = AdminPage.vm;
+    return m('div', [
+      m('h1.title', 'Administration'),
+      m('.calc.column.admin-page', [
+        m('h2', 'Tools'),
+        m('div', [
+          m.component(Checklist, {
+            items: vm.tools,
+            onclick: function(item) {
+              ctrl.deleteTool(item);
+            }
+          }),
+          m.component(ToolEntry, {
+            onclick: function(tool) {
+              ctrl.addTool(tool);
+            }
+          })
+        ]),
+        m('h2', 'Quotes'),
+        m('table', tableWithQuotes(vm.quotes(), quote => {
+          window.open('/previewQuote?q=' + quote._id);
+        }))
       ])
-
-
-    ]),
-    m('.calc.row.center.gap-5.admin-page',
-      m('div.fill', [
-        m('h1', 'View Quotes'),
-        m.component(Checklist, {
-          items: vm.quotes,
-          delete: false,
-          button: true,
-          onclick: function(item) {
-            window.location = '/viewQuote?q=' + item._id;
-            console.log('clicked', item);
-          }
-        })
-      ]))
-  ]);
-};
-
-window.AdminPage = AdminPage;
+    ]);
+  }
+}

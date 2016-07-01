@@ -571,10 +571,11 @@
 	
 	        // Get strings from service objects
 	        for (var i = 0; i < data.length; i++) {
-	          data[i] = {
-	            id: data[i]._id,
-	            text: format(data[i])
-	          };
+	          data[i] = format(data[i]);
+	          // data[i] = {
+	          //   id: data[i]._id,
+	          //   text: format(data[i])
+	          // }
 	        };
 	
 	        attrs.data = data;
@@ -16433,7 +16434,7 @@
 	        dataType: 'json',
 	        success: function success(data, textStatus, jqXHR) {
 	            console.log(data);
-	            window.location('/preview/' + data._id);
+	            window.location.href = '/previewQuote?q=' + data._id;
 	        }
 	    });
 	};
@@ -35395,6 +35396,10 @@
 	
 	var m = __webpack_require__(6);
 	
+	/********
+	CHECKLIST
+	********/
+	
 	var Checklist = {
 	  vm: {},
 	  controller: function controller(args) {
@@ -35404,19 +35409,18 @@
 	  view: function view(ctrl, args) {
 	    var vm = Checklist.vm;
 	    return m('.calc-item', vm.items().map(function (item) {
-	      return m('label.checklist-label.middle.row', {}, [args.delete ? m('button.deleteButton', {
+	      return m('div.checklist-label.middle.row', {}, [m('button.deleteButton', {
 	        onclick: function onclick(e) {
 	          return args.onclick(item);
 	        }
-	      }, 'x') : null, m('div.checkbox-label', [m('strong', item.name || '')]), args.button ? m('button.viewButton', {
-	        onclick: function onclick(e) {
-	          return args.onclick(item);
-	        },
-	        style: 'position: absolute;right: 15px;top: 2px;'
-	      }, 'View Quote') : null]);
+	      }, 'x'), m('div.checkbox-label', [m('strong', item.name || '')])]);
 	    }));
 	  }
 	};
+	
+	/**********
+	TOOL ENTRY
+	**********/
 	
 	var ToolEntry = {
 	  vm: {},
@@ -35430,7 +35434,7 @@
 	    var vm = Checklist.vm;
 	    return m('.calc-item.tool-entry.row.gap-2.bottom', [m('div.column', [m('label', 'name'), m('input.input-text.good border', {
 	      type: 'text',
-	      // placeholder: 'Add a tool...',
+	      placeholder: 'New tool',
 	      onchange: m.withAttr('value', vm.name),
 	      value: vm.name()
 	    })]), m('div.column', [m('label', 'across the web (in)'), m('input.input-text.good border', {
@@ -35453,82 +35457,93 @@
 	
 	        if (tool.name.length && args.onclick) {
 	          args.onclick(tool);
+	          vm.name("");
+	          vm.acrossWeb(0);
+	          vm.aroundWeb(0);
 	        }
 	      }
 	    }, '+')]);
 	  }
 	};
 	
-	var AdminPage = {};
+	/**********
+	QUOTE TABLE
+	**********/
 	
-	//for simplicity, we use this component to namespace the model classes
-	AdminPage.vm = {};
-	
-	AdminPage.controller = function (args) {
-	  var vm = AdminPage.vm;
-	  var app = window.app;
-	
-	  vm.tools = m.prop([]);
-	  vm.newTool = m.prop('');
-	  app.service('tools').find().then(function (tools) {
-	    vm.tools(tools.data);
-	  });
-	
-	  vm.quotes = m.prop([]);
-	  app.service('quotes').find().then(function (quotes) {
-	    vm.quotes(quotes.data);
-	  });
-	};
-	
-	function addTool(tool) {
-	  var vm = AdminPage.vm;
-	  app.service('tools').create(tool).then(function (tool) {
-	    // TODO: make this update automatic
-	    app.service('tools').find().then(function (tools) {
-	      vm.newTool('');
-	      vm.tools(tools.data);
+	function tableWithQuotes(quotes, callback) {
+	  var header = [m('tr', [m('th', 'ID'), m('th', 'Name'), m('th', '')])];
+	  var rows = [];
+	  if (quotes) {
+	    rows = quotes.map(function (quote) {
+	      return m('tr', [m('td', quote._id), m('td', quote.name), m('button.previewButton', {
+	        onclick: function onclick(e) {
+	          callback(quote);
+	        }
+	      }, 'preview')]);
 	    });
-	  });
+	  }
+	
+	  header.push.apply(header, rows);
+	  return header;
 	}
 	
-	function deleteTool(tool) {
-	  var vm = AdminPage.vm;
-	  app.service('tools').remove({
-	    _id: tool._id
-	  }).then(function (removed) {
+	/********
+	MAIN PAGE
+	********/
+	
+	window.AdminPage = {
+	  vm: {},
+	  controller: function controller(args) {
+	    var vm = AdminPage.vm;
+	    var app = window.app;
+	
+	    vm.tools = m.prop([]);
 	    app.service('tools').find().then(function (tools) {
 	      vm.tools(tools.data);
 	    });
-	  });
-	}
 	
-	//here's the view
-	AdminPage.view = function (ctrl, args) {
-	  var vm = AdminPage.vm;
+	    vm.quotes = m.prop([]);
+	    app.service('quotes').find().then(function (quotes) {
+	      vm.quotes(quotes.data);
+	    });
 	
-	  return m('div', [m('h1.title', 'Administration'), m('.calc.row.center.gap-5.admin-page', [m('div.fill', [m('h1', 'Manage Tools'), m.component(Checklist, {
-	    items: vm.tools,
-	    delete: true,
-	    button: false,
-	    onclick: function onclick(item) {
-	      deleteTool(item);
-	    }
-	  }), m.component(ToolEntry, {
-	    onclick: function onclick(tool) {
-	      addTool(tool);
-	    }
-	  })])]), m('.calc.row.center.gap-5.admin-page', m('div.fill', [m('h1', 'View Quotes'), m.component(Checklist, {
-	    items: vm.quotes,
-	    delete: false,
-	    button: true,
-	    onclick: function onclick(item) {
-	      window.location = '/viewQuote?q=' + item._id;
-	      console.log('clicked', item);
-	    }
-	  })]))]);
+	    // Helpers
+	    this.addTool = function (tool) {
+	      var vm = AdminPage.vm;
+	      app.service('tools').create(tool).then(function (tool) {
+	        // TODO: make this update automatic
+	        app.service('tools').find().then(function (tools) {
+	          vm.tools(tools.data);
+	        });
+	      });
+	    };
+	    this.deleteTool = function (tool) {
+	      var vm = AdminPage.vm;
+	      app.service('tools').remove({
+	        _id: tool._id
+	      }).then(function (removed) {
+	        app.service('tools').find().then(function (tools) {
+	          vm.tools(tools.data);
+	        });
+	      });
+	    };
+	  },
+	  view: function view(ctrl, args) {
+	    var vm = AdminPage.vm;
+	    return m('div', [m('h1.title', 'Administration'), m('.calc.column.admin-page', [m('h2', 'Tools'), m('div', [m.component(Checklist, {
+	      items: vm.tools,
+	      onclick: function onclick(item) {
+	        ctrl.deleteTool(item);
+	      }
+	    }), m.component(ToolEntry, {
+	      onclick: function onclick(tool) {
+	        ctrl.addTool(tool);
+	      }
+	    })]), m('h2', 'Quotes'), m('table', tableWithQuotes(vm.quotes(), function (quote) {
+	      window.open('/previewQuote?q=' + quote._id);
+	    }))])]);
+	  }
 	};
-	
-	window.AdminPage = AdminPage;
 
 /***/ },
 /* 10 */

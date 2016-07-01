@@ -10,13 +10,8 @@ module.exports = function(app) {
       return;
     }
 
-    var viewType = req.query.view || 'html';
-
     console.log(req.query);
     app.service('/quotes')
-      // will eventually change to a real query using
-      // quoteNo but it doesn't exist on the server
-      // yet.
       .find({
         query: {
           _id: req.query.q
@@ -25,6 +20,7 @@ module.exports = function(app) {
       .then(function(result) {
         console.log(result);
         res.data = result.data[0];
+        console.log(res.data.id);
         // console.log(res.data);
         next();
       });
