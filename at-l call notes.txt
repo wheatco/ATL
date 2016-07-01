@@ -11,3 +11,20 @@ five quantity fields
 
 phase 2 - 
 full quote spec order tracked through the process
+
+
+changes before friday 7/8:
+  want actual quote numbers
+
+  tool details: shape, corner (corner size), across, around will show tools
+
+  add laminate to finishes: what msi?
+  uv should be 5 cents
+
+  remove copy charges
+
+  fix cost per thousand
+  remove job total line and add bullets for total label cost and price per label
+
+  fix to match hp spreadsheet calculations (look at state in joe's email)
+
