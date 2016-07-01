@@ -83,7 +83,7 @@ Main.view = function(ctrl) {
                 }, 500);
             }
         }, [
-            m('button', {
+            m('.nav', [m('button', {
                 onclick: function (e) {
                     vm.page(pageEnum.QUOTE);
                 }
@@ -92,7 +92,7 @@ Main.view = function(ctrl) {
                 onclick: function (e) {
                     vm.page(pageEnum.ADMIN);
                 }
-            }, 'Administration'),
+            }, 'Administration')]),
             renderPage(vm.page())
         ])
     ]);

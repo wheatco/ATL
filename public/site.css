@@ -504,6 +504,13 @@ svg.line-chart {
 }
 
 /*misc*/
+
+.nav {
+  display:block;
+  margin: 0 auto 20px;
+  text-align: center;
+}
+
 .label-header {
   color: #000;
   display: block;

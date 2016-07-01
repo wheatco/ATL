@@ -117,7 +117,7 @@
 	                parent.postMessage(el.offsetHeight || el.clientHeight, '*');
 	            }, 500);
 	        }
-	    }, [m('button', {
+	    }, [m('.nav', [m('button', {
 	        onclick: function onclick(e) {
 	            vm.page(pageEnum.QUOTE);
 	        }
@@ -125,7 +125,7 @@
 	        onclick: function onclick(e) {
 	            vm.page(pageEnum.ADMIN);
 	        }
-	    }, 'Administration'), renderPage(vm.page())])]);
+	    }, 'Administration')]), renderPage(vm.page())])]);
 	};
 	
 	function renderPage(page) {
@@ -16564,10 +16564,10 @@
 	    // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
 	    vm.calculate = function () {
 	        vm.overallCost1(vm.calculateForQuantity(vm.quantity1()));
-	        vm.overallCost2(vm.calculateForQuantity(vm.quantity2()));
-	        vm.overallCost3(vm.calculateForQuantity(vm.quantity3()));
-	        vm.overallCost4(vm.calculateForQuantity(vm.quantity4()));
-	        vm.overallCost5(vm.calculateForQuantity(vm.quantity5()));
+	        vm.quantity2() !== 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2(0);
+	        vm.quantity3() !== 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3(0);
+	        vm.quantity4() !== 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4(0);
+	        vm.quantity5() !== 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5(0);
 	    };
 	};
 	
