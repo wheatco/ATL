@@ -571,10 +571,11 @@
 	
 	        // Get strings from service objects
 	        for (var i = 0; i < data.length; i++) {
-	          data[i] = {
-	            id: data[i]._id,
-	            text: format(data[i])
-	          };
+	          data[i] = format(data[i]);
+	          // data[i] = {
+	          //   id: data[i]._id,
+	          //   text: format(data[i])
+	          // }
 	        };
 	
 	        attrs.data = data;
@@ -10636,7 +10637,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
