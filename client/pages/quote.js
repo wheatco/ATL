@@ -344,9 +344,13 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'UV',
                     label: 'UV',
+                }, {
+                    val: 'Laminate',
+                    label: 'Laminate',
                 }], function() {
                     if (vm.finish() == 'Gloss') vm.finishMSI(0.20);
-                    else if (vm.finish() == 'UV') vm.finishMSI(0.50);
+                    else if (vm.finish() == 'UV') vm.finishMSI(0.05);
+                    else if (vm.finish() == 'Laminate') vm.finishMSI(0.30);
                     else vm.finishMSI(0.40);
                 }),
                 calc.range({
