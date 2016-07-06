@@ -26,19 +26,19 @@ html(lang="en")
             th Client Info
         tbody
           tr
-            td Proposal For
+            td Proposal For:
             td= name
           tr
-            td Address
+            td Address:
             td= addressStreet
           tr
             td City, St, Zip:
             td= addressCity + ', ' + addressState + ' ' + addressZip
           tr
-            td Telephone
+            td Telephone:
             td= phone
           tr
-            td Email
+            td Email:
             td= email
 
       table.column.right
@@ -47,22 +47,22 @@ html(lang="en")
             th Job Info
         tbody
           tr
-            td Shape
+            td Shape:
             td= shape
           tr
-            td Corner
+            td Corner:
             td= corner
           tr
-            td Tools
+            td Tools:
             td= selectedTool
           tr
-            td Substrate
+            td Substrate:
             td= substrate
           tr
-            td Finishing
+            td Finishing:
             td= finish
           tr
-            td Number of designs
+            td Number of designs:
             td= numDesigns
 
       table.full#price-table
@@ -99,7 +99,7 @@ html(lang="en")
           li= 'Cost Per Design: $' + costPerDesign
           li= 'Prepress Charges: $' +prepressCharges
 
-        ul.big-column.right
+        ul.big-column.right.price-summary
           if quantity1
             li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.toFixed(2)+' ($'+(overallCost1/quantity1).toFixed(2)+' per label)' 
           if quantity2

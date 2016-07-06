@@ -22,6 +22,10 @@ table#price-table tbody{
 	display: block;
 }
 
+.price-summary{
+	font-weight: bold;
+}
+
 .row-header{
 	width: 100%;
 	font-weight: bold;
@@ -52,7 +56,6 @@ table#price-table tbody{
 	width:70%;
 	padding: 20px;
 }
-
 
 .left{
 	float:left;
