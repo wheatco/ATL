@@ -10,15 +10,17 @@ doctype html
 html(lang="en")
   head
     title= 'Quote '+id+' for '+name
+    style
+      include quote-form.css
   body
-    header(style="text-align:center; border-top: 50px solid white;")
-      img(src="http://www.at-l.com/wp-content/uploads/2014/05/atl_logo_frontpage.jpg", style="width: 300px;display:block; margin: 0 auto")
-      h1 American Tape and Label
+    header
+      img#logo(src="http://www.at-l.com/wp-content/uploads/2014/05/atl_logo_frontpage.jpg")
+      h1(style="display:none  ") American Tape and Label
       h2 Service and Quality for Less
-      h3= 'Quote opened on ' + prettyDate(createdAt)
-      h3= 'Quote last modified on ' + prettyDate(updatedAt)
-    main(style="width:100%; overflow:auto")
-      table(style="float:left; width:50vw")
+      aside= 'Quote opened on ' + prettyDate(createdAt)
+      // h3= 'Quote last modified on ' + prettyDate(updatedAt)
+    main.full
+      table.column.left
         thead
           tr
             th Client Info
@@ -39,7 +41,7 @@ html(lang="en")
             td Email
             td= email
 
-      table(style="float:right;")
+      table.column.right
         thead
           tr
             th Job Info
@@ -63,51 +65,51 @@ html(lang="en")
             td Number of designs
             td= numDesigns
 
-      table(style="width:100%; border-collapse:collapse")
+      table.full#price-table
         thead
           tr
             th Pricing
-        tbody(style="border: solid black 1px; display: block")
+        tbody
           tr
-            td(style="width: 100%") Quantity:
+            td.row-header Quantity:
             if quantity1
-              td(style="padding: 10px 30px 0 0; text-align:right")= quantity1
+              td.quantity= quantity1
             if quantity2
-              td(style="padding: 10px 30px 0 0; text-align:right")= quantity2
+              td.quantity= quantity2
             if quantity3
-              td(style="padding: 10px 30px 0 0; text-align:right")= quantity3
+              td.quantity= quantity3
             if quantity4
-              td(style="padding: 10px 30px 0 0; text-align:right")= quantity4
+              td.quantity= quantity4
             if quantity5
-              td(style="padding: 10px 30px 0 0; text-align:right")= quantity5
-          tr(style="border-bottom: solid black 1px;")
-            td Price Per Thousand:
-            if quantity1 && overallCost1
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost1/quantity1 * 1000).toFixed(2)
-            if quantity2 && overallCost2
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost2/quantity2 * 1000).toFixed(2)
-            if quantity3 && overallCost3
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost3/quantity3 * 1000).toFixed(2)
-            if quantity4 && overallCost4
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost4/quantity4 * 1000).toFixed(2)
-            if quantity5 && overallCost5
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+(overallCost5/quantity5 * 1000).toFixed(2)
+              td.quantity= quantity5
           tr
-            td Job Total:
-            if overallCost1
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost1.toFixed(2) 
-            if overallCost2
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost2.toFixed(2) 
-            if overallCost3
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost3.toFixed(2) 
-            if overallCost4
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost4.toFixed(2) 
-            if overallCost5
-              td(style="padding: 10px 30px 0 0; text-align:right")= '$'+overallCost5.toFixed(2) 
-      
-      ul
-        li= 'Cost Per Design: $' + costPerDesign
-        li= 'Prepress Charges: $' +prepressCharges
+            td.row-header Price Per Thousand:
+            if quantity1 && overallCost1
+              td.quantity= '$'+(overallCost1/quantity1 * 1000).toFixed(2)
+            if quantity2 && overallCost2
+              td.quantity= '$'+(overallCost2/quantity2 * 1000).toFixed(2)
+            if quantity3 && overallCost3
+              td.quantity= '$'+(overallCost3/quantity3 * 1000).toFixed(2)
+            if quantity4 && overallCost4
+              td.quantity= '$'+(overallCost4/quantity4 * 1000).toFixed(2)
+            if quantity5 && overallCost5
+              td.quantity= '$'+(overallCost5/quantity5 * 1000).toFixed(2)
+      div
+        ul.small-column.left
+          li= 'Cost Per Design: $' + costPerDesign
+          li= 'Prepress Charges: $' +prepressCharges
+
+        ul.big-column.right
+          if quantity1
+            li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.toFixed(2)+' ($'+(overallCost1/quantity1).toFixed(2)+' per label)' 
+          if quantity2
+            li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.toFixed(2)+' ($'+(overallCost2/quantity2).toFixed(2)+' per label)' 
+          if quantity3
+            li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.toFixed(2)+' ($'+(overallCost3/quantity3).toFixed(2)+' per label)' 
+          if quantity4
+            li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.toFixed(2)+' ($'+(overallCost4/quantity4).toFixed(2)+' per label)' 
+          if quantity5
+            li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.toFixed(2)+' ($'+(overallCost5/quantity5).toFixed(2)+' per label)' 
 
     footer
       h3 DISCLAIMER:
