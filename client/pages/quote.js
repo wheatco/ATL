@@ -42,7 +42,6 @@ QuoteForm.vm.submitForm = function() {
             costPerDesign: vm.costPerDesign(),
             margin: vm.margin(),
             prepressCharges: vm.prepressCharges(),
-            copyCharges: vm.copyCharges(),
             overallCost1: vm.overallCost1(),
             overallCost2: vm.overallCost2(),
             overallCost3: vm.overallCost3(),
@@ -106,7 +105,6 @@ QuoteForm.controller = function(args) {
     vm.margin = m.prop(40);
 
     vm.prepressCharges = m.prop(0);
-    vm.copyCharges = m.prop(0);
 
     vm.overallCost1 = m.prop(0);
     vm.overallCost2 = m.prop(0);
@@ -179,8 +177,7 @@ QuoteForm.controller = function(args) {
 
         var totalExtraneousCosts =
             (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
-            Number(vm.prepressCharges()) +
-            Number(vm.copyCharges());
+            Number(vm.prepressCharges());
 
         // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
 
@@ -344,9 +341,13 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'UV',
                     label: 'UV',
+                }, {
+                    val: 'Laminate',
+                    label: 'Laminate',
                 }], function() {
                     if (vm.finish() == 'Gloss') vm.finishMSI(0.20);
-                    else if (vm.finish() == 'UV') vm.finishMSI(0.50);
+                    else if (vm.finish() == 'UV') vm.finishMSI(0.05);
+                    else if (vm.finish() == 'Laminate') vm.finishMSI(0.30);
                     else vm.finishMSI(0.40);
                 }),
                 calc.range({
@@ -413,12 +414,6 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Prepress Charges',
                     type: 'money',
                     val: vm.prepressCharges,
-                    range: [0, 500, 1]
-                }),
-                calc.range({
-                    header: 'Copy Charges',
-                    type: 'money',
-                    val: vm.copyCharges,
                     range: [0, 500, 1]
                 })
             ]),

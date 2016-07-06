@@ -34,7 +34,6 @@ const quoteSchema = new Schema({
   costPerDesign: Number,
   margin: Number,
   prepressCharges: Number,
-  copyCharges: Number,
   overallCost1: Number,
   overallCost2: Number,
   overallCost3: Number,

@@ -10637,7 +10637,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16424,7 +16424,6 @@
 	            costPerDesign: vm.costPerDesign(),
 	            margin: vm.margin(),
 	            prepressCharges: vm.prepressCharges(),
-	            copyCharges: vm.copyCharges(),
 	            overallCost1: vm.overallCost1(),
 	            overallCost2: vm.overallCost2(),
 	            overallCost3: vm.overallCost3(),
@@ -16487,7 +16486,6 @@
 	    vm.margin = _mithril2.default.prop(40);
 	
 	    vm.prepressCharges = _mithril2.default.prop(0);
-	    vm.copyCharges = _mithril2.default.prop(0);
 	
 	    vm.overallCost1 = _mithril2.default.prop(0);
 	    vm.overallCost2 = _mithril2.default.prop(0);
@@ -16551,7 +16549,7 @@
 	
 	        var totalPhysicalConsumablesCost = totalSubstrateCost + totalFinishingCost;
 	
-	        var totalExtraneousCosts = Number(vm.numDesigns()) * Number(vm.costPerDesign()) + Number(vm.prepressCharges()) + Number(vm.copyCharges());
+	        var totalExtraneousCosts = Number(vm.numDesigns()) * Number(vm.costPerDesign()) + Number(vm.prepressCharges());
 	
 	        // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
 	
@@ -16651,8 +16649,11 @@
 	    }, {
 	        val: 'UV',
 	        label: 'UV'
+	    }, {
+	        val: 'Laminate',
+	        label: 'Laminate'
 	    }], function () {
-	        if (vm.finish() == 'Gloss') vm.finishMSI(0.20);else if (vm.finish() == 'UV') vm.finishMSI(0.50);else vm.finishMSI(0.40);
+	        if (vm.finish() == 'Gloss') vm.finishMSI(0.20);else if (vm.finish() == 'UV') vm.finishMSI(0.05);else if (vm.finish() == 'Laminate') vm.finishMSI(0.30);else vm.finishMSI(0.40);
 	    }), calc.range({
 	        header: 'Finish MSI',
 	        hint: 'Each additional design causes',
@@ -16704,11 +16705,6 @@
 	        header: 'Prepress Charges',
 	        type: 'money',
 	        val: vm.prepressCharges,
-	        range: [0, 500, 1]
-	    }), calc.range({
-	        header: 'Copy Charges',
-	        type: 'money',
-	        val: vm.copyCharges,
 	        range: [0, 500, 1]
 	    })]),
 	    // COLUMN 4: RESULTS AND SUBMISSION
