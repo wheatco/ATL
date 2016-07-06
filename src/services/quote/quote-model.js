@@ -7,6 +7,8 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(mongoose);
 
 const quoteSchema = new Schema({
   name: String,
@@ -48,6 +50,8 @@ const quoteSchema = new Schema({
     'default': Date.now
   }
 });
+
+quoteSchema.plugin(autoIncrement.plugin, { model: 'quote', field: 'quote_id' });
 
 const quoteModel = mongoose.model('quote', quoteSchema);
 
