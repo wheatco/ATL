@@ -1,3 +1,7 @@
+html, body{
+	font-family: sans-serif;
+}
+
 header{
 	text-align: center;
 	margin-top: 50px;
@@ -18,6 +22,7 @@ table#price-table{
 }
 
 table#price-table tbody{
+	padding: 0 20px 10px 20px;
 	border: solid black 1px;
 	display: block;
 }
@@ -40,6 +45,23 @@ table#price-table tbody{
 	width:100%;
 }
 
+#quote-id{
+	position: absolute;
+	padding: 50px;
+	top:0;
+	right:0;
+	text-align: center;
+}
+
+#quote-id h3{
+	border: solid black 1px;
+	padding: 15px 30px;
+}
+
+#quote-id em{
+	font-style: normal;
+}
+
 .column{
 	width:50%;
 	padding: 20px;
@@ -48,13 +70,13 @@ table#price-table tbody{
 
 .small-column{
 	box-sizing: border-box;
-	width:30%;
 	padding: 20px;
+	width:35%;
 }
 .big-column{
 	box-sizing: border-box;
-	width:70%;
 	padding: 20px;
+	width:65%;
 }
 
 .left{

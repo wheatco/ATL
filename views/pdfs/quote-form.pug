@@ -9,7 +9,7 @@
 doctype html
 html(lang="en")
   head
-    title= 'Quote '+id+' for '+name
+    title= 'Quote '+quote_id+' for '+name
     style
       include quote-form.css
   body
@@ -17,8 +17,15 @@ html(lang="en")
       img#logo(src="http://www.at-l.com/wp-content/uploads/2014/05/atl_logo_frontpage.jpg")
       h1(style="display:none  ") American Tape and Label
       h2 Service and Quality for Less
-      aside= 'Quote opened on ' + prettyDate(createdAt)
       // h3= 'Quote last modified on ' + prettyDate(updatedAt)
+      div#quote-id
+        h3 Quote #
+          br
+          em= quote_id
+        aside
+          | Opened
+          br
+          = prettyDate(createdAt)
     main.full
       table.column.left
         thead
@@ -94,22 +101,21 @@ html(lang="en")
               td.quantity= '$'+(overallCost4/quantity4 * 1000).toFixed(2)
             if quantity5 && overallCost5
               td.quantity= '$'+(overallCost5/quantity5 * 1000).toFixed(2)
-      div
-        ul.small-column.left
-          li= 'Cost Per Design: $' + costPerDesign
-          li= 'Prepress Charges: $' +prepressCharges
+      ul.small-column.left
+        li= 'Cost Per Design: $' + costPerDesign
+        li= 'Prepress Charges: $' +prepressCharges
 
-        ul.big-column.right.price-summary
-          if quantity1
-            li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.toFixed(2)+' ($'+(overallCost1/quantity1).toFixed(2)+' per label)' 
-          if quantity2
-            li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.toFixed(2)+' ($'+(overallCost2/quantity2).toFixed(2)+' per label)' 
-          if quantity3
-            li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.toFixed(2)+' ($'+(overallCost3/quantity3).toFixed(2)+' per label)' 
-          if quantity4
-            li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.toFixed(2)+' ($'+(overallCost4/quantity4).toFixed(2)+' per label)' 
-          if quantity5
-            li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.toFixed(2)+' ($'+(overallCost5/quantity5).toFixed(2)+' per label)' 
+      ul.big-column.right.price-summary
+        if quantity1
+          li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.toFixed(2)+' ($'+(overallCost1/quantity1).toFixed(2)+' per label)' 
+        if quantity2
+          li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.toFixed(2)+' ($'+(overallCost2/quantity2).toFixed(2)+' per label)' 
+        if quantity3
+          li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.toFixed(2)+' ($'+(overallCost3/quantity3).toFixed(2)+' per label)' 
+        if quantity4
+          li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.toFixed(2)+' ($'+(overallCost4/quantity4).toFixed(2)+' per label)' 
+        if quantity5
+          li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.toFixed(2)+' ($'+(overallCost5/quantity5).toFixed(2)+' per label)' 
 
     footer
       h3 DISCLAIMER:
@@ -125,4 +131,4 @@ html(lang="en")
         p 6390 North Broadway | Denver, Colorado 80216
         p (303) 427-0588 | FAX (303) 650-6271 | Visit us at www.AT-L.com
         br
-        p &copy; 2007 American Tape &amp; Label. ALl Rights Reserved.
+        p &copy; 2007 American Tape &amp; Label. All Rights Reserved.
