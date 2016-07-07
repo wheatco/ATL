@@ -18,7 +18,9 @@ var select2 = require('select2');
 
 window.Select2 = {
   view: function (ctrl, attrs) {
-    return m('select', {config: Select2.config(attrs)});
+    return m('.select-wrapper', [
+      m('select', {config: Select2.config(attrs)})
+    ]);
   },
   config: function (attrs) {
     return function (element, isInitialized) {
@@ -38,7 +40,9 @@ window.Select2 = {
 
         // Get strings from service objects
         for (var i = 0; i < data.length; i++) {
-          data[i] = format(data[i]);
+          if (format) {
+            data[i] = format(data[i]);
+          }
           // data[i] = {
           //   id: data[i]._id,
           //   text: format(data[i])

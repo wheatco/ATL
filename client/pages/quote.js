@@ -288,23 +288,15 @@ QuoteForm.view = function(ctrl, args) {
             // COLUMN 2: EQUIPMENT / PAPER / FINISH
             m('div', [
                 m('h1', 'Printing Details'),
-                m('h2', 'Tools'),
-                // m('.label-header', 'Shape'),
-                // calc.radios(vm.shape, [{
-                //     val: 'Rectangle',
-                //     label: 'Rectangle',
-                // }, {
-                //     val: 'Circle',
-                //     label: 'Circle',
-                // }]),
-                m('.label-header', 'Corner Shape'),
-                calc.radios(vm.corner, [{
-                    val: 'Square',
-                    label: 'Square',
+                m('.label-header', 'Shape'),
+                calc.radios(vm.shape, [{
+                    val: 'Rectangle',
+                    label: 'Rectangle',
                 }, {
-                    val: 'Rounded',
-                    label: 'Rounded',
+                    val: 'Circle',
+                    label: 'Circle',
                 }]),
+                m('h2', 'Tool'),
                 m('.calc-item.col.gap-3.justify', [
                     m('.label-header', 'Across the web (in)'),
                     m('input.input-text.good.input-number', {
@@ -317,32 +309,45 @@ QuoteForm.view = function(ctrl, args) {
                         type: 'Number',
                     }),
                 ]),
-                m('.label-header', 'Corner Size'),
-                calc.radios(vm.cornerSize, vm.cornerSizes.map(size => {
-                    return {
-                        val: size,
-                        label: size + ' inches'
-                    };
-                })),
-                m('.select-wrapper', [
-                    m.component(Select2, {
-                        data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
-                        format: function(tool) {
-                            // TODO: this is a bit jank
-                            vm.selectedTool(tool.name);
-                            vm.toolAcross(tool.acrossWeb);
-                            vm.toolAround(tool.aroundWeb);
-                            return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
-                        },
-                        value: vm.selectedTool,
-                        onchange: function(val) {
-                            console.log(val);
-                        },
-                        tags: false,
-                        width: '100%',
-                        multiple: 'multiple'
-                    }),
-                ]),
+                m('.label-header', 'Corner Shape'),
+                calc.radios(vm.corner, [{
+                    val: 'Square',
+                    label: 'Square',
+                }, {
+                    val: 'Rounded',
+                    label: 'Rounded',
+                }]),
+                m('.label-header', 'Corner Size (in)'),
+                m.component(Select2, {
+                    data: {
+                        data: vm.cornerSizes
+                    },
+                    // format: function(size) {
+                    //     return `${size} inches`;
+                    // },
+                    value: vm.cornerSize,
+                    onchange: function(val) {
+                    },
+                    width: '100%',
+                }),
+                m('.label-header', 'Select Tool'),
+                m.component(Select2, {
+                    data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
+                    format: function(tool) {
+                        // TODO: this is a bit jank
+                        vm.selectedTool(tool.name);
+                        vm.toolAcross(tool.acrossWeb);
+                        vm.toolAround(tool.aroundWeb);
+                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                    },
+                    value: vm.selectedTool,
+                    onchange: function(val) {
+                        console.log(val);
+                    },
+                    tags: false,
+                    width: '100%',
+                    multiple: 'multiple'
+                }),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
                 calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
