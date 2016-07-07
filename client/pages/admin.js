@@ -45,14 +45,14 @@ var ToolEntry = {
   },
   controller: function(args) {
     var vm = ToolEntry.vm;
-    vm.cornerSizes = [
+    vm.cornerSizes = m.prop([
       '1/3',
       '1/4',
       '1/8',
       '1/16',
       '1/32',
       '1/64'
-    ];
+    ]);
     ToolEntry.init();
   },
   view: function(ctrl, args) {
@@ -95,9 +95,7 @@ var ToolEntry = {
           }]),
           m('.label-header', 'Corner Size'),
           m.component(Select2, {
-              data: {
-                  data: vm.cornerSizes
-              },
+              data: vm.cornerSizes,
               value: vm.cornerSize,
               onchange: function(val) {
               },
