@@ -90,7 +90,7 @@ QuoteForm.controller = function(args) {
         '1/32',
         '1/64'
     ]; 
-    vm.cornerSize = m.prop('');
+    vm.cornerSize = m.prop('1/3');
     vm.tools = app.service('tools').find();
 
     vm.selectedTool = m.prop([]);
@@ -322,9 +322,6 @@ QuoteForm.view = function(ctrl, args) {
                     data: {
                         data: vm.cornerSizes
                     },
-                    // format: function(size) {
-                    //     return `${size} inches`;
-                    // },
                     value: vm.cornerSize,
                     onchange: function(val) {
                     },
