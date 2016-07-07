@@ -57,20 +57,27 @@ QuoteForm.vm.submitForm = function() {
 };
 
 QuoteForm.vm.getTools = function() {
+    // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
     app.service('tools').find().then(tools => {
         var tools = tools.data;
-        var filteredTools = [];
+        var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
             var tool = tools[i];
-            // console.log(tool);
             if (tool.corner == vm.corner() && tool.cornerSize == vm.cornerSize()) {
-                filteredTools.push(tool);
+                // Euclidean distance because why not
+                tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
+                closest.push(tool);
             }
         };
-        vm.tools(filteredTools);
-        console.log(vm.tools());
+        // Sort by closest
+        closest.sort(function(a, b) {
+            return a.distance - b.distance;
+        });
+        // Limit to 10 
+        closest = closest.slice(0, 10);
+        vm.tools(closest);
     });
     
 }
