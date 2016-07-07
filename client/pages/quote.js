@@ -375,9 +375,7 @@ QuoteForm.view = function(ctrl, args) {
                     onchange: function(val) {
                         console.log(val);
                     },
-                    tags: false,
-                    width: '100%',
-                    multiple: 'multiple'
+                    width: '100%'
                 }),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
