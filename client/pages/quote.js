@@ -82,6 +82,15 @@ QuoteForm.controller = function(args) {
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
     vm.corner = m.prop('Square'); // Round
 
+    vm.cornerSizes = [
+        '1/3',
+        '1/4',
+        '1/8',
+        '1/16',
+        '1/32',
+        '1/64'
+    ]; 
+    vm.cornerSize = m.prop('');
     vm.tools = app.service('tools').find();
 
     vm.selectedTool = m.prop([]);
@@ -279,15 +288,16 @@ QuoteForm.view = function(ctrl, args) {
             // COLUMN 2: EQUIPMENT / PAPER / FINISH
             m('div', [
                 m('h1', 'Printing Details'),
-                m('.label-header', 'Shape'),
-                calc.radios(vm.shape, [{
-                    val: 'Rectangle',
-                    label: 'Rectangle',
-                }, {
-                    val: 'Circle',
-                    label: 'Circle',
-                }]),
-                m('.label-header', 'Corner'),
+                m('h2', 'Tools'),
+                // m('.label-header', 'Shape'),
+                // calc.radios(vm.shape, [{
+                //     val: 'Rectangle',
+                //     label: 'Rectangle',
+                // }, {
+                //     val: 'Circle',
+                //     label: 'Circle',
+                // }]),
+                m('.label-header', 'Corner Shape'),
                 calc.radios(vm.corner, [{
                     val: 'Square',
                     label: 'Square',
@@ -295,7 +305,25 @@ QuoteForm.view = function(ctrl, args) {
                     val: 'Rounded',
                     label: 'Rounded',
                 }]),
-                m('.label-header', 'Tools'),
+                m('.calc-item.col.gap-3.justify', [
+                    m('.label-header', 'Across the web (in)'),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                    }),
+                ]),
+                m('.calc-item.col.gap-3.justify', [
+                    m('.label-header', 'Around the web (in)'),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                    }),
+                ]),
+                m('.label-header', 'Corner Size'),
+                calc.radios(vm.cornerSize, vm.cornerSizes.map(size => {
+                    return {
+                        val: size,
+                        label: size + ' inches'
+                    };
+                })),
                 m('.select-wrapper', [
                     m.component(Select2, {
                         data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
