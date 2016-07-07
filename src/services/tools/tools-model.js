@@ -12,7 +12,7 @@ const toolsSchema = new Schema({
   name: { type: String, required: true },
   acrossWeb: { type: Number, required: true },
   aroundWeb: { type: Number, required: true },
-  shape: { type: String, required: true },
+  corner: { type: String, required: true },
   cornerSize: { type: String, required: true },
   createdAt: { type: Date, 'default': Date.now },
   updatedAt: { type: Date, 'default': Date.now }
