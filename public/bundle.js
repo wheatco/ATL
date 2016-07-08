@@ -520,7 +520,9 @@
 	
 	window.Select2 = {
 	  view: function view(ctrl, attrs) {
-	    return m('.select-wrapper', [m('select', { config: Select2.config(attrs) })]);
+	    return m('.select-wrapper', [m('select', {
+	      config: Select2.config(attrs)
+	    })]);
 	  },
 	  config: function config(attrs) {
 	    return function (element, isInitialized) {
@@ -557,6 +559,7 @@
 	        var val = el.select2('val');
 	        value(val);
 	        onchange(val);
+	        return val;
 	      });
 	    };
 	  }
@@ -10609,7 +10612,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
+	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16416,7 +16419,6 @@
 	    var selectedCornerSize = vm.cornerSize();
 	    app.service('tools').find().then(function (tools) {
 	        tools = tools.data;
-	        console.log(tools);
 	        var closest = [];
 	        // First, filter by corner shape and size
 	        for (var i = 0; i < tools.length; i++) {
@@ -16434,9 +16436,7 @@
 	        // Limit to 10
 	        closest = closest.slice(0, 10);
 	        vm.tools(closest);
-	        console.log('corner size at end of get tools', vm.cornerSize());
 	    }).then(function () {
-	        console.log('resetting corner size again');
 	        vm.cornerSize(selectedCornerSize);
 	    });
 	};
@@ -16468,7 +16468,6 @@
 	
 	    vm.cornerSizes = _mithril2.default.prop(['1/3', '1/4', '1/8', '1/16', '1/32', '1/64']);
 	    vm.cornerSize = _mithril2.default.prop('1/3');
-	    console.log('initializing corner size');
 	    vm.selectedTool = _mithril2.default.prop('');
 	    vm.toolAcross = _mithril2.default.prop(0);
 	    vm.toolAround = _mithril2.default.prop(0);
@@ -16579,8 +16578,6 @@
 	QuoteForm.view = function (ctrl, args) {
 	    var vm = QuoteForm.vm;
 	    vm.calculate();
-	    console.log(vm.tools());
-	    console.log(vm.cornerSize());
 	
 	    return (0, _mithril2.default)('div', [(0, _mithril2.default)('h1.title', 'ATL Order Form'), (0, _mithril2.default)('.calc.row.center.gap-5', [
 	
@@ -16634,17 +16631,13 @@
 	        data: vm.cornerSizes,
 	        value: vm.cornerSize,
 	        onchange: function onchange(val) {
-	            console.log('changing corner size to:', val);
 	            vm.cornerSize(val);
 	            vm.getTools();
-	            console.log('corner size is now:', vm.cornerSize());
 	        },
 	        width: '100%'
 	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
 	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?
 	        format: function format(tool) {
-	            console.log('formatting tool');
-	            console.log(tool);
 	            // TODO: this is a bit jank
 	            vm.selectedTool(tool.name);
 	            vm.toolAcross(tool.acrossWeb);
@@ -16652,9 +16645,6 @@
 	            return tool.acrossWeb + 'x' + tool.aroundWeb + ' - ' + tool.name;
 	        },
 	        value: vm.selectedTool,
-	        onchange: function onchange(val) {
-	            console.log(val);
-	        },
 	        width: '100%'
 	    }), (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
 	        return {

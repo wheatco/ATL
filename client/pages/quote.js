@@ -62,7 +62,6 @@ QuoteForm.vm.getTools = function() {
     var selectedCornerSize = vm.cornerSize();
     app.service('tools').find().then(tools => {
         tools = tools.data;
-        console.log(tools);
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
@@ -80,9 +79,7 @@ QuoteForm.vm.getTools = function() {
         // Limit to 10 
         closest = closest.slice(0, 10);
         vm.tools(closest);
-        console.log('corner size at end of get tools', vm.cornerSize());
     }).then(() => {
-        console.log('resetting corner size again');
         vm.cornerSize(selectedCornerSize);
     });
 
@@ -122,7 +119,6 @@ QuoteForm.controller = function(args) {
         '1/64'
     ]);
     vm.cornerSize = m.prop('1/3');
-    console.log('initializing corner size');
     vm.selectedTool = m.prop('');
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
@@ -245,8 +241,6 @@ QuoteForm.controller = function(args) {
 QuoteForm.view = function(ctrl, args) {
     var vm = QuoteForm.vm;
     vm.calculate();
-    console.log(vm.tools());
-    console.log(vm.cornerSize());
 
     return m('div', [
         m('h1.title', 'ATL Order Form'),
@@ -360,10 +354,8 @@ QuoteForm.view = function(ctrl, args) {
                     data: vm.cornerSizes,
                     value: vm.cornerSize,
                     onchange: function(val) {
-                        console.log('changing corner size to:', val);
                         vm.cornerSize(val);
                         vm.getTools();
-                        console.log('corner size is now:', vm.cornerSize());
                     },
                     width: '100%',
                 }),
@@ -371,8 +363,6 @@ QuoteForm.view = function(ctrl, args) {
                 m.component(Select2, {
                     data: vm.tools, // TODO: does this still work if the service takes a long time to load?
                     format: function(tool) {
-                        console.log('formatting tool');
-                        console.log(tool);
                         // TODO: this is a bit jank
                         vm.selectedTool(tool.name);
                         vm.toolAcross(tool.acrossWeb);
@@ -380,9 +370,6 @@ QuoteForm.view = function(ctrl, args) {
                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                     },
                     value: vm.selectedTool,
-                    onchange: function(val) {
-                        console.log(val);
-                    },
                     width: '100%'
                 }),
                 m('h2', 'Paper & Finish'),

@@ -17,13 +17,15 @@ var $ = require('jquery');
 var select2 = require('select2');
 
 window.Select2 = {
-  view: function (ctrl, attrs) {
+  view: function(ctrl, attrs) {
     return m('.select-wrapper', [
-      m('select', {config: Select2.config(attrs)})
+      m('select', {
+        config: Select2.config(attrs)
+      })
     ]);
   },
-  config: function (attrs) {
-    return function (element, isInitialized) {
+  config: function(attrs) {
+    return function(element, isInitialized) {
       var el = $(element);
 
       // Destroy old options when refreshing data
@@ -53,10 +55,11 @@ window.Select2 = {
 
       attrs.data = data;
 
-      el.select2(attrs).on('change', function (e) {
+      el.select2(attrs).on('change', function(e) {
         var val = el.select2('val');
         value(val);
         onchange(val);
+        return val;
       });
     };
   }
