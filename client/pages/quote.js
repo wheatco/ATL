@@ -61,6 +61,7 @@ QuoteForm.vm.getTools = function() {
     var vm = QuoteForm.vm;
     app.service('tools').find().then(tools => {
         var tools = tools.data;
+        console.log(tools);
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
@@ -79,7 +80,7 @@ QuoteForm.vm.getTools = function() {
         closest = closest.slice(0, 10);
         vm.tools(closest);
     });
-    
+
 }
 
 QuoteForm.controller = function(args) {
@@ -114,7 +115,7 @@ QuoteForm.controller = function(args) {
         '1/16',
         '1/32',
         '1/64'
-    ]); 
+    ]);
     vm.cornerSize = m.prop('1/3');
     vm.selectedTool = m.prop('');
     vm.toolAcross = m.prop(0);
@@ -328,7 +329,7 @@ QuoteForm.view = function(ctrl, args) {
                         type: 'Number',
                         min: 0,
                         value: vm.toolAcross(),
-                        onchange: function (e) {
+                        onchange: function(e) {
                             m.withAttr('value', vm.toolAcross)(e);
                             vm.getTools();
                         }
@@ -340,20 +341,12 @@ QuoteForm.view = function(ctrl, args) {
                         type: 'Number',
                         min: 0,
                         value: vm.toolAround(),
-                        onchange: function (e) {
+                        onchange: function(e) {
                             m.withAttr('value', vm.toolAround)(e);
                             vm.getTools();
                         }
                     }),
                 ]),
-                m('.label-header', 'Corner Shape'),
-                calc.radios(vm.corner, [{
-                    val: 'Square',
-                    label: 'Square',
-                }, {
-                    val: 'Rounded',
-                    label: 'Rounded',
-                }], vm.getTools),
                 m('.label-header', 'Corner Size (in)'),
                 m.component(Select2, {
                     data: vm.cornerSizes,
@@ -365,6 +358,8 @@ QuoteForm.view = function(ctrl, args) {
                 m.component(Select2, {
                     data: vm.tools, // TODO: does this still work if the service takes a long time to load?
                     format: function(tool) {
+                        console.log('formatting tool');
+                        console.log(tool);
                         // TODO: this is a bit jank
                         vm.selectedTool(tool.name);
                         vm.toolAcross(tool.acrossWeb);

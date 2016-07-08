@@ -35,12 +35,12 @@ TOOL ENTRY
 
 var ToolEntry = {
   vm: {},
-  init: function () {
+  init: function() {
     var vm = ToolEntry.vm;
     vm.name = m.prop('');
     vm.acrossWeb = m.prop(0);
     vm.aroundWeb = m.prop(0);
-    vm.corner = m.prop('Square');
+    vm.shape = m.prop('Square');
     vm.cornerSize = m.prop('1/3');
   },
   controller: function(args) {
@@ -85,21 +85,20 @@ var ToolEntry = {
         ]),
         // Corner shape and size
         m('.calc-item.col.gap-3.justify.fill-1', [
-          m('.label-header', 'Corner Shape' ),
-          calc.radios(vm.corner, [{
-              val: 'Square',
-              label: 'Square',
+          m('.label-header', 'Shape'),
+          calc.radios(vm.shape, [{
+            val: 'Square',
+            label: 'Square',
           }, {
-              val: 'Rounded',
-              label: 'Rounded',
+            val: 'Round',
+            label: 'Round',
           }]),
           m('.label-header', 'Corner Size'),
           m.component(Select2, {
-              data: vm.cornerSizes,
-              value: vm.cornerSize,
-              onchange: function(val) {
-              },
-              width: '100%',
+            data: vm.cornerSizes,
+            value: vm.cornerSize,
+            onchange: function(val) {},
+            width: '100%',
           }),
         ]),
 
@@ -111,7 +110,7 @@ var ToolEntry = {
             name: vm.name(),
             acrossWeb: vm.acrossWeb(),
             aroundWeb: vm.aroundWeb(),
-            corner: vm.corner(),
+            shape: vm.shape(),
             cornerSize: vm.cornerSize()
           };
 

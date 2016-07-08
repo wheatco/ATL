@@ -10609,7 +10609,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
+	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16415,6 +16415,7 @@
 	    var vm = QuoteForm.vm;
 	    app.service('tools').find().then(function (tools) {
 	        var tools = tools.data;
+	        console.log(tools);
 	        var closest = [];
 	        // First, filter by corner shape and size
 	        for (var i = 0; i < tools.length; i++) {
@@ -16621,13 +16622,7 @@
 	            _mithril2.default.withAttr('value', vm.toolAround)(e);
 	            vm.getTools();
 	        }
-	    })]), (0, _mithril2.default)('.label-header', 'Corner Shape'), calc.radios(vm.corner, [{
-	        val: 'Square',
-	        label: 'Square'
-	    }, {
-	        val: 'Rounded',
-	        label: 'Rounded'
-	    }], vm.getTools), (0, _mithril2.default)('.label-header', 'Corner Size (in)'), _mithril2.default.component(Select2, {
+	    })]), (0, _mithril2.default)('.label-header', 'Corner Size (in)'), _mithril2.default.component(Select2, {
 	        data: vm.cornerSizes,
 	        value: vm.cornerSize,
 	        onchange: vm.getTools,
@@ -16635,6 +16630,8 @@
 	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
 	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?
 	        format: function format(tool) {
+	            console.log('formatting tool');
+	            console.log(tool);
 	            // TODO: this is a bit jank
 	            vm.selectedTool(tool.name);
 	            vm.toolAcross(tool.acrossWeb);
@@ -35443,7 +35440,7 @@
 	    vm.name = m.prop('');
 	    vm.acrossWeb = m.prop(0);
 	    vm.aroundWeb = m.prop(0);
-	    vm.corner = m.prop('Square');
+	    vm.shape = m.prop('Square');
 	    vm.cornerSize = m.prop('1/3');
 	  },
 	  controller: function controller(args) {
@@ -35472,12 +35469,12 @@
 	      value: vm.aroundWeb()
 	    })]),
 	    // Corner shape and size
-	    m('.calc-item.col.gap-3.justify.fill-1', [m('.label-header', 'Corner Shape'), calc.radios(vm.corner, [{
+	    m('.calc-item.col.gap-3.justify.fill-1', [m('.label-header', 'Shape'), calc.radios(vm.shape, [{
 	      val: 'Square',
 	      label: 'Square'
 	    }, {
-	      val: 'Rounded',
-	      label: 'Rounded'
+	      val: 'Round',
+	      label: 'Round'
 	    }]), m('.label-header', 'Corner Size'), m.component(Select2, {
 	      data: vm.cornerSizes,
 	      value: vm.cornerSize,
@@ -35491,7 +35488,7 @@
 	          name: vm.name(),
 	          acrossWeb: vm.acrossWeb(),
 	          aroundWeb: vm.aroundWeb(),
-	          corner: vm.corner(),
+	          shape: vm.shape(),
 	          cornerSize: vm.cornerSize()
 	        };
 	
