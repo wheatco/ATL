@@ -56,6 +56,31 @@ QuoteForm.vm.submitForm = function() {
     });
 };
 
+QuoteForm.vm.getTools = function() {
+    // TODO: make this a mongo query?
+    var vm = QuoteForm.vm;
+    app.service('tools').find().then(tools => {
+        var tools = tools.data;
+        var closest = [];
+        // First, filter by corner shape and size
+        for (var i = 0; i < tools.length; i++) {
+            var tool = tools[i];
+            if (tool.corner == vm.corner() && tool.cornerSize == vm.cornerSize()) {
+                // Euclidean distance because why not
+                tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
+                closest.push(tool);
+            }
+        };
+        // Sort by closest
+        closest.sort(function(a, b) {
+            return a.distance - b.distance;
+        });
+        // Limit to 10 
+        closest = closest.slice(0, 10);
+        vm.tools(closest);
+    });
+    
+}
 
 QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
@@ -82,11 +107,20 @@ QuoteForm.controller = function(args) {
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
     vm.corner = m.prop('Square'); // Round
 
-    vm.tools = app.service('tools').find();
-
-    vm.selectedTool = m.prop([]);
-    vm.toolAcross = m.prop([]);
-    vm.toolAround = m.prop([]);
+    vm.cornerSizes = m.prop([
+        '1/3',
+        '1/4',
+        '1/8',
+        '1/16',
+        '1/32',
+        '1/64'
+    ]); 
+    vm.cornerSize = m.prop('1/3');
+    vm.selectedTool = m.prop('');
+    vm.toolAcross = m.prop(0);
+    vm.toolAround = m.prop(0);
+    vm.tools = m.prop([]);
+    vm.getTools();
 
     vm.quantity1 = m.prop(100);
     vm.quantity2 = m.prop(0);
@@ -287,34 +321,62 @@ QuoteForm.view = function(ctrl, args) {
                     val: 'Circle',
                     label: 'Circle',
                 }]),
-                m('.label-header', 'Corner'),
+                m('h2', 'Tool'),
+                m('.calc-item.col.gap-3.justify', [
+                    m('.label-header', 'Across the web (in)'),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.toolAcross(),
+                        onchange: function (e) {
+                            m.withAttr('value', vm.toolAcross)(e);
+                            vm.getTools();
+                        }
+                    }),
+                ]),
+                m('.calc-item.col.gap-3.justify', [
+                    m('.label-header', 'Around the web (in)'),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.toolAround(),
+                        onchange: function (e) {
+                            m.withAttr('value', vm.toolAround)(e);
+                            vm.getTools();
+                        }
+                    }),
+                ]),
+                m('.label-header', 'Corner Shape'),
                 calc.radios(vm.corner, [{
                     val: 'Square',
                     label: 'Square',
                 }, {
                     val: 'Rounded',
                     label: 'Rounded',
-                }]),
-                m('.label-header', 'Tools'),
-                m('.select-wrapper', [
-                    m.component(Select2, {
-                        data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
-                        format: function(tool) {
-                            // TODO: this is a bit jank
-                            vm.selectedTool(tool.name);
-                            vm.toolAcross(tool.acrossWeb);
-                            vm.toolAround(tool.aroundWeb);
-                            return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
-                        },
-                        value: vm.selectedTool,
-                        onchange: function(val) {
-                            console.log(val);
-                        },
-                        tags: false,
-                        width: '100%',
-                        multiple: 'multiple'
-                    }),
-                ]),
+                }], vm.getTools),
+                m('.label-header', 'Corner Size (in)'),
+                m.component(Select2, {
+                    data: vm.cornerSizes,
+                    value: vm.cornerSize,
+                    onchange: vm.getTools,
+                    width: '100%',
+                }),
+                m('.label-header', 'Select Tool'),
+                m.component(Select2, {
+                    data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+                    format: function(tool) {
+                        // TODO: this is a bit jank
+                        vm.selectedTool(tool.name);
+                        vm.toolAcross(tool.acrossWeb);
+                        vm.toolAround(tool.aroundWeb);
+                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                    },
+                    value: vm.selectedTool,
+                    onchange: function(val) {
+                        console.log(val);
+                    },
+                    width: '100%'
+                }),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
                 calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
