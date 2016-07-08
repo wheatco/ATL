@@ -10609,7 +10609,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16413,19 +16413,20 @@
 	QuoteForm.vm.getTools = function () {
 	    // TODO: make this a mongo query?
 	    var vm = QuoteForm.vm;
+	    var selectedCornerSize = vm.cornerSize();
 	    app.service('tools').find().then(function (tools) {
-	        var tools = tools.data;
+	        tools = tools.data;
 	        console.log(tools);
 	        var closest = [];
 	        // First, filter by corner shape and size
 	        for (var i = 0; i < tools.length; i++) {
 	            var tool = tools[i];
-	            if (tool.corner == vm.corner() && tool.cornerSize == vm.cornerSize()) {
+	            if (tool.cornerSize == selectedCornerSize) {
 	                // Euclidean distance because why not
 	                tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
 	                closest.push(tool);
 	            }
-	        };
+	        }
 	        // Sort by closest
 	        closest.sort(function (a, b) {
 	            return a.distance - b.distance;
@@ -16433,6 +16434,10 @@
 	        // Limit to 10
 	        closest = closest.slice(0, 10);
 	        vm.tools(closest);
+	        console.log('corner size at end of get tools', vm.cornerSize());
+	    }).then(function () {
+	        console.log('resetting corner size again');
+	        vm.cornerSize(selectedCornerSize);
 	    });
 	};
 	
@@ -16463,6 +16468,7 @@
 	
 	    vm.cornerSizes = _mithril2.default.prop(['1/3', '1/4', '1/8', '1/16', '1/32', '1/64']);
 	    vm.cornerSize = _mithril2.default.prop('1/3');
+	    console.log('initializing corner size');
 	    vm.selectedTool = _mithril2.default.prop('');
 	    vm.toolAcross = _mithril2.default.prop(0);
 	    vm.toolAround = _mithril2.default.prop(0);
@@ -16573,6 +16579,8 @@
 	QuoteForm.view = function (ctrl, args) {
 	    var vm = QuoteForm.vm;
 	    vm.calculate();
+	    console.log(vm.tools());
+	    console.log(vm.cornerSize());
 	
 	    return (0, _mithril2.default)('div', [(0, _mithril2.default)('h1.title', 'ATL Order Form'), (0, _mithril2.default)('.calc.row.center.gap-5', [
 	
@@ -16625,7 +16633,12 @@
 	    })]), (0, _mithril2.default)('.label-header', 'Corner Size (in)'), _mithril2.default.component(Select2, {
 	        data: vm.cornerSizes,
 	        value: vm.cornerSize,
-	        onchange: vm.getTools,
+	        onchange: function onchange(val) {
+	            console.log('changing corner size to:', val);
+	            vm.cornerSize(val);
+	            vm.getTools();
+	            console.log('corner size is now:', vm.cornerSize());
+	        },
 	        width: '100%'
 	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
 	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?

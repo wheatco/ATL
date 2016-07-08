@@ -59,19 +59,20 @@ QuoteForm.vm.submitForm = function() {
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
+    var selectedCornerSize = vm.cornerSize();
     app.service('tools').find().then(tools => {
-        var tools = tools.data;
+        tools = tools.data;
         console.log(tools);
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
             var tool = tools[i];
-            if (tool.corner == vm.corner() && tool.cornerSize == vm.cornerSize()) {
+            if (tool.cornerSize == selectedCornerSize) {
                 // Euclidean distance because why not
                 tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
                 closest.push(tool);
             }
-        };
+        }
         // Sort by closest
         closest.sort(function(a, b) {
             return a.distance - b.distance;
@@ -79,9 +80,13 @@ QuoteForm.vm.getTools = function() {
         // Limit to 10 
         closest = closest.slice(0, 10);
         vm.tools(closest);
+        console.log('corner size at end of get tools', vm.cornerSize());
+    }).then(() => {
+        console.log('resetting corner size again');
+        vm.cornerSize(selectedCornerSize);
     });
 
-}
+};
 
 QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
@@ -117,6 +122,7 @@ QuoteForm.controller = function(args) {
         '1/64'
     ]);
     vm.cornerSize = m.prop('1/3');
+    console.log('initializing corner size');
     vm.selectedTool = m.prop('');
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
@@ -239,6 +245,8 @@ QuoteForm.controller = function(args) {
 QuoteForm.view = function(ctrl, args) {
     var vm = QuoteForm.vm;
     vm.calculate();
+    console.log(vm.tools());
+    console.log(vm.cornerSize());
 
     return m('div', [
         m('h1.title', 'ATL Order Form'),
@@ -351,7 +359,12 @@ QuoteForm.view = function(ctrl, args) {
                 m.component(Select2, {
                     data: vm.cornerSizes,
                     value: vm.cornerSize,
-                    onchange: vm.getTools,
+                    onchange: function(val) {
+                        console.log('changing corner size to:', val);
+                        vm.cornerSize(val);
+                        vm.getTools();
+                        console.log('corner size is now:', vm.cornerSize());
+                    },
                     width: '100%',
                 }),
                 m('.label-header', 'Select Tool'),
