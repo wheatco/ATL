@@ -189,37 +189,6 @@
 	    }));
 	};
 	
-	// window.calc.checklist = function(valProp, items) {
-	//     // Assumes prop is an object with properties either true or false
-	//     // eg {value1: false, value2: true}
-	
-	//     var items = Object.keys(valProp());
-	
-	//     return m('.calc-item', items.map(function(item) {
-	//         return m('label.checkbox', {
-	//             class: valProp()[item] || false ? 'active' : ''
-	//         }, [
-	//             m('input', {
-	//                 type: 'checkbox',
-	//                 checked: valProp()[item] || false,
-	//                 value: item,
-	//                 onclick: function (e) {
-	//                     var items = valProp();
-	//                     m.withAttr('value', function (value) {
-	//                         items[value] = !items[value]; // toggle this item
-	//                         valProp(items);
-	//                         console.log(valProp());
-	//                     })(e);
-	//                 }
-	//             }),
-	//             m('span.checkbox-dot'),
-	//             m('div.checkbox-label', [
-	//                 m('strong', item || '')
-	//             ])
-	//         ]);
-	//     }));
-	// };
-	
 	window.calc.pieChart = function (values) {
 	    // values should be an array of {val: 129, color: "#ff0000", label: "meow food"}
 	    return m(".calc-item.row.gap-2.middle", [m('svg.pie-chart', {
@@ -537,7 +506,7 @@
 	/*
 	  Usage: 
 	  m.component(Select2, {
-	      data: array of dropdown options from a feathers service
+	      data: m.prop containing dropdown options
 	      format: function (dataitem) that returns string to display
 	      value: m.prop to store selected value(s)
 	      onchange: callback with selected value
@@ -551,41 +520,44 @@
 	
 	window.Select2 = {
 	  view: function view(ctrl, attrs) {
-	    return m('select', { config: Select2.config(attrs) });
+	    return m('.select-wrapper', [m('select', { config: Select2.config(attrs) })]);
 	  },
 	  config: function config(attrs) {
 	    return function (element, isInitialized) {
 	      var el = $(element);
-	      // Only setup once
-	      if (!isInitialized) {
 	
-	        // Special values
-	        var data = attrs.data.data;
-	        var format = attrs.format;
-	        var value = attrs.value;
-	        var onchange = attrs.onchange;
-	        delete attrs.data;
-	        delete attrs.dataKey;
-	        delete attrs.value;
-	        delete attrs.onchange;
+	      // Destroy old options when refreshing data
+	      // https://github.com/select2/select2/issues/3185#issuecomment-88955394
+	      el.find("option").remove();
 	
-	        // Get strings from service objects
-	        for (var i = 0; i < data.length; i++) {
+	      // Special values
+	      var data = attrs.data();
+	      var format = attrs.format;
+	      var value = attrs.value;
+	      var onchange = attrs.onchange;
+	      delete attrs.data;
+	      delete attrs.dataKey;
+	      delete attrs.value;
+	      delete attrs.onchange;
+	
+	      // Get strings from objects
+	      for (var i = 0; i < data.length; i++) {
+	        if (format) {
 	          data[i] = format(data[i]);
-	          // data[i] = {
-	          //   id: data[i]._id,
-	          //   text: format(data[i])
-	          // }
-	        };
+	        }
+	        // data[i] = {
+	        //   id: data[i]._id,
+	        //   text: format(data[i])
+	        // }
+	      };
 	
-	        attrs.data = data;
+	      attrs.data = data;
 	
-	        el.select2(attrs).on('change', function (e) {
-	          var val = el.select2('val');
-	          value(val);
-	          onchange(val);
-	        });
-	      }
+	      el.select2(attrs).on('change', function (e) {
+	        var val = el.select2('val');
+	        value(val);
+	        onchange(val);
+	      });
 	    };
 	  }
 	};
@@ -16438,6 +16410,31 @@
 	    });
 	};
 	
+	QuoteForm.vm.getTools = function () {
+	    // TODO: make this a mongo query?
+	    var vm = QuoteForm.vm;
+	    app.service('tools').find().then(function (tools) {
+	        var tools = tools.data;
+	        var closest = [];
+	        // First, filter by corner shape and size
+	        for (var i = 0; i < tools.length; i++) {
+	            var tool = tools[i];
+	            if (tool.corner == vm.corner() && tool.cornerSize == vm.cornerSize()) {
+	                // Euclidean distance because why not
+	                tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
+	                closest.push(tool);
+	            }
+	        };
+	        // Sort by closest
+	        closest.sort(function (a, b) {
+	            return a.distance - b.distance;
+	        });
+	        // Limit to 10
+	        closest = closest.slice(0, 10);
+	        vm.tools(closest);
+	    });
+	};
+	
 	QuoteForm.controller = function (args) {
 	    var vm = QuoteForm.vm;
 	    var app = window.app;
@@ -16463,11 +16460,13 @@
 	    vm.shape = _mithril2.default.prop('Rectangle'); // Circle, Triangle, Star
 	    vm.corner = _mithril2.default.prop('Square'); // Round
 	
-	    vm.tools = app.service('tools').find();
-	
-	    vm.selectedTool = _mithril2.default.prop([]);
-	    vm.toolAcross = _mithril2.default.prop([]);
-	    vm.toolAround = _mithril2.default.prop([]);
+	    vm.cornerSizes = _mithril2.default.prop(['1/3', '1/4', '1/8', '1/16', '1/32', '1/64']);
+	    vm.cornerSize = _mithril2.default.prop('1/3');
+	    vm.selectedTool = _mithril2.default.prop('');
+	    vm.toolAcross = _mithril2.default.prop(0);
+	    vm.toolAround = _mithril2.default.prop(0);
+	    vm.tools = _mithril2.default.prop([]);
+	    vm.getTools();
 	
 	    vm.quantity1 = _mithril2.default.prop(100);
 	    vm.quantity2 = _mithril2.default.prop(0);
@@ -16606,14 +16605,35 @@
 	    }, {
 	        val: 'Circle',
 	        label: 'Circle'
-	    }]), (0, _mithril2.default)('.label-header', 'Corner'), calc.radios(vm.corner, [{
+	    }]), (0, _mithril2.default)('h2', 'Tool'), (0, _mithril2.default)('.calc-item.col.gap-3.justify', [(0, _mithril2.default)('.label-header', 'Across the web (in)'), (0, _mithril2.default)('input.input-text.good.input-number', {
+	        type: 'Number',
+	        min: 0,
+	        value: vm.toolAcross(),
+	        onchange: function onchange(e) {
+	            _mithril2.default.withAttr('value', vm.toolAcross)(e);
+	            vm.getTools();
+	        }
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-3.justify', [(0, _mithril2.default)('.label-header', 'Around the web (in)'), (0, _mithril2.default)('input.input-text.good.input-number', {
+	        type: 'Number',
+	        min: 0,
+	        value: vm.toolAround(),
+	        onchange: function onchange(e) {
+	            _mithril2.default.withAttr('value', vm.toolAround)(e);
+	            vm.getTools();
+	        }
+	    })]), (0, _mithril2.default)('.label-header', 'Corner Shape'), calc.radios(vm.corner, [{
 	        val: 'Square',
 	        label: 'Square'
 	    }, {
 	        val: 'Rounded',
 	        label: 'Rounded'
-	    }]), (0, _mithril2.default)('.label-header', 'Tools'), (0, _mithril2.default)('.select-wrapper', [_mithril2.default.component(Select2, {
-	        data: vm.tools(), // TODO: does this still work if the service takes a long time to load?
+	    }], vm.getTools), (0, _mithril2.default)('.label-header', 'Corner Size (in)'), _mithril2.default.component(Select2, {
+	        data: vm.cornerSizes,
+	        value: vm.cornerSize,
+	        onchange: vm.getTools,
+	        width: '100%'
+	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
+	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?
 	        format: function format(tool) {
 	            // TODO: this is a bit jank
 	            vm.selectedTool(tool.name);
@@ -16625,10 +16645,8 @@
 	        onchange: function onchange(val) {
 	            console.log(val);
 	        },
-	        tags: false,
-	        width: '100%',
-	        multiple: 'multiple'
-	    })]), (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
+	        width: '100%'
+	    }), (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
 	        return {
 	            val: key,
 	            label: key
@@ -35405,7 +35423,7 @@
 	  view: function view(ctrl, args) {
 	    var vm = Checklist.vm;
 	    return m('.calc-item', vm.items().map(function (item) {
-	      return m('div.checklist-label.middle.row', {}, [m('button.deleteButton', {
+	      return m('div.checklist-label.middle.row', [m('button.deleteButton', {
 	        onclick: function onclick(e) {
 	          return args.onclick(item);
 	        }
@@ -35420,45 +35438,70 @@
 	
 	var ToolEntry = {
 	  vm: {},
-	  controller: function controller(args) {
-	    var vm = Checklist.vm;
+	  init: function init() {
+	    var vm = ToolEntry.vm;
 	    vm.name = m.prop('');
 	    vm.acrossWeb = m.prop(0);
 	    vm.aroundWeb = m.prop(0);
+	    vm.corner = m.prop('Square');
+	    vm.cornerSize = m.prop('1/3');
+	  },
+	  controller: function controller(args) {
+	    var vm = ToolEntry.vm;
+	    vm.cornerSizes = m.prop(['1/3', '1/4', '1/8', '1/16', '1/32', '1/64']);
+	    ToolEntry.init();
 	  },
 	  view: function view(ctrl, args) {
-	    var vm = Checklist.vm;
-	    return m('.calc-item.tool-entry.row.gap-2.bottom', [m('div.column', [m('label', 'name'), m('input.input-text.good border', {
+	    var vm = ToolEntry.vm;
+	    return m('.calc-item.tool-entry.col.justify', [m('.row.gap-4.justify', [
+	    // Name and measurements
+	    m('.calc-item.col.gap-1.justify.fill-1', [m('label', 'name'), m('input.input-text.good border', {
 	      type: 'text',
 	      placeholder: 'New tool',
 	      onchange: m.withAttr('value', vm.name),
 	      value: vm.name()
-	    })]), m('div.column', [m('label', 'across the web (in)'), m('input.input-text.good border', {
+	    }), m('label', 'across the web (in)'), m('input.input-text.good border', {
 	      type: 'number',
 	      min: 0,
 	      onchange: m.withAttr('value', vm.acrossWeb),
 	      value: vm.acrossWeb()
-	    })]), m('div.column', [m('label', 'around the web (in)'), m('input.input-text.good border', {
+	    }), m('label', 'around the web (in)'), m('input.input-text.good border', {
 	      type: 'number',
 	      min: 0,
 	      onchange: m.withAttr('value', vm.aroundWeb),
 	      value: vm.aroundWeb()
-	    })]), m('button.addButton', {
+	    })]),
+	    // Corner shape and size
+	    m('.calc-item.col.gap-3.justify.fill-1', [m('.label-header', 'Corner Shape'), calc.radios(vm.corner, [{
+	      val: 'Square',
+	      label: 'Square'
+	    }, {
+	      val: 'Rounded',
+	      label: 'Rounded'
+	    }]), m('.label-header', 'Corner Size'), m.component(Select2, {
+	      data: vm.cornerSizes,
+	      value: vm.cornerSize,
+	      onchange: function onchange(val) {},
+	      width: '100%'
+	    })])]),
+	    // Add button
+	    m('button.addButton', {
 	      onclick: function onclick() {
 	        var tool = {
 	          name: vm.name(),
 	          acrossWeb: vm.acrossWeb(),
-	          aroundWeb: vm.aroundWeb()
+	          aroundWeb: vm.aroundWeb(),
+	          corner: vm.corner(),
+	          cornerSize: vm.cornerSize()
 	        };
 	
 	        if (tool.name.length && args.onclick) {
 	          args.onclick(tool);
-	          vm.name("");
-	          vm.acrossWeb(0);
-	          vm.aroundWeb(0);
+	          // Reset
+	          ToolEntry.init();
 	        }
 	      }
-	    }, '+')]);
+	    }, 'Add')]);
 	  }
 	};
 	
@@ -35531,7 +35574,7 @@
 	      onclick: function onclick(item) {
 	        ctrl.deleteTool(item);
 	      }
-	    }), m.component(ToolEntry, {
+	    }), m('h2', 'New Tool'), m.component(ToolEntry, {
 	      onclick: function onclick(tool) {
 	        ctrl.addTool(tool);
 	      }
