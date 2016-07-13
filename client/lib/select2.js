@@ -55,12 +55,20 @@ window.Select2 = {
 
       attrs.data = data;
 
+      // TODO: unjankify
       el.select2(attrs).on('change', function(e) {
         var val = el.select2('val');
-        value(val);
-        onchange(val);
-        return val;
+        if (val != value()) {
+          value(val);
+          if (onchange != null) {
+          onchange(val);
+          }
+          return val;
+        }
       });
+
+      el.val(value()).change();
+      
     };
   }
 };
