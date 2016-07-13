@@ -61,7 +61,7 @@ window.Select2 = {
         if (val != value()) {
           value(val);
           if (onchange != null) {
-          onchange(val);
+            onchange(val);
           }
           return val;
         }

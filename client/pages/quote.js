@@ -361,12 +361,8 @@ QuoteForm.view = function(ctrl, args) {
                 }),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
-                    data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+                    data: vm.tools,
                     format: function(tool) {
-                        // TODO: this is a bit jank
-                        vm.selectedTool(tool.name);
-                        vm.toolAcross(tool.acrossWeb);
-                        vm.toolAround(tool.aroundWeb);
                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                     },
                     value: vm.selectedTool,
