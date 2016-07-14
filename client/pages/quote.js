@@ -171,10 +171,12 @@ QuoteForm.controller = function(args) {
         var substrateWidth = 13.00;
         var multiColorCostImpression = 0.0175;
 
+        console.log("toolAround", vm.toolAround());
+
         var labelsAcrossTheWeb = Math.floor(
-            maxImageAreaWebWidth / (vm.toolAcross() + acrossGutter));
+            maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
-            maxImageAreaRepeatLength / (vm.toolAround() + aroundGutter));
+            maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
         var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
@@ -361,12 +363,8 @@ QuoteForm.view = function(ctrl, args) {
                 }),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
-                    data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+                    data: vm.tools,
                     format: function(tool) {
-                        // TODO: this is a bit jank
-                        vm.selectedTool(tool.name);
-                        vm.toolAcross(tool.acrossWeb);
-                        vm.toolAround(tool.aroundWeb);
                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                     },
                     value: vm.selectedTool,

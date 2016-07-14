@@ -555,12 +555,19 @@
 	
 	      attrs.data = data;
 	
+	      // TODO: unjankify
 	      el.select2(attrs).on('change', function (e) {
 	        var val = el.select2('val');
-	        value(val);
-	        onchange(val);
-	        return val;
+	        if (val != value()) {
+	          value(val);
+	          if (onchange != null) {
+	            onchange(val);
+	          }
+	          return val;
+	        }
 	      });
+	
+	      el.val(value()).change();
 	    };
 	  }
 	};
@@ -16520,8 +16527,10 @@
 	        var substrateWidth = 13.00;
 	        var multiColorCostImpression = 0.0175;
 	
-	        var labelsAcrossTheWeb = Math.floor(maxImageAreaWebWidth / (vm.toolAcross() + acrossGutter));
-	        var labelsAroundTheWeb = Math.floor(maxImageAreaRepeatLength / (vm.toolAround() + aroundGutter));
+	        console.log("toolAround", vm.toolAround());
+	
+	        var labelsAcrossTheWeb = Math.floor(maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
+	        var labelsAroundTheWeb = Math.floor(maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 	
 	        var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 	        var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
@@ -16636,12 +16645,8 @@
 	        },
 	        width: '100%'
 	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
-	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+	        data: vm.tools,
 	        format: function format(tool) {
-	            // TODO: this is a bit jank
-	            vm.selectedTool(tool.name);
-	            vm.toolAcross(tool.acrossWeb);
-	            vm.toolAround(tool.aroundWeb);
 	            return tool.acrossWeb + 'x' + tool.aroundWeb + ' - ' + tool.name;
 	        },
 	        value: vm.selectedTool,
