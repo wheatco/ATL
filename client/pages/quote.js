@@ -171,10 +171,12 @@ QuoteForm.controller = function(args) {
         var substrateWidth = 13.00;
         var multiColorCostImpression = 0.0175;
 
+        console.log("toolAround", vm.toolAround());
+
         var labelsAcrossTheWeb = Math.floor(
-            maxImageAreaWebWidth / (vm.toolAcross() + acrossGutter));
+            maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
-            maxImageAreaRepeatLength / (vm.toolAround() + aroundGutter));
+            maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
         var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
