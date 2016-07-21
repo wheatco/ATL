@@ -10,7 +10,6 @@ QuoteForm.vm = {};
 
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
-    console.log('running submit');
     $.ajax({
         //I changed this from /addQuote to actually connect to the endpoint
         // --joe
@@ -50,7 +49,6 @@ QuoteForm.vm.submitForm = function() {
         },
         dataType: 'json',
         success: function(data, textStatus, jqXHR) {
-            console.log(data);
             window.location.href = '/previewQuote?q=' + data._id;
         }
     });
@@ -170,8 +168,6 @@ QuoteForm.controller = function(args) {
         var wasteLinFt = 0.01; // percent
         var substrateWidth = 13.00;
         var multiColorCostImpression = 0.0175;
-
-        console.log("toolAround", vm.toolAround());
 
         var labelsAcrossTheWeb = Math.floor(
             maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
