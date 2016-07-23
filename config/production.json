@@ -8,5 +8,9 @@
       "secret": "FEATHERS_AUTH_SECRET"
     },
     "local": {}
+  },
+  "mailgun": {
+    "api_key": "key-d64b98f2977515ff21806fbe2c27f92b",
+    "domain": "sandbox90234bbf28114475b4475f6df62e30a1.mailgun.org"
   }
 }

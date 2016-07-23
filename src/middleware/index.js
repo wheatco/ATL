@@ -1,5 +1,6 @@
 'use strict';
 
+const sendQuoteEmail = require('./sendQuoteEmail');
 const previewQuote = require('./previewQuote');
 
 const addQuote = require('./addQuote');
@@ -33,6 +34,10 @@ module.exports = function() {
 
   app.get('/previewQuote', previewQuote(app));
   app.post('/addQuote', addQuote(app));
+
+  app.post('/sendQuoteEmail', 
+    retrieveQuote(app),
+    sendQuoteEmail(app));
 
   app.use(notFound());
   app.use(logger(app));

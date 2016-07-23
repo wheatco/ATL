@@ -8,5 +8,9 @@
       "secret": "JMZQWvQKX2ro04M/RAj9PvDuShXBycEOx2uKuOlAMf7O0kZsNSOqCH2Kl1HLtMjy1rcSDLQb80JHDY2Jfgd4Vg=="
     },
     "local": {}
+  },
+  "mailgun": {
+    "apiKey": "key-d64b98f2977515ff21806fbe2c27f92b",
+    "domain": "sandbox90234bbf28114475b4475f6df62e30a1.mailgun.org"
   }
 }

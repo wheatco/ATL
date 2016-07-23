@@ -17,12 +17,30 @@ html(lang="en")
         width: 600;
         height: 400;
       }
+    script(type='text/javascript' src='https://code.jquery.com/jquery-3.1.0.min.js')
+    script.
+      var sendQuote = function(q_id) {
+        $.ajax({
+            url: '/sendQuoteEmail',
+            type: 'POST',
+            data: {
+                q: q_id
+            },
+            error: function (err) {
+                console.log(err);
+                $('.flash').html("Sending failed: " + err.responseText);
+            },
+            success: function(res) {
+                $('.flash').html("Quote sent!");
+            }
+        });
+      }
 
   body
-    h1 Preview Quote Number #{q_id}
-    p Here's the preview:
+    h1 Quote Preview
     iframe.frame(src="/viewQuote?q="+q_id, style='width: 850px; height: 1100px', width=1100, height = 850)
     p Do you want to send it?
-    button.send(onClick=function(){console.log('need to implement')}) Send!
-    //- this button doesn't work yet and needs to be implemented with the email system -ac
+    //- better way to format this? -dp
+    button.send(onClick='sendQuote("'+q_id+'")') Send!
+    p.flash &nbsp;
 

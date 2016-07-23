@@ -17,7 +17,10 @@ const quoteSchema = new Schema({
   addressState: String,
   addressZip: String,
   phone: String,
-  email: String,
+  email: {
+    type: String,
+    required: true
+  },
   shape: String,
   corner: String,
   selectedTool: String,

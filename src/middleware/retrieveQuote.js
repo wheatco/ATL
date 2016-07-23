@@ -3,26 +3,26 @@
 module.exports = function(app) {
   return function(req, res, next) {
 
-    var quoteNo = req.query.q;
-    if (!quoteNo) {
+    var quoteID = req.query.q || req.body.q;
+    if (!quoteID) {
       //need to throw a better error
-      res.status(400).end();
+      res.status(400).send("Must include 'q' quote ID query.");
       return;
     }
 
-    console.log(req.query);
     app.service('/quotes')
       .find({
         query: {
-          _id: req.query.q
+          _id: quoteID
         }
       })
       .then(function(result) {
-        console.log(result);
-        res.data = result.data[0];
-        console.log(res.data.id);
-        // console.log(res.data);
-        next();
+        if (result.total == 0) {
+          res.status(404).send("Quote not found by those conditions.");
+        } else {
+          res.data = result.data[0];
+          next();
+        }
       });
   };
 };
