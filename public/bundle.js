@@ -555,12 +555,19 @@
 	
 	      attrs.data = data;
 	
+	      // TODO: unjankify
 	      el.select2(attrs).on('change', function (e) {
 	        var val = el.select2('val');
-	        value(val);
-	        onchange(val);
-	        return val;
+	        if (val != value()) {
+	          value(val);
+	          if (onchange != null) {
+	            onchange(val);
+	          }
+	          return val;
+	        }
 	      });
+	
+	      el.val(value()).change();
 	    };
 	  }
 	};
@@ -10612,7 +10619,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
 	 * Select2 4.0.3
 	 * https://select2.github.io
 	 *
@@ -16559,6 +16566,33 @@
 	        // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
 	
 	        var totalCost = Number(totalTimeCost) + Number(totalDigitalConsumablesCost) + Number(totalPhysicalConsumablesCost) + Number(totalExtraneousCosts);
+	
+	        var debugObject = {
+	            labelsAcrossTheWeb: labelsAcrossTheWeb,
+	            labelsAroundTheWeb: labelsAroundTheWeb,
+	            labelsPerFrame: labelsPerFrame,
+	            repeatLength: repeatLength,
+	            productionFrames: productionFrames,
+	            productionLinFt: productionLinFt,
+	            totalLinFt: totalLinFt,
+	            msi: msi,
+	            totalPrePressTimeCost: totalPrePressTimeCost,
+	            totalPressRunMinutes: totalPressRunMinutes,
+	            totalPressRunTimeCost: totalPressRunTimeCost,
+	            totalFinishingMiniutes: totalFinishingMiniutes,
+	            totalFinishingTimeCost: totalFinishingTimeCost,
+	            totalRewindMinutes: totalRewindMinutes,
+	            totalRewindTimeCost: totalRewindTimeCost,
+	            totalTimeCost: totalTimeCost,
+	            totalImpressions: totalImpressions,
+	            totalDigitalConsumablesCost: totalDigitalConsumablesCost,
+	            totalSubstrateCost: totalSubstrateCost,
+	            totalFinishingCost: totalFinishingCost,
+	            totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
+	            totalExtraneousCosts: totalExtraneousCosts,
+	            totalCost: totalCost
+	        };
+	        console.debug(debugObject);
 	
 	        // calculate in margin
 	        return (1 + vm.margin() / 100) * totalCost;

@@ -223,6 +223,33 @@ QuoteForm.controller = function(args) {
             Number(totalPhysicalConsumablesCost) +
             Number(totalExtraneousCosts);
 
+        var debugObject = {
+            labelsAcrossTheWeb: labelsAcrossTheWeb,
+            labelsAroundTheWeb: labelsAroundTheWeb,
+            labelsPerFrame: labelsPerFrame,
+            repeatLength: repeatLength,
+            productionFrames: productionFrames,
+            productionLinFt: productionLinFt,
+            totalLinFt: totalLinFt,
+            msi: msi,
+            totalPrePressTimeCost: totalPrePressTimeCost,
+            totalPressRunMinutes: totalPressRunMinutes,
+            totalPressRunTimeCost: totalPressRunTimeCost,
+            totalFinishingMiniutes: totalFinishingMiniutes,
+            totalFinishingTimeCost: totalFinishingTimeCost,
+            totalRewindMinutes: totalRewindMinutes,
+            totalRewindTimeCost: totalRewindTimeCost,
+            totalTimeCost: totalTimeCost,
+            totalImpressions: totalImpressions,
+            totalDigitalConsumablesCost: totalDigitalConsumablesCost,
+            totalSubstrateCost: totalSubstrateCost,
+            totalFinishingCost: totalFinishingCost,
+            totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
+            totalExtraneousCosts: totalExtraneousCosts,
+            totalCost: totalCost,
+        };
+        console.debug(debugObject);
+
         // calculate in margin
         return (1 + vm.margin() / 100) * totalCost;
     };
