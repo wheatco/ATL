@@ -154,20 +154,24 @@ QuoteForm.controller = function(args) {
         // Hardcoded entries based on their exact job requirements and specific machine type.
         var maxImageAreaWebWidth = 11.84;
         var maxImageAreaRepeatLength = 17.70;
+        var colorsPerFrame = 4;
         var acrossGutter = 0.1250;
         var aroundGutter = 0.1250;
         var prepressRateHr = 25;
         var prepressMins = 15;
         var pressCostHr = 123.27;
         var pressSpeed = 50; // linFt/Min
-        var finishingCostHr = 45.00;
+        var finishingCostHr = 82.54;
         var finishingSpeed = 120;
+        var finishingSetupMinutes = 15;
         var rewindCostHr = 45.00;
         var rewindSpeed = 150;
-        var setupFt = 60;
+        var rewindSetupMinPerLane = 4;
+        var setupFt = 85;
+        var setupFrames = setupFt * 12 / maxImageAreaRepeatLength;
         var wasteLinFt = 0.01; // percent
         var substrateWidth = 13.00;
-        var multiColorCostImpression = 0.0175;
+        var multiColorCostImpression = 0.0201;
 
         var labelsAcrossTheWeb = Math.floor(
             maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
@@ -175,7 +179,10 @@ QuoteForm.controller = function(args) {
             maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
-        var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
+
+        var repeatLength = labelsAroundTheWeb * (Number(vm.toolAround()) + aroundGutter);
+        console.log(labelsAroundTheWeb, vm.toolAround(), aroundGutter);
+        console.log(repeatLength);
 
         var productionFrames = Math.ceil(quantity / labelsPerFrame);
         var productionLinFt = productionFrames * repeatLength / inchesInFoot;
@@ -185,13 +192,13 @@ QuoteForm.controller = function(args) {
 
         var totalPrePressTimeCost = prepressRateHr * prepressMins / minHr;
 
-        var totalPressRunMinutes = totalLinFt / pressSpeed;
+        var totalPressRunMinutes = totalLinFt / pressSpeed + prepressMins;
         var totalPressRunTimeCost = totalPressRunMinutes / minHr * pressCostHr;
 
-        var totalFinishingMiniutes = totalLinFt / finishingSpeed;
+        var totalFinishingMiniutes = totalLinFt / finishingSpeed + finishingSetupMinutes;
         var totalFinishingTimeCost = totalFinishingMiniutes / minHr * finishingCostHr;
 
-        var totalRewindMinutes = totalLinFt / rewindSpeed;
+        var totalRewindMinutes = totalLinFt / rewindSpeed + rewindSetupMinPerLane * labelsAcrossTheWeb;
         var totalRewindTimeCost = totalRewindMinutes / minHr * rewindCostHr;
 
         var totalTimeCost = totalPrePressTimeCost +
@@ -199,7 +206,7 @@ QuoteForm.controller = function(args) {
             totalFinishingTimeCost +
             totalRewindTimeCost;
 
-        var totalImpressions = labelsPerFrame * productionFrames;
+        var totalImpressions = colorsPerFrame * (productionFrames + setupFrames);
 
         var totalDigitalConsumablesCost = multiColorCostImpression * totalImpressions;
 
@@ -221,8 +228,36 @@ QuoteForm.controller = function(args) {
             Number(totalPhysicalConsumablesCost) +
             Number(totalExtraneousCosts);
 
+        var debugObject = {
+            labelsAcrossTheWeb: labelsAcrossTheWeb,
+            labelsAroundTheWeb: labelsAroundTheWeb,
+            labelsPerFrame: labelsPerFrame,
+            repeatLength: repeatLength,
+            productionFrames: productionFrames,
+            productionLinFt: productionLinFt,
+            totalLinFt: totalLinFt,
+            msi: msi,
+            totalPrePressTimeCost: totalPrePressTimeCost,
+            totalPressRunMinutes: totalPressRunMinutes,
+            totalPressRunTimeCost: totalPressRunTimeCost,
+            totalFinishingMiniutes: totalFinishingMiniutes,
+            totalFinishingTimeCost: totalFinishingTimeCost,
+            totalRewindMinutes: totalRewindMinutes,
+            totalRewindTimeCost: totalRewindTimeCost,
+            totalTimeCost: totalTimeCost,
+            totalImpressions: totalImpressions,
+            totalDigitalConsumablesCost: totalDigitalConsumablesCost,
+            totalSubstrateCost: totalSubstrateCost,
+            totalFinishingCost: totalFinishingCost,
+            totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
+            totalExtraneousCosts: totalExtraneousCosts,
+            totalCost: totalCost,
+        };
+        console.debug(debugObject);
+
         // calculate in margin
-        return (1 + vm.margin() / 100) * totalCost;
+        return totalCost / (1 - vm.margin() / 100);
+        // return (1 + vm.margin() / 100) * totalCost;
     };
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
@@ -323,49 +358,74 @@ QuoteForm.view = function(ctrl, args) {
                     label: 'Circle',
                 }]),
                 m('h2', 'Tool'),
-                m('.calc-item.col.gap-3.justify', [
-                    m('.label-header', 'Across the web (in)'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Across the Web'),
+                    ]),
                     m('input.input-text.good.input-number', {
                         type: 'Number',
                         min: 0,
                         value: vm.toolAcross(),
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAcross)(e);
-                            vm.getTools();
                         }
                     }),
                 ]),
-                m('.calc-item.col.gap-3.justify', [
-                    m('.label-header', 'Around the web (in)'),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Around the Web'),
+                    ]),
                     m('input.input-text.good.input-number', {
                         type: 'Number',
                         min: 0,
                         value: vm.toolAround(),
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAround)(e);
-                            vm.getTools();
                         }
                     }),
                 ]),
-                m('.label-header', 'Corner Size (in)'),
-                m.component(Select2, {
-                    data: vm.cornerSizes,
-                    value: vm.cornerSize,
-                    onchange: function(val) {
-                        vm.cornerSize(val);
-                        vm.getTools();
-                    },
-                    width: '100%',
-                }),
-                m('.label-header', 'Select Tool'),
-                m.component(Select2, {
-                    data: vm.tools,
-                    format: function(tool) {
-                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
-                    },
-                    value: vm.selectedTool,
-                    width: '100%'
-                }),
+                //                 m('.label-header', 'Corner Size (in)'),
+                //                 m.component(Select2, {
+                //                     data: vm.cornerSizes,
+                //                     value: vm.cornerSize,
+                //                     onchange: function(val) {
+                //                         vm.cornerSize(val);
+                //                         vm.getTools();
+                //                     },
+                //                     width: '100%',
+                //                 }),
+                //                 m('.label-header', 'Select Tool'),
+                //                 m.component(Select2, {
+                //                     data: vm.tools,
+                //                     format: function(tool) {
+                //                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                //                     },
+                //                     value: vm.selectedTool,
+                //                     width: '100%'
+                //                 }),
+                //                 // m('.label-header', 'Corner Size (in)'),
+                //                 // m.component(Select2, {
+                //                 //     data: vm.cornerSizes,
+                //                 //     value: vm.cornerSize,
+                //                 //     onchange: function(val) {
+                //                 //         vm.cornerSize(val);
+                //                 //         vm.getTools();
+                //                 //     },
+                //                 //     width: '100%',
+                //                 // }),
+                //                 // m('.label-header', 'Select Tool'),
+                //                 // m.component(Select2, {
+                //                 //     data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+                //                 //     format: function(tool) {
+                //                 //         // TODO: this is a bit jank
+                //                 //         vm.selectedTool(tool.name);
+                //                 //         vm.toolAcross(tool.acrossWeb);
+                //                 //         vm.toolAround(tool.aroundWeb);
+                //                 //         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                //                 //     },
+                //                 //     value: vm.selectedTool,
+                //                 //     width: '100%'
+                //                 // }),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
                 calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
