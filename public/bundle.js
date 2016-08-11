@@ -16512,26 +16512,33 @@
 	        // Hardcoded entries based on their exact job requirements and specific machine type.
 	        var maxImageAreaWebWidth = 11.84;
 	        var maxImageAreaRepeatLength = 17.70;
+	        var colorsPerFrame = 4;
 	        var acrossGutter = 0.1250;
 	        var aroundGutter = 0.1250;
 	        var prepressRateHr = 25;
 	        var prepressMins = 15;
 	        var pressCostHr = 123.27;
 	        var pressSpeed = 50; // linFt/Min
-	        var finishingCostHr = 45.00;
+	        var finishingCostHr = 82.54;
 	        var finishingSpeed = 120;
+	        var finishingSetupMinutes = 15;
 	        var rewindCostHr = 45.00;
 	        var rewindSpeed = 150;
-	        var setupFt = 60;
+	        var rewindSetupMinPerLane = 4;
+	        var setupFt = 85;
+	        var setupFrames = setupFt * 12 / maxImageAreaRepeatLength;
 	        var wasteLinFt = 0.01; // percent
 	        var substrateWidth = 13.00;
-	        var multiColorCostImpression = 0.0175;
+	        var multiColorCostImpression = 0.0201;
 	
-	        var labelsAcrossTheWeb = Math.floor(maxImageAreaWebWidth / (vm.toolAcross() + acrossGutter));
-	        var labelsAroundTheWeb = Math.floor(maxImageAreaRepeatLength / (vm.toolAround() + aroundGutter));
+	        var labelsAcrossTheWeb = Math.floor(maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
+	        var labelsAroundTheWeb = Math.floor(maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 	
 	        var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
-	        var repeatLength = labelsAroundTheWeb * (vm.toolAround() + aroundGutter);
+	
+	        var repeatLength = labelsAroundTheWeb * (Number(vm.toolAround()) + aroundGutter);
+	        console.log(labelsAroundTheWeb, vm.toolAround(), aroundGutter);
+	        console.log(repeatLength);
 	
 	        var productionFrames = Math.ceil(quantity / labelsPerFrame);
 	        var productionLinFt = productionFrames * repeatLength / inchesInFoot;
@@ -16541,18 +16548,18 @@
 	
 	        var totalPrePressTimeCost = prepressRateHr * prepressMins / minHr;
 	
-	        var totalPressRunMinutes = totalLinFt / pressSpeed;
+	        var totalPressRunMinutes = totalLinFt / pressSpeed + prepressMins;
 	        var totalPressRunTimeCost = totalPressRunMinutes / minHr * pressCostHr;
 	
-	        var totalFinishingMiniutes = totalLinFt / finishingSpeed;
+	        var totalFinishingMiniutes = totalLinFt / finishingSpeed + finishingSetupMinutes;
 	        var totalFinishingTimeCost = totalFinishingMiniutes / minHr * finishingCostHr;
 	
-	        var totalRewindMinutes = totalLinFt / rewindSpeed;
+	        var totalRewindMinutes = totalLinFt / rewindSpeed + rewindSetupMinPerLane * labelsAcrossTheWeb;
 	        var totalRewindTimeCost = totalRewindMinutes / minHr * rewindCostHr;
 	
 	        var totalTimeCost = totalPrePressTimeCost + totalPressRunTimeCost + totalFinishingTimeCost + totalRewindTimeCost;
 	
-	        var totalImpressions = labelsPerFrame * productionFrames;
+	        var totalImpressions = colorsPerFrame * (productionFrames + setupFrames);
 	
 	        var totalDigitalConsumablesCost = multiColorCostImpression * totalImpressions;
 	
@@ -16595,7 +16602,8 @@
 	        console.debug(debugObject);
 	
 	        // calculate in margin
-	        return (1 + vm.margin() / 100) * totalCost;
+	        return totalCost / (1 - vm.margin() / 100);
+	        // return (1 + vm.margin() / 100) * totalCost;
 	    };
 	
 	    // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
@@ -16645,42 +16653,69 @@
 	    }, {
 	        val: 'Circle',
 	        label: 'Circle'
-	    }]), (0, _mithril2.default)('h2', 'Tool'), (0, _mithril2.default)('.calc-item.col.gap-3.justify', [(0, _mithril2.default)('.label-header', 'Across the web (in)'), (0, _mithril2.default)('input.input-text.good.input-number', {
+	    }]), (0, _mithril2.default)('h2', 'Tool'), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Across the Web')]), (0, _mithril2.default)('input.input-text.good.input-number', {
 	        type: 'Number',
 	        min: 0,
 	        value: vm.toolAcross(),
 	        onchange: function onchange(e) {
 	            _mithril2.default.withAttr('value', vm.toolAcross)(e);
-	            vm.getTools();
 	        }
-	    })]), (0, _mithril2.default)('.calc-item.col.gap-3.justify', [(0, _mithril2.default)('.label-header', 'Around the web (in)'), (0, _mithril2.default)('input.input-text.good.input-number', {
+	    })]), (0, _mithril2.default)('.calc-item.col.gap-2.justify', [(0, _mithril2.default)('div', [(0, _mithril2.default)('.label-header', 'Around the Web')]), (0, _mithril2.default)('input.input-text.good.input-number', {
 	        type: 'Number',
 	        min: 0,
 	        value: vm.toolAround(),
 	        onchange: function onchange(e) {
 	            _mithril2.default.withAttr('value', vm.toolAround)(e);
-	            vm.getTools();
 	        }
-	    })]), (0, _mithril2.default)('.label-header', 'Corner Size (in)'), _mithril2.default.component(Select2, {
-	        data: vm.cornerSizes,
-	        value: vm.cornerSize,
-	        onchange: function onchange(val) {
-	            vm.cornerSize(val);
-	            vm.getTools();
-	        },
-	        width: '100%'
-	    }), (0, _mithril2.default)('.label-header', 'Select Tool'), _mithril2.default.component(Select2, {
-	        data: vm.tools, // TODO: does this still work if the service takes a long time to load?
-	        format: function format(tool) {
-	            // TODO: this is a bit jank
-	            vm.selectedTool(tool.name);
-	            vm.toolAcross(tool.acrossWeb);
-	            vm.toolAround(tool.aroundWeb);
-	            return tool.acrossWeb + 'x' + tool.aroundWeb + ' - ' + tool.name;
-	        },
-	        value: vm.selectedTool,
-	        width: '100%'
-	    }), (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
+	    })]),
+	    // m('.calc-item.col.gap-3.justify', [
+	    //     m('.label-header', 'Across the web (in)'),
+	    //     m('input.input-text.good.input-number', {
+	    //         type: 'Number',
+	    //         min: 0,
+	    //         value: vm.toolAcross(),
+	    //         onchange: function(e) {
+	    //             m.withAttr('value', vm.toolAcross)(e);
+	    //             vm.getTools();
+	    //         }
+	    //     }),
+	    // ]),
+	    // m('.calc-item.col.gap-3.justify', [
+	    //     m('.label-header', 'Around the web (in)'),
+	    //     m('input.input-text.good.input-number', {
+	    //         type: 'Number',
+	    //         min: 0,
+	    //         value: vm.toolAround(),
+	    //         onchange: function(e) {
+	    //             m.withAttr('value', vm.toolAround)(e);
+	    //             vm.getTools();
+	    //         }
+	    //     }),
+	    // ]),
+	    // m('.label-header', 'Corner Size (in)'),
+	    // m.component(Select2, {
+	    //     data: vm.cornerSizes,
+	    //     value: vm.cornerSize,
+	    //     onchange: function(val) {
+	    //         vm.cornerSize(val);
+	    //         vm.getTools();
+	    //     },
+	    //     width: '100%',
+	    // }),
+	    // m('.label-header', 'Select Tool'),
+	    // m.component(Select2, {
+	    //     data: vm.tools, // TODO: does this still work if the service takes a long time to load?
+	    //     format: function(tool) {
+	    //         // TODO: this is a bit jank
+	    //         vm.selectedTool(tool.name);
+	    //         vm.toolAcross(tool.acrossWeb);
+	    //         vm.toolAround(tool.aroundWeb);
+	    //         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+	    //     },
+	    //     value: vm.selectedTool,
+	    //     width: '100%'
+	    // }),
+	    (0, _mithril2.default)('h2', 'Paper & Finish'), (0, _mithril2.default)('.label-header', 'Substrate'), calc.radios(vm.substrate, _lodash2.default.map(vm.defaultMSI, function (value, key) {
 	        return {
 	            val: key,
 	            label: key
