@@ -31,5 +31,4 @@ data/
 
 # Compiled public stuff
 
-public/bundle.js
-public/bundle.js.map
+public/
