@@ -1,11 +1,7 @@
 'use strict';
-//IMPORTANT
-//phantomjs has hidden dependency:
-// sudo apt-get install libfontconfig
 
 const path = require('path');
 const serveStatic = require('feathers').static;
-const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const feathers = require('feathers');
@@ -24,7 +20,6 @@ app.configure(configuration(path.join(__dirname, '..')));
 app.use(compress())
   .options('*', cors())
   .use(cors())
-  .use(favicon( path.join(app.get('public'), 'favicon.ico') ))
   .use('/', serveStatic( app.get('public') ))
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))

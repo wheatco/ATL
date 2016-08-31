@@ -13,6 +13,7 @@
       })
 */
 
+var m = require('mithril');
 var $ = require('jquery');
 var select2 = require('select2');
 

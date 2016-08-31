@@ -4,7 +4,6 @@ import m from 'mithril';
 import _ from 'lodash';
 var QuoteForm = {};
 
-
 //for simplicity, we use this component to namespace the model classes
 QuoteForm.vm = {};
 

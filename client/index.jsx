@@ -1,34 +1,26 @@
+// Move static files to the right place
+require('file?name=[name].[ext]!./index.html');
+require('file?name=[name].[ext]!./styles/normalize.css');
+require('file?name=[name].[ext]!./styles/flexblocks.css');
+require('file?name=[name].[ext]!./styles/site.css');
+require('file?name=[name].[ext]!./favicon.ico');
+
+var m = require('mithril');
+var socket = require('socket.io-client')();
+var feathers = require('feathers-client');
+var fm = require('feathers-mithril');
+
 require('./lib/calc.js');
 require('./lib/select2.js');
 require('./pages/quote.js');
 require('./pages/admin.js');
 
-// Move static files to the right place
-require('file?name=[name].[ext]!./index.html');
-require('file?name=[name].[ext]!./signup.html');
-require('file?name=[name].[ext]!./login.html');
-require('file?name=[name].[ext]!./normalize.css');
-require('file?name=[name].[ext]!./flexblocks.css');
-require('file?name=[name].[ext]!./site.css');
-// require('!style!css!sass!./styles/main.scss');
-
-var m = require('mithril');
-var io = require('socket.io-client');
-var feathers = require('feathers-client');
-var reactive = require('feathers-reactive');
-var rxjs = require('rxjs');
-var fm = require('feathers-mithril');
-var _ = require('lodash');
-
-const socket = io();
 // Initialize our Feathers client application through Socket.io
 // with hooks and authentication.
 window.app = feathers()
     .configure(feathers.socketio(socket))
     .configure(feathers.hooks())
-    .configure(reactive(rxjs))
     .configure(fm(m))
-    // Use localStorage to store our login token
     .configure(feathers.authentication({
       storage: window.localStorage
     }));
