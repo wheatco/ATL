@@ -128,6 +128,8 @@ QuoteForm.controller = function(args) {
     vm.quantity4 = m.prop(0);
     vm.quantity5 = m.prop(0);
 
+    vm.numColors = m.prop(4)
+
     vm.substrate = m.prop('White Paper');
     vm.substrateMSI = m.prop(0.45);
     vm.finish = m.prop('Gloss'); // TODO may be plural?
@@ -153,7 +155,7 @@ QuoteForm.controller = function(args) {
         // Hardcoded entries based on their exact job requirements and specific machine type.
         var maxImageAreaWebWidth = 11.84;
         var maxImageAreaRepeatLength = 17.70;
-        var colorsPerFrame = 4;
+        var colorsPerFrame = vm.numColors() || 4;
         var acrossGutter = 0.1250;
         var aroundGutter = 0.1250;
         var prepressRateHr = 25;
@@ -425,6 +427,9 @@ QuoteForm.view = function(ctrl, args) {
                 //                 //     value: vm.selectedTool,
                 //                 //     width: '100%'
                 //                 // }),
+                m('h2', 'Colors'),
+                m('.label-header', 'Number of Colors'),
+                calc.radios(vm.numColors, _.map([4,5,6,7], function(value, key) {return {val: value, label: value}}), function(){}),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
                 calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
@@ -433,7 +438,7 @@ QuoteForm.view = function(ctrl, args) {
                         label: key
                     };
                 }), function() {
-                    vm.substrateMSI(vm.defaultMSI[vm.substrate()]);
+                    vm.substrateMSI(vm.defaultMSI[vm.substrate()]); 
                 }),
                 calc.range({
                     header: 'Substrate MSI',
