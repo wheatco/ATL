@@ -134,7 +134,7 @@ function tableWithQuotes(quotes, callback) {
   var header = [
     m('tr', [
       m('th', 'ID'),
-      m('th', 'Client/ Company Name'),
+      m('th', 'Client'),
       m('th', 'Email'),
       m('th', '')
     ])

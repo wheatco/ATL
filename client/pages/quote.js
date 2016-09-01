@@ -73,7 +73,7 @@ QuoteForm.vm.getTools = function() {
         closest.sort(function(a, b) {
             return a.distance - b.distance;
         });
-        // Limit to 10 
+        // Limit to 10
         closest = closest.slice(0, 10);
         vm.tools(closest);
     }).then(() => {
@@ -496,7 +496,7 @@ QuoteForm.view = function(ctrl, args) {
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
-                m('h2', 'Design'),
+                m('h2', 'Copies'),
                 calc.range({
                     header: 'Number of copies',
                     // hint: 'Each additional design causes',
@@ -509,6 +509,7 @@ QuoteForm.view = function(ctrl, args) {
                     val: vm.costPerDesign,
                     range: [0, 30, 1]
                 }),
+                m('h2', ''),
                 calc.range({
                     header: 'Margin',
                     type: 'percent',
