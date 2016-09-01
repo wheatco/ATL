@@ -73,7 +73,7 @@ QuoteForm.vm.getTools = function() {
         closest.sort(function(a, b) {
             return a.distance - b.distance;
         });
-        // Limit to 10 
+        // Limit to 10
         closest = closest.slice(0, 10);
         vm.tools(closest);
     }).then(() => {
@@ -104,7 +104,7 @@ QuoteForm.controller = function(args) {
     vm.phone = m.prop('');
     vm.email = m.prop('');
 
-    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
+    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star
     vm.corner = m.prop('Square'); // Round
 
     vm.cornerSizes = m.prop([
@@ -136,7 +136,7 @@ QuoteForm.controller = function(args) {
     vm.numDesigns = m.prop(1);
     vm.costPerDesign = m.prop(15);
 
-    vm.margin = m.prop(40);
+    vm.margin = m.prop(60);
 
     vm.prepressCharges = m.prop(0);
 
@@ -180,8 +180,6 @@ QuoteForm.controller = function(args) {
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
         var repeatLength = labelsAroundTheWeb * (Number(vm.toolAround()) + aroundGutter);
-        console.log(labelsAroundTheWeb, vm.toolAround(), aroundGutter);
-        console.log(repeatLength);
 
         var productionFrames = Math.ceil(quantity / labelsPerFrame);
         var productionLinFt = productionFrames * repeatLength / inchesInFoot;
@@ -219,8 +217,6 @@ QuoteForm.controller = function(args) {
         var totalExtraneousCosts =
             (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
             Number(vm.prepressCharges());
-
-        // console.log(vm.numDesigns() * vm.costPerDesign(), vm.prepressCharges() console.log(vm.prepressCharges(), totalExtraneousCosts);
 
         var totalCost = Number(totalTimeCost) +
             Number(totalDigitalConsumablesCost) +
@@ -437,7 +433,6 @@ QuoteForm.view = function(ctrl, args) {
                 }),
                 calc.range({
                     header: 'Substrate MSI',
-                    hint: 'Each additional design causes',
                     val: vm.substrateMSI,
                     range: [0.0, 1.5, 0.01]
                 }),
@@ -462,7 +457,7 @@ QuoteForm.view = function(ctrl, args) {
                 }),
                 calc.range({
                     header: 'Finish MSI',
-                    hint: 'Each additional design causes',
+                    // hint: 'Each additional design causes',
                     val: vm.finishMSI,
                     range: [0.0, 1.5, 0.01]
                 }),
@@ -501,19 +496,20 @@ QuoteForm.view = function(ctrl, args) {
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
-                m('h2', 'Designs'),
+                m('h2', 'Copies'),
                 calc.range({
-                    header: 'Number of designs',
-                    hint: 'Each additional design causes',
+                    header: 'Number of copies',
+                    // hint: 'Each additional design causes',
                     val: vm.numDesigns,
                     range: [1, 8, 1]
                 }),
                 calc.range({
-                    header: 'Cost Per Design',
+                    header: 'Cost Per Copy',
                     type: 'money',
                     val: vm.costPerDesign,
                     range: [0, 30, 1]
                 }),
+                m('h2', ''),
                 calc.range({
                     header: 'Margin',
                     type: 'percent',
