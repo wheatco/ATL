@@ -73,7 +73,7 @@ QuoteForm.vm.getTools = function() {
         closest.sort(function(a, b) {
             return a.distance - b.distance;
         });
-        // Limit to 10 
+        // Limit to 10
         closest = closest.slice(0, 10);
         vm.tools(closest);
     }).then(() => {
@@ -104,7 +104,7 @@ QuoteForm.controller = function(args) {
     vm.phone = m.prop('');
     vm.email = m.prop('');
 
-    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star 
+    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star
     vm.corner = m.prop('Square'); // Round
 
     vm.cornerSizes = m.prop([
@@ -438,7 +438,7 @@ QuoteForm.view = function(ctrl, args) {
                         label: key
                     };
                 }), function() {
-                    vm.substrateMSI(vm.defaultMSI[vm.substrate()]); 
+                    vm.substrateMSI(vm.defaultMSI[vm.substrate()]);
                 }),
                 calc.range({
                     header: 'Substrate MSI',
@@ -448,22 +448,22 @@ QuoteForm.view = function(ctrl, args) {
                 }),
                 m('.label-header', 'Finish'),
                 calc.radios(vm.finish, [{
-                    val: 'Gloss',
-                    label: 'Gloss',
+                    val: 'Laminate Gloss',
+                    label: 'Laminate Gloss',
                 }, {
-                    val: 'Matte',
-                    label: 'Matte',
+                    val: 'Laminate Matte',
+                    label: 'Laminate Matte',
                 }, {
-                    val: 'UV',
-                    label: 'UV',
+                    val: 'UV Gloss',
+                    label: 'UV Gloss',
                 }, {
-                    val: 'Laminate',
-                    label: 'Laminate',
+                    val: 'UV Matte',
+                    label: 'UV Matte',
                 }], function() {
-                    if (vm.finish() == 'Gloss') vm.finishMSI(0.20);
-                    else if (vm.finish() == 'UV') vm.finishMSI(0.05);
-                    else if (vm.finish() == 'Laminate') vm.finishMSI(0.30);
-                    else vm.finishMSI(0.40);
+                    if (vm.finish() == 'Laminate Gloss') vm.finishMSI(0.20);
+                    else if (vm.finish() == 'Laminate Matte') vm.finishMSI(0.40);
+                    else if (vm.finish() == 'UV Gloss') vm.finishMSI(0.05);
+                    else vm.finishMSI(0.05);
                 }),
                 calc.range({
                     header: 'Finish MSI',
