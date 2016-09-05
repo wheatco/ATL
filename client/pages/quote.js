@@ -182,8 +182,8 @@ QuoteForm.controller = function(args) {
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
         var repeatLength = labelsAroundTheWeb * (Number(vm.toolAround()) + aroundGutter);
-        console.log(labelsAroundTheWeb, vm.toolAround(), aroundGutter);
-        console.log(repeatLength);
+        // console.log(labelsAroundTheWeb, vm.toolAround(), aroundGutter);
+        // console.log(repeatLength);
 
         var productionFrames = Math.ceil(quantity / labelsPerFrame);
         var productionLinFt = productionFrames * repeatLength / inchesInFoot;
@@ -254,7 +254,7 @@ QuoteForm.controller = function(args) {
             totalExtraneousCosts: totalExtraneousCosts,
             totalCost: totalCost,
         };
-        console.debug(debugObject);
+        // console.debug(debugObject);
 
         // calculate in margin
         return totalCost / (1 - vm.margin() / 100);
@@ -263,11 +263,11 @@ QuoteForm.controller = function(args) {
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
     vm.calculate = function() {
-        vm.overallCost1(vm.calculateForQuantity(vm.quantity1()));
-        vm.quantity2() !== 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2(0);
-        vm.quantity3() !== 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3(0);
-        vm.quantity4() !== 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4(0);
-        vm.quantity5() !== 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5(0);
+        vm.quantity1() != 0 ? vm.overallCost1(vm.calculateForQuantity(vm.quantity1())) : vm.overallCost1(0);
+        vm.quantity2() != 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2(0);
+        vm.quantity3() != 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3(0);
+        vm.quantity4() != 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4(0);
+        vm.quantity5() != 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5(0);
     };
 };
 
