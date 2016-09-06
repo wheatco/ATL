@@ -416,9 +416,10 @@ String.prototype.replaceAll = function(find, replace) {
     return this.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 };
 
-window.calc.formatMoney = function(number) {
-    number = Number(number);
-    var money = number.format(0);
+window.calc.formatMoney = function(number, decimals) {
+    var decimals = decimals || 0
+    var number = Number(number);
+    var money = number.format(decimals);
     return "$" + money;
 };
 

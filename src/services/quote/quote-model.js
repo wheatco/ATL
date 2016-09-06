@@ -39,11 +39,26 @@ const quoteSchema = new Schema({
   costPerDesign: Number,
   margin: Number,
   prepressCharges: Number,
-  overallCost1: Number,
-  overallCost2: Number,
-  overallCost3: Number,
-  overallCost4: Number,
-  overallCost5: Number,
+  overallCost1: {
+    total: Number,
+    perLabel: Number
+  },
+  overallCost2: {
+    total: Number,
+    perLabel: Number
+  },
+  overallCost3: {
+    total: Number,
+    perLabel: Number
+  },
+  overallCost4: {
+    total: Number,
+    perLabel: Number
+  },
+  overallCost5: {
+    total: Number,
+    perLabel: Number
+  },
   createdAt: {
     type: Date,
     'default': Date.now
