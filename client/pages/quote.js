@@ -381,52 +381,29 @@ QuoteForm.view = function(ctrl, args) {
                         }
                     }),
                 ]),
-                                m('.label-header', 'Corner Size (in)'),
-                                m.component(Select2, {
-                                    data: vm.cornerSizes,
-                                    value: vm.cornerSize,
-                                    onchange: function(val) {
-                                        vm.cornerSize(val);
-                                        vm.getTools();
-                                    },
-                                    options: {
-                                      width: '100%',
-                                    }
-                                }),
-                                m('.label-header', 'Select Tool'),
-                                m.component(Select2, {
-                                    data: vm.tools,
-                                    format: function(tool) {
-                                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
-                                    },
-                                    value: vm.selectedTool,
-                                    options: {
-                                      width: '100%'
-                                    }
-                                }),
-                                // m('.label-header', 'Corner Size (in)'),
-                                // m.component(Select2, {
-                                //     data: vm.cornerSizes,
-                                //     value: vm.cornerSize,
-                                //     onchange: function(val) {
-                                //         vm.cornerSize(val);
-                                //         vm.getTools();
-                                //     },
-                                //     width: '100%',
-                                // }),
-                                // m('.label-header', 'Select Tool'),
-                                // m.component(Select2, {
-                                //     data: vm.tools, // TODO: does this still work if the service takes a long time to load?
-                                //     format: function(tool) {
-                                //         // TODO: this is a bit jank
-                                //         vm.selectedTool(tool.name);
-                                //         vm.toolAcross(tool.acrossWeb);
-                                //         vm.toolAround(tool.aroundWeb);
-                                //         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
-                                //     },
-                                //     value: vm.selectedTool,
-                                //     width: '100%'
-                                // }),
+                m('.label-header', 'Corner Size (in)'),
+                m.component(Select2, {
+                    data: vm.cornerSizes,
+                    value: vm.cornerSize,
+                    onchange: function(val) {
+                        vm.cornerSize(val);
+                        vm.getTools();
+                    },
+                    options: {
+                      width: '100%',
+                    }
+                }),
+                m('.label-header', 'Select Tool'),
+                m.component(Select2, {
+                    data: vm.tools,
+                    format: function(tool) {
+                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                    },
+                    value: vm.selectedTool,
+                    options: {
+                      width: '100%'
+                    }
+                }),
                 m('h2', 'Colors'),
                 m('.label-header', 'Number of Colors'),
                 calc.radios(vm.numColors, _.map([4,5,6,7], function(value, key) {return {val: value, label: value}}), function(){}),
