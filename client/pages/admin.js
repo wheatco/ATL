@@ -22,9 +22,8 @@ var Checklist = {
             return args.onclick(item);
           }
         }, 'x'),
-        m('div.checkbox-label', [
-          m('strong', item.name || '')
-        ])
+        m('div.fill-2', `${item.name.toUpperCase()}`),
+        m('div', `Across: ${item.acrossWeb} Around: ${item.aroundWeb} Shape: ${item.shape} Corner: ${item.cornerSize}`)
       ]);
     }));
   }
@@ -99,7 +98,9 @@ var ToolEntry = {
             data: vm.cornerSizes,
             value: vm.cornerSize,
             onchange: function(val) {},
-            width: '100%',
+            options: {
+              width: '100%'
+            }
           }),
         ]),
 
