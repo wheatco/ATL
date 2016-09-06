@@ -48,7 +48,10 @@ window.Select2 = {
       // Get strings from objects
       for (var i = 0; i < data.length; i++) {
         if (format) {
-          options.data.push(format(data[i]));
+          options.data.push({
+            id: data[i]._id,
+            text: format(data[i])
+          });
         } else {
           options.data.push(data[i]);
         }

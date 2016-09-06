@@ -117,6 +117,7 @@ QuoteForm.controller = function(args) {
     ]);
     vm.cornerSize = m.prop('1/3');
     vm.selectedTool = m.prop('');
+    vm.selectedToolObject = m.prop(null);
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
     vm.tools = m.prop([]);
@@ -174,10 +175,12 @@ QuoteForm.controller = function(args) {
         var substrateWidth = 13.00;
         var multiColorCostImpression = 0.0201;
 
+        var tool = vm.selectedToolObject() || {acrossWeb: 0, aroundWeb:0};
+
         var labelsAcrossTheWeb = Math.floor(
-            maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
+            maxImageAreaWebWidth / (tool.acrossWeb + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
-            maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
+            maxImageAreaRepeatLength / (tool.aroundWeb + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
@@ -365,6 +368,7 @@ QuoteForm.view = function(ctrl, args) {
                         value: vm.toolAcross(),
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAcross)(e);
+                            vm.getTools();
                         }
                     }),
                 ]),
@@ -378,6 +382,7 @@ QuoteForm.view = function(ctrl, args) {
                         value: vm.toolAround(),
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAround)(e);
+                            vm.getTools();
                         }
                     }),
                 ]),
@@ -400,6 +405,13 @@ QuoteForm.view = function(ctrl, args) {
                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                     },
                     value: vm.selectedTool,
+                    onchange: function(val) {
+                      if (val) {
+                        app.service('tools').get(val).then(tool => {
+                          vm.selectedToolObject(tool);
+                        });
+                      }
+                    },
                     options: {
                       width: '100%'
                     }
