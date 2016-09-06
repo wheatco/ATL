@@ -565,8 +565,8 @@ QuoteForm.view = function(ctrl, args) {
                 })
             ]),
             // COLUMN 4: RESULTS AND SUBMISSION 
-            m('div', [
-                m('h1', 'Costs'),
+            m('div', {class:'costs'}, [
+                m('h1','Costs'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost1().total, 2),
                     'Quantity 1', calc.formatMoney(vm.overallCost1().perLabel,3) + ' per label'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost2().total, 2),

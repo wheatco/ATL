@@ -554,3 +554,8 @@ svg.line-chart {
   display: block;
   font-family: "Source Code Pro", Courier, monospace;
 }
+
+
+.costs .result-text{
+  min-width: 7em;
+}
