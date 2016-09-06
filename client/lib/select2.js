@@ -2,15 +2,17 @@
 // Adapted from http://mithril.js.org/integration.html
 
 /*
-  Usage: 
+  Usage:
   m.component(Select2, {
       data: m.prop containing dropdown options
       format: function (dataitem) that returns string to display
       value: m.prop to store selected value(s)
       onchange: callback with selected value
       ...PLUS...
-      any other select2 options such as width, multiple, tags etc.
-      })
+      options: {
+        any other select2 options such as width, multiple, tags etc.
+      }
+  })
 */
 
 var m = require('mithril');
@@ -33,31 +35,30 @@ window.Select2 = {
       // https://github.com/select2/select2/issues/3185#issuecomment-88955394
       el.find("option").remove();
 
-      // Special values
+      // Values from attribs
       var data = attrs.data();
       var format = attrs.format;
       var value = attrs.value;
       var onchange = attrs.onchange;
-      delete attrs.data;
-      delete attrs.dataKey;
-      delete attrs.value;
-      delete attrs.onchange;
+
+      // Init options
+      var options = attrs.options || {};
+      options.data = [];
 
       // Get strings from objects
       for (var i = 0; i < data.length; i++) {
         if (format) {
-          data[i] = format(data[i]);
+          options.data.push({
+            id: data[i]._id,
+            text: format(data[i])
+          });
+        } else {
+          options.data.push(data[i]);
         }
-        // data[i] = {
-        //   id: data[i]._id,
-        //   text: format(data[i])
-        // } 
       };
 
-      attrs.data = data;
-
       // TODO: unjankify
-      el.select2(attrs).on('change', function(e) {
+      el.select2(options).on('change', function(e) {
         var val = el.select2('val');
         if (val != value()) {
           value(val);
