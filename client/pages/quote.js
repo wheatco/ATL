@@ -9,38 +9,6 @@ QuoteForm.vm = {};
 
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
-    console.log({
-            name: vm.name(),
-            addressStreet: vm.addressStreet(),
-            addressCity: vm.addressCity(),
-            addressState: vm.addressState(),
-            addressZip: vm.addressZip(),
-            phone: vm.phone(),
-            email: vm.email(),
-            shape: vm.shape(),
-            corner: vm.corner(),
-            selectedTool: vm.selectedTool(),
-            toolAcross: vm.toolAcross(),
-            toolAround: vm.toolAround(),
-            quantity1: vm.quantity1(),
-            quantity2: vm.quantity2(),
-            quantity3: vm.quantity3(),
-            quantity4: vm.quantity4(),
-            quantity5: vm.quantity5(),
-            substrate: vm.substrate(),
-            substrateMSI: vm.substrateMSI(),
-            finish: vm.finish(),
-            finishMSI: vm.finishMSI(),
-            numDesigns: vm.numDesigns(),
-            costPerDesign: vm.costPerDesign(),
-            margin: vm.margin(),
-            prepressCharges: vm.prepressCharges(),
-            overallCost1: vm.overallCost1(),
-            overallCost2: vm.overallCost2(),
-            overallCost3: vm.overallCost3(),
-            overallCost4: vm.overallCost4(),
-            overallCost5: vm.overallCost5(),
-        });
     $.ajax({
         url: '/quotes',
         type: 'POST',
@@ -552,7 +520,7 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Cost Per Copy',
                     type: 'money',
                     val: vm.costPerDesign,
-                    range: [0, 30, 1]
+                    range: [0, 100, 1]
                 }),
                 m('h2', ''),
                 calc.range({
@@ -569,7 +537,7 @@ QuoteForm.view = function(ctrl, args) {
                 })
             ]),
             // COLUMN 4: RESULTS AND SUBMISSION 
-            m('div', {class:'costs'}, [
+            m('div', {class:'costs', config: stick}, [
                 m('h1','Costs'),
                 calc.resultDisplay(calc.formatMoney(vm.overallCost1().total, 2),
                     'Quantity 1', calc.formatMoney(vm.overallCost1().perLabel,3) + ' per label'),
@@ -590,3 +558,23 @@ QuoteForm.view = function(ctrl, args) {
 };
 
 window.QuoteForm = QuoteForm;
+
+var stick = function(el, notInit, context) {
+    if (!notInit) {
+        var stickyColumn = $(el);
+        console.log(stickyColumn.offset().top)
+        var sidebarTop = stickyColumn.offset().top;
+        console.log(sidebarTop)
+        $(window).scroll(function () {
+            if (stickyColumn.length > 0) {
+                var scrollTop = $(window).scrollTop();
+                if (sidebarTop < scrollTop) {
+                    stickyColumn.css('top', scrollTop - sidebarTop);
+                }
+                else {
+                    stickyColumn.css('top', '0');
+                } 
+            }
+        });
+    }
+}
