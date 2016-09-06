@@ -91,31 +91,31 @@ html(lang="en")
               td.quantity= quantity5
           tr
             td.row-header Price Per Thousand:
-            if quantity1 && overallCost1
-              td.quantity= '$'+(overallCost1/quantity1 * 1000).toFixed(2)
-            if quantity2 && overallCost2
-              td.quantity= '$'+(overallCost2/quantity2 * 1000).toFixed(2)
-            if quantity3 && overallCost3
-              td.quantity= '$'+(overallCost3/quantity3 * 1000).toFixed(2)
-            if quantity4 && overallCost4
-              td.quantity= '$'+(overallCost4/quantity4 * 1000).toFixed(2)
-            if quantity5 && overallCost5
-              td.quantity= '$'+(overallCost5/quantity5 * 1000).toFixed(2)
+            if quantity1 && overallCost1.total
+              td.quantity= '$'+(overallCost1.perLabel * 1000).toFixed(2)
+            if quantity2 && overallCost2.total
+              td.quantity= '$'+(overallCost2.perLabel * 1000).toFixed(2)
+            if quantity3 && overallCost3.total
+              td.quantity= '$'+(overallCost3.perLabel * 1000).toFixed(2)
+            if quantity4 && overallCost4.total
+              td.quantity= '$'+(overallCost4.perLabel * 1000).toFixed(2)
+            if quantity5 && overallCost5.total
+              td.quantity= '$'+(overallCost5.perLabel * 1000).toFixed(2)
       ul.small-column.left
         li= 'Cost Per Design: $' + costPerDesign
         li= 'Prepress Charges: $' +prepressCharges
 
       ul.big-column.right.price-summary
         if quantity1
-          li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.toFixed(2)+' ($'+(overallCost1/quantity1).toFixed(2)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.total.toFixed(2)+' ($'+overallCost1.perLabel.toFixed(3)+' per label)' 
         if quantity2
-          li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.toFixed(2)+' ($'+(overallCost2/quantity2).toFixed(2)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.total.toFixed(2)+' ($'+overallCost2.perLabel.toFixed(3)+' per label)' 
         if quantity3
-          li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.toFixed(2)+' ($'+(overallCost3/quantity3).toFixed(2)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.total.toFixed(2)+' ($'+overallCost3.perLabel.toFixed(3)+' per label)' 
         if quantity4
-          li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.toFixed(2)+' ($'+(overallCost4/quantity4).toFixed(2)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.total.toFixed(2)+' ($'+overallCost4.perLabel.toFixed(3)+' per label)' 
         if quantity5
-          li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.toFixed(2)+' ($'+(overallCost5/quantity5).toFixed(2)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.total.toFixed(2)+' ($'+overallCost5.perLabel.toFixed(3)+' per label)' 
 
     footer
       h3 DISCLAIMER:

@@ -9,9 +9,39 @@ QuoteForm.vm = {};
 
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
+    console.log({
+            name: vm.name(),
+            addressStreet: vm.addressStreet(),
+            addressCity: vm.addressCity(),
+            addressState: vm.addressState(),
+            addressZip: vm.addressZip(),
+            phone: vm.phone(),
+            email: vm.email(),
+            shape: vm.shape(),
+            corner: vm.corner(),
+            selectedTool: vm.selectedTool(),
+            toolAcross: vm.toolAcross(),
+            toolAround: vm.toolAround(),
+            quantity1: vm.quantity1(),
+            quantity2: vm.quantity2(),
+            quantity3: vm.quantity3(),
+            quantity4: vm.quantity4(),
+            quantity5: vm.quantity5(),
+            substrate: vm.substrate(),
+            substrateMSI: vm.substrateMSI(),
+            finish: vm.finish(),
+            finishMSI: vm.finishMSI(),
+            numDesigns: vm.numDesigns(),
+            costPerDesign: vm.costPerDesign(),
+            margin: vm.margin(),
+            prepressCharges: vm.prepressCharges(),
+            overallCost1: vm.overallCost1(),
+            overallCost2: vm.overallCost2(),
+            overallCost3: vm.overallCost3(),
+            overallCost4: vm.overallCost4(),
+            overallCost5: vm.overallCost5(),
+        });
     $.ajax({
-        //I changed this from /addQuote to actually connect to the endpoint
-        // --joe
         url: '/quotes',
         type: 'POST',
         data: {
@@ -149,6 +179,10 @@ QuoteForm.controller = function(args) {
     vm.overallCost5 = m.prop(0);
 
     vm.calculateForQuantity = function(quantity) {
+        var applyMargin = function(num) {
+            return num / (1 - vm.margin() / 100);
+        }
+
         var inchesInFoot = 12;
         var minHr = 60;
 
@@ -220,10 +254,10 @@ QuoteForm.controller = function(args) {
             (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
             Number(vm.prepressCharges());
 
-        var totalCost = Number(totalTimeCost) +
+        var subTotalCost = Number(totalTimeCost) +
             Number(totalDigitalConsumablesCost) +
-            Number(totalPhysicalConsumablesCost) +
-            Number(totalExtraneousCosts);
+            Number(totalPhysicalConsumablesCost)/* +
+            Number(totalExtraneousCosts);*/
 
         var debugObject = {
             labelsAcrossTheWeb: labelsAcrossTheWeb,
@@ -248,22 +282,24 @@ QuoteForm.controller = function(args) {
             totalFinishingCost: totalFinishingCost,
             totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
             totalExtraneousCosts: totalExtraneousCosts,
-            totalCost: totalCost,
+            subTotalCost: subTotalCost,
         };
         // console.debug(debugObject);
 
         // calculate in margin
-        return totalCost / (1 - vm.margin() / 100);
+        // returns [totalCost, costPerLabel]
+        return {total: Number(applyMargin(subTotalCost)+Number(totalExtraneousCosts)), perLabel: Number(applyMargin(subTotalCost) / quantity)}
+
         // return (1 + vm.margin() / 100) * totalCost;
     };
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
     vm.calculate = function() {
-        vm.quantity1() != 0 ? vm.overallCost1(vm.calculateForQuantity(vm.quantity1())) : vm.overallCost1(0);
-        vm.quantity2() != 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2(0);
-        vm.quantity3() != 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3(0);
-        vm.quantity4() != 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4(0);
-        vm.quantity5() != 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5(0);
+        vm.quantity1() != 0 ? vm.overallCost1(vm.calculateForQuantity(vm.quantity1())) : vm.overallCost1({total: 0, perLabel: 0});
+        vm.quantity2() != 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2({total: 0, perLabel: 0});
+        vm.quantity3() != 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3({total: 0, perLabel: 0});
+        vm.quantity4() != 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4({total: 0, perLabel: 0});
+        vm.quantity5() != 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5({total: 0, perLabel: 0});
     };
 };
 
@@ -528,14 +564,19 @@ QuoteForm.view = function(ctrl, args) {
                     range: [0, 500, 1]
                 })
             ]),
-            // COLUMN 4: RESULTS AND SUBMISSION
-            m('div', [
-                m('h1', 'Results'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost1()), 'Overall Cost (quantity 1)'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost2()), 'Overall Cost (quantity 2)'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost3()), 'Overall Cost (quantity 3)'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost4()), 'Overall Cost (quantity 4)'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost5()), 'Overall Cost (quantity 5)'),
+            // COLUMN 4: RESULTS AND SUBMISSION 
+            m('div', {class:'costs'}, [
+                m('h1','Costs'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost1().total, 2),
+                    'Quantity 1', calc.formatMoney(vm.overallCost1().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost2().total, 2),
+                    'Quantity 2', calc.formatMoney(vm.overallCost2().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost3().total, 2),
+                    'Quantity 3', calc.formatMoney(vm.overallCost3().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost4().total, 2),
+                    'Quantity 4', calc.formatMoney(vm.overallCost4().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.overallCost5().total, 2),
+                    'Quantity 5', calc.formatMoney(vm.overallCost5().perLabel,3) + ' per label'),
                 m('button.submit', {
                     onclick: vm.submitForm
                 }, 'Submit'),
