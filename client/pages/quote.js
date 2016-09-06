@@ -555,7 +555,7 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Margin',
                     type: 'percent',
                     val: vm.margin,
-                    range: [0, 200, 1]
+                    range: [0, 99, 1]
                 }),
                 calc.range({
                     header: 'Prepress Charges',
