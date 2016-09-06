@@ -73,13 +73,12 @@ QuoteForm.vm.getTools = function() {
         // add custom tool
         closest.push({
           _id: 0,
-          name: "Custom Tool"
+          name: "New/Custom Tool"
         });
         vm.tools(closest);
     }).then(() => {
         // vm.cornerSize(selectedCornerSize);
     });
-
 };
 
 QuoteForm.controller = function(args) {
@@ -427,7 +426,9 @@ QuoteForm.view = function(ctrl, args) {
                     }
                 }),
                 calc.range({
-                    header: 'Custom Tool Cost',
+                    header: 'Tool Overhead',
+                    hint: 'E.g., if you need a new die',
+                    type: 'money',
                     val: vm.toolCost,
                     range: [0, 250, 1]
                 }),
