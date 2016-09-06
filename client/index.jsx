@@ -14,6 +14,7 @@ require('./lib/calc.js');
 require('./lib/select2.js');
 require('./pages/quote.js');
 require('./pages/admin.js');
+require('./pages/tools.js');
 
 // Initialize our Feathers client application through Socket.io
 // with hooks and authentication.
@@ -27,7 +28,8 @@ window.app = feathers()
 
 const pageEnum = {
     QUOTE: 0,
-    ADMIN: 1
+    ADMIN: 1,
+    TOOLS: 2,
 };
 
 var Main = {};
@@ -36,7 +38,7 @@ Main.vm = {};
 
 Main.controller = function() {
     var vm = Main.vm;
-    vm.page = m.prop(pageEnum.ADMIN);
+    vm.page = m.prop(pageEnum.QUOTE);
 };
 
 Main.view = function(ctrl) {
@@ -75,16 +77,23 @@ Main.view = function(ctrl) {
                 }, 500);
             }
         }, [
-            m('.nav', [m('button', {
-                onclick: function (e) {
-                    vm.page(pageEnum.QUOTE);
-                }
-            }, 'New Quote'),
-            m('button', {
-                onclick: function (e) {
-                    vm.page(pageEnum.ADMIN);
-                }
-            }, 'Administration')]),
+            m('.nav', [
+              m('button', {
+                  onclick: function (e) {
+                      vm.page(pageEnum.QUOTE);
+                  }
+              }, 'New Quote'),
+              m('button', {
+                  onclick: function (e) {
+                      vm.page(pageEnum.ADMIN);
+                  }
+              }, 'Administration'),
+              m('button', {
+                  onclick: function (e) {
+                      vm.page(pageEnum.TOOLS);
+                  }
+              }, 'Tools')
+            ]),
             renderPage(vm.page())
         ])
     ]);
@@ -96,6 +105,8 @@ function renderPage (page) {
             return m.component(QuoteForm);
         case pageEnum.ADMIN:
             return m.component(AdminPage);
+        case pageEnum.TOOLS:
+            return m.component(ToolsPage);
         default:
             return null;
     }
