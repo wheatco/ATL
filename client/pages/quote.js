@@ -86,18 +86,15 @@ QuoteForm.vm.submitForm = function() {
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    var selectedCornerSize = vm.cornerSize();
     app.service('tools').find().then(tools => {
         tools = tools.data;
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
             var tool = tools[i];
-            if (tool.cornerSize == selectedCornerSize) {
-                // Euclidean distance because why not
-                tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
-                closest.push(tool);
-            }
+            // Euclidean distance because why not
+            tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
+            closest.push(tool);
         }
         // Sort by closest
         closest.sort(function(a, b) {
@@ -105,9 +102,14 @@ QuoteForm.vm.getTools = function() {
         });
         // Limit to 10
         closest = closest.slice(0, 10);
+        // add custom tool
+        closest.push({
+          _id: 0,
+          name: "Custom Tool"
+        });
         vm.tools(closest);
     }).then(() => {
-        vm.cornerSize(selectedCornerSize);
+        // vm.cornerSize(selectedCornerSize);
     });
 
 };
@@ -137,20 +139,21 @@ QuoteForm.controller = function(args) {
     vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star
     vm.corner = m.prop('Square'); // Round
 
-    vm.cornerSizes = m.prop([
-        '1/3',
-        '1/4',
-        '1/8',
-        '1/16',
-        '1/32',
-        '1/64'
-    ]);
-    vm.cornerSize = m.prop('1/3');
+    // vm.cornerSizes = m.prop([
+    //     '1/3',
+    //     '1/4',
+    //     '1/8',
+    //     '1/16',
+    //     '1/32',
+    //     '1/64'
+    // ]);
+    // vm.cornerSize = m.prop('1/3');
     vm.selectedTool = m.prop('');
     vm.selectedToolObject = m.prop(null);
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
     vm.tools = m.prop([]);
+    vm.toolCost = m.prop(0);
     vm.getTools();
 
     vm.quantity1 = m.prop(100);
@@ -422,35 +425,43 @@ QuoteForm.view = function(ctrl, args) {
                         }
                     }),
                 ]),
-                m('.label-header', 'Corner Size (in)'),
-                m.component(Select2, {
-                    data: vm.cornerSizes,
-                    value: vm.cornerSize,
-                    onchange: function(val) {
-                        vm.cornerSize(val);
-                        vm.getTools();
-                    },
-                    options: {
-                      width: '100%',
-                    }
-                }),
+                // m('.label-header', 'Corner Size (in)'),
+                // m.component(Select2, {
+                //     data: vm.cornerSizes,
+                //     value: vm.cornerSize,
+                //     onchange: function(val) {
+                //         vm.cornerSize(val);
+                //         vm.getTools();
+                //     },
+                //     options: {
+                //       width: '100%',
+                //     }
+                // }),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
                     format: function(tool) {
+                        if (tool.acrossWeb == null) return tool.name;
                         return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
                     },
                     value: vm.selectedTool,
                     onchange: function(val) {
-                      if (val) {
+                      if (val && val != 0) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
+                          vm.toolAcross(tool.acrossWeb);
+                          vm.toolAround(tool.aroundWeb);
                         });
                       }
                     },
                     options: {
                       width: '100%'
                     }
+                }),
+                calc.range({
+                    header: 'Custom Tool Cost',
+                    val: vm.toolCost,
+                    range: [0, 250, 1]
                 }),
                 m('h2', 'Colors'),
                 m('.label-header', 'Number of Colors'),
