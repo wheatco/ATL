@@ -36,6 +36,10 @@ body {
   bottom: 100%;
 }*/
 
+.calc > div{
+  padding-top: 20px;
+}
+
 .no-borders:before, .no-borders:after {
   background-image: none;
 }
@@ -555,6 +559,10 @@ svg.line-chart {
   font-family: "Source Code Pro", Courier, monospace;
 }
 
+.costs {
+    position: relative;
+    transition: top 0.2s;
+}
 
 .costs .result-text{
   min-width: 7em;
