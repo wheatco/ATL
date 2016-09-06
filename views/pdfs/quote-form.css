@@ -101,7 +101,9 @@ table#price-table tbody{
 
 footer{
 	position: absolute;
+	left:0;
 	bottom: .5in;
+	padding: 0 .5in;
 }
 
 @page {
