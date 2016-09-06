@@ -521,6 +521,33 @@ svg.line-chart {
   text-align: center;
 }
 
+.nav button{
+  font-family: "Source Code Pro", Courier, monospace;
+  border: solid white 2px;
+  background: white;
+  padding: 10px;
+  outline: none;
+  text-transform: uppercase;
+}
+
+.nav button:not(.active){
+  text-decoration: underline;
+}
+
+.nav button:hover:not(.active){
+  border: solid gray 2px;
+}
+
+.nav button:active:not(.active){
+  border: solid gray 2px;
+  background-color: #eee;
+}
+
+.nav button.active{
+  border: solid black 2px;
+  cursor: pointer;
+}
+
 .label-header {
   color: #000;
   display: block;
