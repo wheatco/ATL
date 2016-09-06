@@ -79,20 +79,23 @@ Main.view = function(ctrl) {
         }, [
             m('.nav', [
               m('button', {
+                  class: vm.page() == pageEnum.QUOTE ? "active": '',
                   onclick: function (e) {
                       vm.page(pageEnum.QUOTE);
                   }
               }, 'New Quote'),
               m('button', {
+                  class: vm.page() == pageEnum.ADMIN ? "active" : '',
                   onclick: function (e) {
                       vm.page(pageEnum.ADMIN);
                   }
-              }, 'Administration'),
+              }, 'Existings Quotes'),
               m('button', {
+                  class: vm.page() == pageEnum.TOOLS ? "active": '',
                   onclick: function (e) {
                       vm.page(pageEnum.TOOLS);
                   }
-              }, 'Tools')
+              }, 'Tool Library')
             ]),
             renderPage(vm.page())
         ])

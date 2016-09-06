@@ -541,7 +541,7 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Cost Per Copy',
                     type: 'money',
                     val: vm.costPerDesign,
-                    range: [0, 30, 1]
+                    range: [0, 100, 1]
                 }),
                 m('h2', ''),
                 calc.range({
