@@ -1,7 +1,7 @@
 'use strict';
 
 // quote-model.js - A mongoose model
-// 
+//
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 
@@ -17,10 +17,7 @@ const quoteSchema = new Schema({
   addressState: String,
   addressZip: String,
   phone: String,
-  email: {
-    type: String,
-    required: true
-  },
+  email: String,
   shape: String,
   corner: String,
   selectedTool: String,
