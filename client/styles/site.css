@@ -444,7 +444,7 @@ svg.line-chart {
 
 .select-wrapper {
   margin-top: 15px;
-  max-width: 235px;
+  /*max-width: 235px;*/
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
