@@ -13,7 +13,7 @@ function tableWithQuotes(quotes, callback) {
       m('th', 'Client'),
       m('th', 'Phone'),
       m('th', 'Email'),
-      m('th', '')
+      m('th', {class:"preview"}, 'Review')
     ])
   ];
   var rows = []
@@ -24,11 +24,13 @@ function tableWithQuotes(quotes, callback) {
         m('td', quote.name),
         m('td', quote.phone),
         m('td', quote.email),
-        m('button.previewButton', {
-          onclick: function(e) {
-            callback(quote);
-          }
-        }, 'review')
+        m('td',[
+          m('button.previewButton', {
+            onclick: function(e) {
+              callback(quote);
+            }
+          }, 'review')
+        ])
       ]);
     });
   }
