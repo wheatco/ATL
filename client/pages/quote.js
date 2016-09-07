@@ -182,9 +182,9 @@ QuoteForm.controller = function(args) {
         var tool = vm.selectedToolObject() || {acrossWeb: 0, aroundWeb:0};
 
         var labelsAcrossTheWeb = Math.floor(
-            maxImageAreaWebWidth / (tool.acrossWeb + acrossGutter));
+            maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
-            maxImageAreaRepeatLength / (tool.aroundWeb + aroundGutter));
+            maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
@@ -409,10 +409,12 @@ QuoteForm.view = function(ctrl, args) {
                     data: vm.tools,
                     format: function(tool) {
                         if (tool.acrossWeb == null) return tool.name;
-                        return `${tool.acrossWeb}x${tool.aroundWeb} - ${tool.name}`;
+                        return `${tool.acrossWeb}x${tool.aroundWeb} — ${tool.name}`;
                     },
                     value: vm.selectedTool,
                     onchange: function(val) {
+                    // if a tool is chosen, then look it up (again?) and
+                    // pretty sure val is _id
                       if (val && val != 0) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
