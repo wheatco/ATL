@@ -115,13 +115,13 @@ QuoteForm.controller = function(args) {
     //     '1/64'
     // ]);
     // vm.cornerSize = m.prop('1/3');
-    vm.selectedTool = m.prop('');
+    vm.getTools();
+    vm.selectedTool = m.prop(0);
     vm.selectedToolObject = m.prop(null);
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
     vm.tools = m.prop([]);
     vm.toolCost = m.prop(0);
-    vm.getTools();
 
     vm.quantity1 = m.prop(100);
     vm.quantity2 = m.prop(0);
@@ -179,15 +179,10 @@ QuoteForm.controller = function(args) {
         var substrateWidth = 13.00;
         var multiColorCostImpression = 0.0201;
 
-        // var tool = vm.selectedToolObject() || {acrossWeb: 0, aroundWeb:0};
-
         var labelsAcrossTheWeb = Math.floor(
             maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
             maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
-
-        console.log(labelsAcrossTheWeb, labelsAroundTheWeb);
-        console.log(vm.toolAround(), vm.toolAcross());
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
@@ -378,6 +373,7 @@ QuoteForm.view = function(ctrl, args) {
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAcross)(e);
                             vm.getTools();
+                            vm.selectedTool(0);
                         }
                     }),
                 ]),
@@ -392,6 +388,7 @@ QuoteForm.view = function(ctrl, args) {
                         onchange: function(e) {
                             m.withAttr('value', vm.toolAround)(e);
                             vm.getTools();
+                            vm.selectedTool(0);
                         }
                     }),
                 ]),
