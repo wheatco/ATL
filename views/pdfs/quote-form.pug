@@ -53,15 +53,17 @@ html(lang="en")
           tr
             th Job Info
         tbody
+          if shape
+            tr
+              td Shape:
+              td= shape
+          if corner
+            tr
+              td Corner:
+              td= corner
           tr
-            td Shape:
-            td= shape
-          tr
-            td Corner:
-            td= corner
-          tr
-            td Tools:
-            td= selectedTool
+            td Tool:
+            td= selectedToolName
           tr
             td Substrate:
             td= substrate

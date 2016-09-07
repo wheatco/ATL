@@ -1,0 +1,15 @@
+.iframe-wrapper{
+	width: 9.5in;
+	margin: 0 auto;
+	padding: .5in;
+	background-color: #eee;
+	border: solid black 3px;
+	max-height: 450px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+iframe{
+	border: none;
+	box-shadow: 0 3px 10px 0px rgba(0,0,0,.5);
+}

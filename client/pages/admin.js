@@ -26,7 +26,7 @@ function tableWithQuotes(quotes, callback) {
           onclick: function(e) {
             callback(quote);
           }
-        }, 'preview')
+        }, 'review')
       ]);
     });
   }

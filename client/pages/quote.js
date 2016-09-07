@@ -23,8 +23,10 @@ QuoteForm.vm.submitForm = function() {
             shape: vm.shape(),
             corner: vm.corner(),
             selectedTool: vm.selectedTool(),
+            selectedToolName: vm.selectedTool() == 0 ? 'Custom Die' : vm.selectedToolName(),
             toolAcross: vm.toolAcross(),
             toolAround: vm.toolAround(),
+            toolOverhead: vm.toolOverhead(),
             quantity1: vm.quantity1(),
             quantity2: vm.quantity2(),
             quantity3: vm.quantity3(),
@@ -103,8 +105,8 @@ QuoteForm.controller = function(args) {
     vm.phone = m.prop('');
     vm.email = m.prop('');
 
-    vm.shape = m.prop('Rectangle'); // Circle, Triangle, Star
-    vm.corner = m.prop('Square'); // Round
+    vm.shape = m.prop(''); // Rectangle, Circle, Triangle, Star
+    vm.corner = m.prop(''); // Square, Round
 
     // vm.cornerSizes = m.prop([
     //     '1/3',
@@ -117,11 +119,12 @@ QuoteForm.controller = function(args) {
     // vm.cornerSize = m.prop('1/3');
     vm.getTools();
     vm.selectedTool = m.prop(0);
+    vm.selectedToolName = m.prop('Default');
     vm.selectedToolObject = m.prop(null);
     vm.toolAcross = m.prop(0);
     vm.toolAround = m.prop(0);
     vm.tools = m.prop([]);
-    vm.toolCost = m.prop(0);
+    vm.toolOverhead = m.prop(0);
 
     vm.quantity1 = m.prop(100);
     vm.quantity2 = m.prop(0);
@@ -223,7 +226,8 @@ QuoteForm.controller = function(args) {
 
         var totalExtraneousCosts =
             (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
-            Number(vm.prepressCharges());
+            Number(vm.prepressCharges())+
+            Number(vm.toolOverhead());
 
         var subTotalCost = Number(totalTimeCost) +
             Number(totalDigitalConsumablesCost) +
@@ -418,6 +422,7 @@ QuoteForm.view = function(ctrl, args) {
                       if (val && val != 0) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
+                          vm.selectedToolName(tool.name);
                           vm.toolAcross(tool.acrossWeb);
                           vm.toolAround(tool.aroundWeb);
                         });
@@ -431,7 +436,7 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Tool Overhead',
                     hint: 'E.g., if you need a new die',
                     type: 'money',
-                    val: vm.toolCost,
+                    val: vm.toolOverhead,
                     range: [0, 250, 1]
                 }),
                 m('h2', 'Colors'),
@@ -481,33 +486,33 @@ QuoteForm.view = function(ctrl, args) {
             // COLUMN 3: QUANTITY AND ADDITIONAL INFO
             m('div', [
                 m('h1', 'Order Details'),
-                m('h2', 'Quantity'),
+                m('h2', 'Label Quantities'),
                 calc.range({
-                    header: 'Number of labels (quantity 1)',
+                    header: 'Quantity 1',
                     val: vm.quantity1,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
-                    header: 'Number of labels (quantity 2)',
+                    header: 'Quantity 2',
                     val: vm.quantity2,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
-                    header: 'Number of labels (quantity 3)',
+                    header: 'Quantity 3',
                     val: vm.quantity3,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
-                    header: 'Number of labels (quantity 4)',
+                    header: 'Quantity 4',
                     val: vm.quantity4,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
-                    header: 'Number of labels (quantity 5)',
+                    header: 'Quantity 5',
                     val: vm.quantity5,
                     type: 'number',
                     range: [0, 1000000, 100]
@@ -554,7 +559,7 @@ QuoteForm.view = function(ctrl, args) {
                     'Quantity 5', calc.formatMoney(vm.overallCost5().perLabel,3) + ' per label'),
                 m('button.submit', {
                     onclick: vm.submitForm
-                }, 'Submit'),
+                }, 'Generate Quote Form'),
             ])
         ])
     ]);

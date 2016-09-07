@@ -12,11 +12,8 @@ doctype html
 html(lang="en")
   head
     title= pageTitle
-    style.
-      .frame {
-        width: 600;
-        height: 400;
-      }
+    style
+      include preview-quote.css
     script(type='text/javascript' src='https://code.jquery.com/jquery-3.1.0.min.js')
     script.
       var sendQuote = function(q_id) {
@@ -38,7 +35,8 @@ html(lang="en")
 
   body
     h1 Quote Preview
-    iframe.frame(src="/viewQuote?q="+q_id, style='width: 9.5in; height: 12in', width=1100, height = 850)
+    div.iframe-wrapper
+      iframe(src="/viewQuote?q="+q_id, style='width: 9.5in; height: 12in', width=1100, height = 850)
     p Do you want to send it?
     //- better way to format this? -dp
     button.send(onClick='sendQuote("'+q_id+'")') Send!
