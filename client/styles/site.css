@@ -451,6 +451,14 @@ svg.line-chart {
      background-color: rgb(24, 196, 141);
 }
 
+.admin-page th:first-child{
+  width: 5em;
+}
+
+.admin-page th.preview{
+  width: 5em;
+}
+
 /***************
   BUTTONS
 ***************/
@@ -502,6 +510,11 @@ svg.line-chart {
   border-radius: 2px;
   box-shadow: none;
   margin: 3px;
+  background-color: gray;
+}
+
+.previewButton:hover {
+  background-color: black;
 }
 
 /***************
