@@ -23,7 +23,7 @@ function tableWithQuotes(quotes, callback) {
         m('td', quote.quote_id),
         m('td', quote.name),
         m('td', quote.phone),
-        m('td', quote.email),
+        m('td.hyphenate', quote.email),
         m('td',[
           m('button.previewButton', {
             onclick: function(e) {
