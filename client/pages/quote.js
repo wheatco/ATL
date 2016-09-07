@@ -565,9 +565,7 @@ window.QuoteForm = QuoteForm;
 var stick = function(el, notInit, context) {
     if (!notInit) {
         var stickyColumn = $(el);
-        console.log(stickyColumn.offset().top)
         var sidebarTop = stickyColumn.offset().top;
-        console.log(sidebarTop)
         $(window).scroll(function () {
             if (stickyColumn.length > 0) {
                 var scrollTop = $(window).scrollTop();
