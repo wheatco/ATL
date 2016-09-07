@@ -89,7 +89,7 @@ Main.view = function(ctrl) {
                   onclick: function (e) {
                       vm.page(pageEnum.ADMIN);
                   }
-              }, 'Existing Quotes'),
+              }, 'Quote History'),
               m('button', {
                   class: vm.page() == pageEnum.TOOLS ? "active": '',
                   onclick: function (e) {
