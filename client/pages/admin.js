@@ -11,6 +11,7 @@ function tableWithQuotes(quotes, callback) {
     m('tr', [
       m('th', 'ID'),
       m('th', 'Client'),
+      m('th', 'Phone'),
       m('th', 'Email'),
       m('th', '')
     ])
@@ -21,6 +22,7 @@ function tableWithQuotes(quotes, callback) {
       return m('tr', [
         m('td', quote.quote_id),
         m('td', quote.name),
+        m('td', quote.phone),
         m('td', quote.email),
         m('button.previewButton', {
           onclick: function(e) {
