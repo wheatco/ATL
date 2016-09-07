@@ -2,7 +2,7 @@
 	width: 9.5in;
 	margin: 0 auto;
 	padding: .5in;
-	background-color: #eee;
+	background-color: #777;
 	border: solid black 3px;
 	max-height: 450px;
 	overflow-x: hidden;
@@ -11,5 +11,49 @@
 
 iframe{
 	border: none;
-	box-shadow: 0 3px 10px 0px rgba(0,0,0,.5);
+	box-shadow: 0 3px 10px 0px black;
+}
+
+h1{
+	font-size: 1.5em;
+}
+
+div.controls{
+	text-align: center;
+}
+
+div.controls button{
+    border: solid black 2px;
+    margin: 10px;
+    padding: 10px;
+    background-color: white;
+	font-family: "Source Code Pro", Courier, monospace;
+	font-size: 12pt;
+}
+
+div.controls button:first-of-type{
+	width: 15em;
+}
+
+div.controls button:hover{
+    background-color: #eee;
+}
+
+div.controls button:active{
+    background-color: #ddd;
+}
+
+p.flash{
+	opacity: 0;
+}
+
+p.flash.visible{
+	width: 14em;
+    margin: 0 auto;
+    border: solid red 1px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    background-color: rgba(255,0,0,.1);
+    text-align: center;
+    opacity: 1;
 }
