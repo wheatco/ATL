@@ -31,7 +31,7 @@ var Nav = { view: function() {
   ];
   function mBtn(name, route){
     var isCurrent = (m.route() === route);
-    var handleClick ,= function(){ m.route (route) };
+    var handleClick = function(){ m.route (route) };
     return m("button"+(isCurrent ? "active": ""), {onclick: handleClick}, name);
   }
 }};
