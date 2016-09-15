@@ -116,7 +116,9 @@ var ToolEntry = {
             cornerSize: vm.cornerSize()
           };
 
-          if (tool.name.length && args.onclick) {
+          tool.name = tool.name.length ? tool.name : "No Name"
+
+          if (args.onclick) {
             args.onclick(tool);
             // Reset
             ToolEntry.init();
@@ -134,7 +136,7 @@ MAIN PAGE
 var ToolsPage = {
   vm: {},
   controller: function(args) {
-    var vm = AdminPage.vm;
+    var vm = ToolsPage.vm;
     const app = window.app;
 
     vm.tools = m.prop([]);
@@ -144,7 +146,7 @@ var ToolsPage = {
 
     // Helpers
     this.addTool = function(tool) {
-      var vm = AdminPage.vm;
+      var vm = ToolsPage.vm;
       app.service('tools').create(tool).then(tool => {
         // TODO: make this update automatic
         app.service('tools').find().then(tools => {
@@ -153,7 +155,7 @@ var ToolsPage = {
       });
     }
     this.deleteTool = function(tool) {
-      var vm = AdminPage.vm;
+      var vm = ToolsPage.vm;
       app.service('tools').remove({
         _id: tool._id
       }).then(removed => {
@@ -165,7 +167,7 @@ var ToolsPage = {
 
   },
   view: function(ctrl, args) {
-    var vm = AdminPage.vm;
+    var vm = ToolsPage.vm;
     return m('div', [
       m('h1.title', 'Manage Tools'),
       m('.calc.column.admin-page', [

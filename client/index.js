@@ -24,61 +24,56 @@ window.app = feathers()
     }));
 
 var Nav = { view: function() {
-  return[
-    mBtn("New Quote", "/quote"),
-    mBtn("Quote History", "/admin"),
-    mBtn("Tools", "tools")
-  ];
-  function mBtn(name, route){
-    var isCurrent = (m.route() === route);
-    var handleClick = function(){ m.route (route) };
-    return m("button"+(isCurrent ? "active": ""), {onclick: handleClick}, name);
-  }
+    return m(".nav", [
+        mBtn("New Quote", "/quote"),
+        mBtn("Quote History", "/admin"),
+        mBtn("Tools", "/tools")
+    ]);
+    function mBtn(name, route){
+        var isCurrent = (m.route() === route);
+        var handleClick = function(){ m.route (route) };
+        return m("button"+(isCurrent ? ".active": ""), {onclick: handleClick}, name);
+    }
+
 }};
 
-var Page = (content){
-  this.view = function(){
-    return m('html', [  
-        m('head', [
-            m('link', {
-                rel: 'stylesheet',
-                href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
-            }),
-            m('link', {
-                rel: 'stylesheet',
-                href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
-            }),
-            m('link', {
-                rel: 'stylesheet',
-                href: 'normalize.css'
-            }),
-            m('link', {
-                rel: 'stylesheet',
-                href: 'flexblocks.css'
-            }),
-            m('link', {
-                rel: 'stylesheet',
-                href: 'site.css'
-            }),
-            m('meta', {
-                name: 'viewport',
-                content: 'width=device-width, initial-scale=1'
-            })
-        ]),
-        m('body', {
-            // //what is this?
-            // config: function(el) {
-            //     window.setInterval(function() {
-            //         parent.postMessage((el.offsetHeight || el.clientHeight), '*');
-            //     }, 500);
-            // }
-        }, [
-            Menu.view(),
-            renderPage(vm.page())
-        ])
-  
-    return [ Menu.view(), ]
-  }
+var Page = function (content){
+    //laminate each page with head info
+    //TODO: the head stuff should be static, right?
+    this.view = function(){
+        return m('html', [  
+            m('head', [
+                m('link', {
+                    rel: 'stylesheet',
+                    href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
+                }),
+                m('link', {
+                    rel: 'stylesheet',
+                    href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
+                }),
+                m('link', {
+                    rel: 'stylesheet',
+                    href: 'normalize.css'
+                }),
+                m('link', {
+                    rel: 'stylesheet',
+                    href: 'flexblocks.css'
+                }),
+                m('link', {
+                    rel: 'stylesheet',
+                    href: 'site.css'
+                }),
+                m('meta', {
+                    name: 'viewport',
+                    content: 'width=device-width, initial-scale=1'
+                })
+            ]),
+            m('body', [
+                Nav.view(),
+                m(".page", content)
+            ])
+        ]);
+    }
 }
 
 var QuotePage = new Page(require('./pages/quote.js'));

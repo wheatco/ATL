@@ -51,7 +51,7 @@ function tableWithQuotes(quotes, editCallback, reviewCallback) {
 MAIN PAGE
 ********/
 
-window.AdminPage = {
+var AdminPage = {
   vm: {},
   controller: function(args) {
     var vm = AdminPage.vm;
@@ -76,3 +76,5 @@ window.AdminPage = {
     ]);
   }
 }
+
+module.exports = AdminPage
