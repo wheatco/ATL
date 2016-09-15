@@ -565,7 +565,7 @@ QuoteForm.view = function(ctrl, args) {
     ]);
 };
 
-window.QuoteForm = QuoteForm;
+module.exports = QuoteForm;
 
 var stick = function(el, notInit, context) {
     if (!notInit) {

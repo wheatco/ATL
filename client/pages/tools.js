@@ -131,7 +131,7 @@ var ToolEntry = {
 MAIN PAGE
 ********/
 
-window.ToolsPage = {
+var ToolsPage = {
   vm: {},
   controller: function(args) {
     var vm = AdminPage.vm;
@@ -189,3 +189,5 @@ window.ToolsPage = {
   }
 }
 
+
+module.exports = ToolsPage;
