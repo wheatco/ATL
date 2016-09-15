@@ -6,7 +6,7 @@ html, body{
 	width: 100%;
 	margin: 0;
 	background-color: white;
-	font-size: 11pt;
+	font-size: 95%;
 }
 
 
@@ -36,7 +36,7 @@ table#price-table{
 
 table#price-table tbody{
 	padding: 0 .2in .1in .2in;
-	border: solid black 1pt;
+	border: solid black .1em;
 	display: block;
 }
 
