@@ -63,7 +63,6 @@ var AdminPage = {
     });
   },
   view: function(ctrl, args) {
-    console.log("test")
     var vm = AdminPage.vm;
     return m('div', [
       m('h1.title', 'Administration'),

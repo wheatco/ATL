@@ -35,7 +35,7 @@ QuoteForm.vm.submitForm = function() {
     } else {
         rawQuote.updatedAt = Date.now();
         $.ajax({
-            url: '/quotes',
+            url: '/quotes/'+rawQuote._id,
             type: 'PUT',
             data: rawQuote,
             dataType: 'json',
@@ -434,18 +434,6 @@ QuoteForm.view = function(ctrl, args) {
                         }
                     }),
                 ]),
-                // m('.label-header', 'Corner Size (in)'),
-                // m.component(Select2, {
-                //     data: vm.cornerSizes,
-                //     value: vm.cornerSize,
-                //     onchange: function(val) {
-                //         vm.cornerSize(val);
-                //         vm.getTools();
-                //     },
-                //     options: {
-                //       width: '100%',
-                //     }
-                // }),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
@@ -453,7 +441,7 @@ QuoteForm.view = function(ctrl, args) {
                         if (tool.acrossWeb == null) return tool.name;
                         return `${tool.acrossWeb}x${tool.aroundWeb} — ${tool.name}`;
                     },
-                    value: vm.selectedTool,
+                    value: vm.quoteObj.selectedToolID,
                     onchange: function(val) {
                     // if a tool is chosen, then look it up (again?) and
                     // pretty sure val is _id
@@ -582,7 +570,7 @@ QuoteForm.view = function(ctrl, args) {
                     range: [0, 500, 1]
                 })
             ]),
-            // COLUMN 4: RESULTS AND SUBMISSION 
+            // COLUMN 4: RESULTS AND SUBMISSION
             m('div', {class:'costs', config: stick}, [
                 m('h1','Costs'),
                 calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost1().total, 2),
@@ -620,7 +608,7 @@ var stick = function(el, notInit, context) {
                 }
                 else {
                     stickyColumn.css('top', '0');
-                } 
+                }
             }
         });
     }
