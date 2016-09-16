@@ -2,11 +2,10 @@
 import $ from 'jquery';
 import m from 'mithril';
 import _ from 'lodash';
-var QuoteForm = {};
-
 const app = window.app;
 
-//for simplicity, we use this component to namespace the model classes
+var QuoteForm = {};
+
 QuoteForm.vm = {};
 
 QuoteForm.vm.submitForm = function() {
@@ -58,8 +57,8 @@ QuoteForm.vm.submitForm = function() {
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    app.service('tools').find().then(tools => {
-        tools = tools.data;
+    app.service('tools').find().then(res => {
+        var tools = res.data;
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
@@ -80,18 +79,44 @@ QuoteForm.vm.getTools = function() {
           name: "New/Custom Tool"
         });
         vm.tools(closest);
-    }).then(() => {
-        // vm.cornerSize(selectedCornerSize);
     });
 };
+
+
 
 QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
 
-    app.service('quotes').find({_id: m.route.param("quoteID") }).then( res => {
-        console.log(res.data[0]);
-    });
+    var initWithNewQuote = function(){
+        //do some other stuff
+        vm.initializing = false;
+    }
 
+    var initWithExistingQuote = function(quote){
+        console.log(quote)
+        vm.initializing = false;
+    }
+
+    //block the UI until we determine what to do with quoteID information
+    vm.initializing = true;
+
+    if (m.route.param("quoteID")){
+        //if we're editing an existing quote
+        var quoteNum = m.route.param("quoteID")
+        app.service('quotes').find({query:{quote_id: quoteNum }}).then( res => {
+            if (res.data.length == 0) {
+                alert("Sorry, we don't have a quote stored with Quote #"+quoteNum+". Press OK to begin a new quote.")
+                initWithNewQuote();
+            }
+            else if (res.data.length >= 2){
+                alert ("We found multiple quotes with Quote #"+quoteNum+". Press OK to edit the first one, but be sure to contact support because there is an error in the database.")
+                initWithExistingQuote(res.data[0])
+            } else {
+                initWithExistingQuote(res.data[0]);
+            }
+
+        });
+    } else initWithNewQuote();
 
     vm.defaultMSI = {
         'Semi Gloss AT20 - 53269': 0.41,
@@ -114,15 +139,6 @@ QuoteForm.controller = function(args) {
     vm.shape = m.prop(''); // Rectangle, Circle, Triangle, Star
     vm.corner = m.prop(''); // Square, Round
 
-    // vm.cornerSizes = m.prop([
-    //     '1/3',
-    //     '1/4',
-    //     '1/8',
-    //     '1/16',
-    //     '1/32',
-    //     '1/64'
-    // ]);
-    // vm.cornerSize = m.prop('1/3');
     vm.getTools();
     vm.selectedTool = m.prop(0);
     vm.selectedToolName = m.prop('Default');
@@ -142,7 +158,7 @@ QuoteForm.controller = function(args) {
 
     vm.substrate = m.prop('White Paper');
     vm.substrateMSI = m.prop(0.45);
-    vm.finish = m.prop('Gloss'); // TODO may be plural?
+    vm.finish = m.prop('Laminate Gloss');
     vm.finishMSI = m.prop(0.20);
 
     vm.numDesigns = m.prop(1);
@@ -240,31 +256,31 @@ QuoteForm.controller = function(args) {
             Number(totalPhysicalConsumablesCost)/* +
             Number(totalExtraneousCosts);*/
 
-        var debugObject = {
-            labelsAcrossTheWeb: labelsAcrossTheWeb,
-            labelsAroundTheWeb: labelsAroundTheWeb,
-            labelsPerFrame: labelsPerFrame,
-            repeatLength: repeatLength,
-            productionFrames: productionFrames,
-            productionLinFt: productionLinFt,
-            totalLinFt: totalLinFt,
-            msi: msi,
-            totalPrePressTimeCost: totalPrePressTimeCost,
-            totalPressRunMinutes: totalPressRunMinutes,
-            totalPressRunTimeCost: totalPressRunTimeCost,
-            totalFinishingMiniutes: totalFinishingMiniutes,
-            totalFinishingTimeCost: totalFinishingTimeCost,
-            totalRewindMinutes: totalRewindMinutes,
-            totalRewindTimeCost: totalRewindTimeCost,
-            totalTimeCost: totalTimeCost,
-            totalImpressions: totalImpressions,
-            totalDigitalConsumablesCost: totalDigitalConsumablesCost,
-            totalSubstrateCost: totalSubstrateCost,
-            totalFinishingCost: totalFinishingCost,
-            totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
-            totalExtraneousCosts: totalExtraneousCosts,
-            subTotalCost: subTotalCost,
-        };
+        // var debugObject = {
+        //     labelsAcrossTheWeb: labelsAcrossTheWeb,
+        //     labelsAroundTheWeb: labelsAroundTheWeb,
+        //     labelsPerFrame: labelsPerFrame,
+        //     repeatLength: repeatLength,
+        //     productionFrames: productionFrames,
+        //     productionLinFt: productionLinFt,
+        //     totalLinFt: totalLinFt,
+        //     msi: msi,
+        //     totalPrePressTimeCost: totalPrePressTimeCost,
+        //     totalPressRunMinutes: totalPressRunMinutes,
+        //     totalPressRunTimeCost: totalPressRunTimeCost,
+        //     totalFinishingMiniutes: totalFinishingMiniutes,
+        //     totalFinishingTimeCost: totalFinishingTimeCost,
+        //     totalRewindMinutes: totalRewindMinutes,
+        //     totalRewindTimeCost: totalRewindTimeCost,
+        //     totalTimeCost: totalTimeCost,
+        //     totalImpressions: totalImpressions,
+        //     totalDigitalConsumablesCost: totalDigitalConsumablesCost,
+        //     totalSubstrateCost: totalSubstrateCost,
+        //     totalFinishingCost: totalFinishingCost,
+        //     totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
+        //     totalExtraneousCosts: totalExtraneousCosts,
+        //     subTotalCost: subTotalCost,
+        // };
         // console.debug(debugObject);
 
         // calculate in margin

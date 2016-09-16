@@ -23,11 +23,9 @@ const toolsSchema = new Schema({
   },
   shape: {
     type: String,
-    required: true
   },
   cornerSize: {
     type: String,
-    required: true
   },
   createdAt: {
     type: Date,
