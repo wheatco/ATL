@@ -177,13 +177,10 @@ QuoteForm.controller = function(args) {
         //if we're editing an existing quote
         var quoteNum = m.route.param("quoteID")
         app.service('quotes').find({query:{quote_id: quoteNum }}).then( res => {
-            console.log("res", res)
             if (res.data.length == 0) {
-                console.log(0);
                 notify("Sorry, we don't have a quote stored with Quote #"+quoteNum+". Press OK to begin a new quote.")
                 m.route("/quote")
             } else if (res.data.length >= 2){
-                console.log(1);
                 notify("We found multiple quotes with Quote #"+quoteNum+". Press OK to edit the first one, but be sure to contact support because there is an error in the database.")
                 initWithExistingQuote(res.data[0])
             } else {
