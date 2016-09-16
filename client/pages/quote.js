@@ -322,7 +322,7 @@ QuoteForm.view = function(ctrl, args) {
     vm.calculate();
 
     return m('div', [
-        m('h1.title', 'ATL Order Form'),
+        m('h1.title', vm.isNewQuote ? "New Quote" : "Edit Quote " + vm.quoteObj.quote_id()),
         m('.calc.row.center.gap-5', [
 
             // COLUMN 1: CLIENT INFO
@@ -585,7 +585,7 @@ QuoteForm.view = function(ctrl, args) {
                     'Quantity 5', calc.formatMoney(vm.quoteObj.overallCost5().perLabel,3) + ' per label'),
                 m('button.submit', {
                     onclick: vm.submitForm
-                }, vm.isNewQuote ? 'Generate Quote Form' : 'Update'),
+                }, 'Save and Review'),
                 !vm.isNewQuote ? m('button.cancel', {
                     onclick: () => {m.route("/admin")} // TODO: make this just click the back button? E.g. window.history.back
                 }, 'Cancel') : undefined,
