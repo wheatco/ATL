@@ -4,6 +4,8 @@ import m from 'mithril';
 import _ from 'lodash';
 var QuoteForm = {};
 
+const app = window.app;
+
 //for simplicity, we use this component to namespace the model classes
 QuoteForm.vm = {};
 
@@ -85,7 +87,11 @@ QuoteForm.vm.getTools = function() {
 
 QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
-    const app = window.app;
+
+    app.service('quotes').find({_id: m.route.param("quoteID") }).then( res => {
+        console.log(res.data[0]);
+    });
+
 
     vm.defaultMSI = {
         'Semi Gloss AT20 - 53269': 0.41,
