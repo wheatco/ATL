@@ -415,7 +415,7 @@ QuoteForm.view = function(ctrl, args) {
                         onchange: function(e) {
                             m.withAttr('value', vm.quoteObj.toolAcross)(e);
                             vm.getTools();
-                            vm.selectedToolID(0);
+                            vm.quoteObj.selectedToolID(0);
                         }
                     }),
                 ]),
