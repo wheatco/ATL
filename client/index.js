@@ -38,55 +38,25 @@ var Nav = { view: function() {
 }};
 
 var Page = function (content){
-    //laminate each page with head info
-    //TODO: the head stuff should be static, right?
+    //laminate each page with nav
     this.view = function(){
-        return m('html', [  
-            m('head', [
-                m('link', {
-                    rel: 'stylesheet',
-                    href: 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Source+Code+Pro:700'
-                }),
-                m('link', {
-                    rel: 'stylesheet',
-                    href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
-                }),
-                m('link', {
-                    rel: 'stylesheet',
-                    href: 'normalize.css'
-                }),
-                m('link', {
-                    rel: 'stylesheet',
-                    href: 'flexblocks.css'
-                }),
-                m('link', {
-                    rel: 'stylesheet',
-                    href: 'site.css'
-                }),
-                m('meta', {
-                    name: 'viewport',
-                    content: 'width=device-width, initial-scale=1'
-                })
-            ]),
-            m('body', [
-                Nav.view(),
-                m(".page", content)
-            ])
-        ]);
+        return [ Nav.view(), m(".app-page", content) ];
     }
 }
 
 var QuotePage = new Page(require('./pages/quote.js'));
 var AdminPage = new Page(require('./pages/admin.js'));
 var ToolsPage = new Page(require('./pages/tools.js'));
+var QuoteReviewPage = new Page(require('./pages/quote-review.js'))
 
 //setup routes to start w/ the `#` symbol
 m.route.mode = "hash";
 
 //define a route
-m.route(document, "/quote", {
+m.route(document.body, "/quote", {
   "/quote": QuotePage,
   "/quote/:quoteID": QuotePage,
+  "/review/:quoteID": QuoteReviewPage,
   "/admin": AdminPage,
   "/tools": ToolsPage
 });

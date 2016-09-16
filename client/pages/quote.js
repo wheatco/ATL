@@ -18,6 +18,7 @@ var QuoteForm = {};
 
 QuoteForm.vm = {};
 
+// TODO: shouldn't this be on the controller?
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
     var rawQuote = demithrilify(vm.quoteObj);
@@ -29,7 +30,7 @@ QuoteForm.vm.submitForm = function() {
             data: rawQuote,
             dataType: 'json',
             success: function(data, textStatus, jqXHR) {
-                window.location.href = '/previewQuote?q=' + data._id;
+                m.route('/review/' + data.quote_id);
             }
         });
     } else {
@@ -40,7 +41,7 @@ QuoteForm.vm.submitForm = function() {
             data: rawQuote,
             dataType: 'json',
             success: function(data, textStatus, jqXHR) {
-                window.location.href = '/previewQuote?q=' + data._id;
+                m.route('/review/' + data.quote_id);
             }
         });
     }
@@ -140,6 +141,7 @@ QuoteForm.controller = function(args) {
         vm.isNewQuote = true;
         initCommon();
         vm.initializing = false;
+        m.redraw(); // TODO: is this necessary? (for the "initializing thing")
     }
 
     var initWithExistingQuote = function(rawQuote){
@@ -147,6 +149,7 @@ QuoteForm.controller = function(args) {
         vm.isNewQuote = false;
         initCommon();
         vm.initializing = false;
+        m.redraw(); // TODO: is this necessary? (for the "initializing thing")
     }
 
     var initCommon = function(){
@@ -324,6 +327,7 @@ QuoteForm.view = function(ctrl, args) {
     return m('div', [
         m('h1.title', 'ATL Order Form'),
         m('.calc.row.center.gap-5', [
+            vm.initializing ? m(".blocking", "Loading...") : undefined,
 
             // COLUMN 1: CLIENT INFO
             m('div', [
