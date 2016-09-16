@@ -18,26 +18,32 @@ const quoteSchema = new Schema({
   addressZip: String,
   phone: String,
   email: String,
+
+  selectedToolID: String,
+  selectedToolName: String,
   shape: String,
   corner: String,
-  selectedTool: String,
-  selectedToolName: String,
   toolAround: Number,
   toolAcross: Number,
   toolOverhead: Number,
+
   quantity1: Number,
   quantity2: Number,
   quantity3: Number,
   quantity4: Number,
   quantity5: Number,
+
+  numColors: Number,
   substrate: String,
   substrateMSI: Number,
   finish: String,
   finishMSI: Number,
+
   numDesigns: Number,
   costPerDesign: Number,
   margin: Number,
   prepressCharges: Number,
+
   overallCost1: {
     total: Number,
     perLabel: Number
