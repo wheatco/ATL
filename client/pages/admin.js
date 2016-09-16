@@ -70,7 +70,7 @@ var AdminPage = {
       m('.calc.column.admin-page', [
         m('h2', 'Quotes'),
         m('table', tableWithQuotes(vm.quotes(),
-          quote => { return true },
+          quote => { m.route("/quote/"+quote.quote_id) },
           quote => { window.open('/previewQuote?q=' + quote._id); })
         )
       ])

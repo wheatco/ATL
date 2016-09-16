@@ -6,12 +6,12 @@ const app = window.app;
 
 global.m = m;
 
-// mithrilify wraps each property of an object in mithrily goodness
+// These utility functions converts server json to vm-ready objects and back:
+// - MITHRILIFY wraps each property of an object in mithrily goodness
+// - DEMITHRILIFY rips away each property's mithrily veil
 // TODO: this is a general m.prop object wrapper.
 // move to somewhere general
 var mithrilify = obj => _.mapValues(obj, val => m.prop(val))
-
-// demithrilify rips away each property's mithrily veil
 var demithrilify = obj => _.mapValues(obj, val => val())
 
 var QuoteForm = {};
@@ -21,16 +21,29 @@ QuoteForm.vm = {};
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
     var rawQuote = demithrilify(vm.quoteObj);
-    console.log('test')
-    $.ajax({
-        url: '/quotes',
-        type: 'POST',
-        data: rawQuote,
-        dataType: 'json',
-        success: function(data, textStatus, jqXHR) {
-            window.location.href = '/previewQuote?q=' + data._id;
-        }
-    });
+
+    if (vm.isNewQuote) {
+        $.ajax({
+            url: '/quotes',
+            type: 'POST',
+            data: rawQuote,
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                window.location.href = '/previewQuote?q=' + data._id;
+            }
+        });
+    } else {
+        rawQuote.updatedAt = Date.now();
+        $.ajax({
+            url: '/quotes',
+            type: 'PUT',
+            data: rawQuote,
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                window.location.href = '/previewQuote?q=' + data._id;
+            }
+        });
+    }
 };
 
 QuoteForm.vm.getTools = function() {
@@ -67,7 +80,7 @@ QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
 
     var initWithNewQuote = function(){
-        //do some other stuff
+        //defaults
         var rawQuote = {
             name: '',
             addressStreet: '',
@@ -124,12 +137,14 @@ QuoteForm.controller = function(args) {
             }
         }
         vm.quoteObj = mithrilify(rawQuote);
+        vm.isNewQuote = true;
         initCommon();
         vm.initializing = false;
     }
 
     var initWithExistingQuote = function(rawQuote){
         vm.quoteObj = mithrilify(rawQuote);
+        vm.isNewQuote = false;
         initCommon();
         vm.initializing = false;
     }
@@ -585,7 +600,10 @@ QuoteForm.view = function(ctrl, args) {
                     'Quantity 5', calc.formatMoney(vm.quoteObj.overallCost5().perLabel,3) + ' per label'),
                 m('button.submit', {
                     onclick: vm.submitForm
-                }, 'Generate Quote Form'),
+                }, vm.isNewQuote ? 'Generate Quote Form' : 'Update'),
+                !vm.isNewQuote ? m('button.cancel', {
+                    onclick: () => {m.route("/admin")} // TODO: make this just click the back button? E.g. window.history.back
+                }, 'Cancel') : undefined,
             ])
         ])
     ]);
