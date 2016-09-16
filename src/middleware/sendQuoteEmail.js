@@ -22,7 +22,7 @@ module.exports = function(app) {
 
       // Render quote PDF
       var writeStream = fs.createWriteStream('views/pdfs/quote.pdf');
-      wkhtmltopdf(html, { pageSize: 'letter' }).pipe(writeStream);
+      wkhtmltopdf(html, { pageSize: 'letter' ,  marginTop: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}).pipe(writeStream);
 
       // Send
       writeStream.on('finish', function() {
