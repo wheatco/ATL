@@ -6,6 +6,7 @@ html, body{
 	width: 100%;
 	margin: 0;
 	background-color: white;
+	font-size: 95%;
 }
 
 
@@ -17,11 +18,10 @@ body{
 
 header{
 	text-align: center;
-	margin-top: 50px;
 }
 
 #logo{
-	width: 300px;
+	width: 3in;
 	display:block;
 	margin: 0 auto;
 }
@@ -35,8 +35,8 @@ table#price-table{
 }
 
 table#price-table tbody{
-	padding: 0 20px 10px 20px;
-	border: solid black 1px;
+	padding: 0 .2in .1in .2in;
+	border: solid black .1em;
 	display: block;
 }
 
