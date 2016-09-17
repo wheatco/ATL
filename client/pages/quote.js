@@ -2,68 +2,62 @@
 import $ from 'jquery';
 import m from 'mithril';
 import _ from 'lodash';
+const app = window.app;
+
+global.m = m;
+
+// These utility functions converts server json to vm-ready objects and back:
+// - MITHRILIFY wraps each property of an object in mithrily goodness
+// - DEMITHRILIFY rips away each property's mithrily veil
+// TODO: this is a general m.prop object wrapper.
+// move to somewhere general
+var mithrilify = obj => _.mapValues(obj, val => m.prop(val))
+var demithrilify = obj => _.mapValues(obj, val => val())
+
 var QuoteForm = {};
 
-//for simplicity, we use this component to namespace the model classes
 QuoteForm.vm = {};
 
+// TODO: shouldn't this be on the controller?
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
-    $.ajax({
-        url: '/quotes',
-        type: 'POST',
-        data: {
-            name: vm.name(),
-            addressStreet: vm.addressStreet(),
-            addressCity: vm.addressCity(),
-            addressState: vm.addressState(),
-            addressZip: vm.addressZip(),
-            phone: vm.phone(),
-            email: vm.email(),
-            shape: vm.shape(),
-            corner: vm.corner(),
-            selectedTool: vm.selectedTool(),
-            selectedToolName: vm.selectedTool() == 0 ? 'Custom Die' : vm.selectedToolName(),
-            toolAcross: vm.toolAcross(),
-            toolAround: vm.toolAround(),
-            toolOverhead: vm.toolOverhead(),
-            quantity1: vm.quantity1(),
-            quantity2: vm.quantity2(),
-            quantity3: vm.quantity3(),
-            quantity4: vm.quantity4(),
-            quantity5: vm.quantity5(),
-            substrate: vm.substrate(),
-            substrateMSI: vm.substrateMSI(),
-            finish: vm.finish(),
-            finishMSI: vm.finishMSI(),
-            numDesigns: vm.numDesigns(),
-            costPerDesign: vm.costPerDesign(),
-            margin: vm.margin(),
-            prepressCharges: vm.prepressCharges(),
-            overallCost1: vm.overallCost1(),
-            overallCost2: vm.overallCost2(),
-            overallCost3: vm.overallCost3(),
-            overallCost4: vm.overallCost4(),
-            overallCost5: vm.overallCost5(),
-        },
-        dataType: 'json',
-        success: function(data, textStatus, jqXHR) {
-            window.location.href = '/previewQuote?q=' + data._id;
-        }
-    });
+    var rawQuote = demithrilify(vm.quoteObj);
+
+    if (vm.isNewQuote) {
+        $.ajax({
+            url: '/quotes',
+            type: 'POST',
+            data: rawQuote,
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                m.route('/review/' + data.quote_id);
+            }
+        });
+    } else {
+        rawQuote.updatedAt = Date.now();
+        $.ajax({
+            url: '/quotes/'+rawQuote._id,
+            type: 'PUT',
+            data: rawQuote,
+            dataType: 'json',
+            success: function(data, textStatus, jqXHR) {
+                m.route('/review/' + data.quote_id);
+            }
+        });
+    }
 };
 
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    app.service('tools').find().then(tools => {
-        tools = tools.data;
+    app.service('tools').find().then(res => {
+        var tools = res.data;
         var closest = [];
         // First, filter by corner shape and size
         for (var i = 0; i < tools.length; i++) {
             var tool = tools[i];
             // Euclidean distance because why not
-            tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.toolAround(), 2));
+            tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.quoteObj.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.quoteObj.toolAround(), 2));
             closest.push(tool);
         }
         // Sort by closest
@@ -75,86 +69,132 @@ QuoteForm.vm.getTools = function() {
         // add custom tool
         closest.push({
           _id: 0,
-          name: "New/Custom Tool"
+          name: "Custom Die"
         });
         vm.tools(closest);
-    }).then(() => {
-        // vm.cornerSize(selectedCornerSize);
     });
 };
 
+
+
 QuoteForm.controller = function(args) {
     var vm = QuoteForm.vm;
-    const app = window.app;
 
-    vm.defaultMSI = {
-        'Semi Gloss AT20 - 53269': 0.41,
-        'White Bopp - 79536': 0.57,
-        'Clear Bopp - 79560': 0.59,
-        'Silver Paper - 53909': 0.69,
-        'Silver Bopp - 79248': 0.68,
-        'Paper Perm - 53272': 0.43,
-        'Matte Litho - 19958': 0.44
-    };
+    var initWithNewQuote = function(){
+        //defaults
+        var rawQuote = {
+            name: '',
+            addressStreet: '',
+            addressCity: '',
+            addressState: '',
+            addressZip: '',
+            phone: '',
+            email: '',
 
-    vm.name = m.prop('');
-    vm.addressStreet = m.prop('');
-    vm.addressCity = m.prop('');
-    vm.addressState = m.prop('');
-    vm.addressZip = m.prop('');
-    vm.phone = m.prop('');
-    vm.email = m.prop('');
+            selectedToolID: 0,
+            selectedToolName: null,
+            shape: 'Rectangle', // Rectangle, Circle, Triangle, Star
+            corner: '',// Square, Round
+            toolAround: 0,
+            toolAcross: 0,
+            toolOverhead: 0,
 
-    vm.shape = m.prop(''); // Rectangle, Circle, Triangle, Star
-    vm.corner = m.prop(''); // Square, Round
+            quantity1: 100,
+            quantity2: 0,
+            quantity3: 0,
+            quantity4: 0,
+            quantity5: 0,
 
-    // vm.cornerSizes = m.prop([
-    //     '1/3',
-    //     '1/4',
-    //     '1/8',
-    //     '1/16',
-    //     '1/32',
-    //     '1/64'
-    // ]);
-    // vm.cornerSize = m.prop('1/3');
-    vm.getTools();
-    vm.selectedTool = m.prop(0);
-    vm.selectedToolName = m.prop('Default');
-    vm.selectedToolObject = m.prop(null);
-    vm.toolAcross = m.prop(0);
-    vm.toolAround = m.prop(0);
-    vm.tools = m.prop([]);
-    vm.toolOverhead = m.prop(0);
+            numColors: 4,
+            substrate: 'Semi Gloss AT20 - 53269',
+            substrateMSI: 0.45,
+            finish: 'Laminate Gloss',
+            finishMSI: 0.20,
 
-    vm.quantity1 = m.prop(100);
-    vm.quantity2 = m.prop(0);
-    vm.quantity3 = m.prop(0);
-    vm.quantity4 = m.prop(0);
-    vm.quantity5 = m.prop(0);
+            numDesigns: 1,
+            costPerDesign: 15,
+            margin: 60,
+            prepressCharges: 0,
 
-    vm.numColors = m.prop(4)
+            overallCost1: {
+                total: 0,
+                perLabel: 0
+            },
+            overallCost2: {
+                total: 0,
+                perLabel: 0
+            },
+            overallCost3: {
+                total: 0,
+                perLabel: 0
+            },
+            overallCost4: {
+                total: 0,
+                perLabel: 0
+            },
+            overallCost5: {
+                total: 0,
+                perLabel: 0
+            }
+        }
+        vm.quoteObj = mithrilify(rawQuote);
+        vm.isNewQuote = true;
+        initCommon();
+        vm.initializing = false;
+        m.redraw(); // TODO: is this necessary? (for the "initializing thing")
+    }
 
-    vm.substrate = m.prop('White Paper');
-    vm.substrateMSI = m.prop(0.45);
-    vm.finish = m.prop('Gloss'); // TODO may be plural?
-    vm.finishMSI = m.prop(0.20);
+    var initWithExistingQuote = function(rawQuote){
+        vm.quoteObj = mithrilify(rawQuote);
+        vm.isNewQuote = false;
+        initCommon();
+        vm.initializing = false;
+        m.redraw(); // TODO: is this necessary? (for the "initializing thing")
+    }
 
-    vm.numDesigns = m.prop(1);
-    vm.costPerDesign = m.prop(15);
+    var initCommon = function(){
+        vm.defaultMSI = {
+            'Semi Gloss AT20 - 53269': 0.41,
+            'White Bopp - 79536': 0.57,
+            'Clear Bopp - 79560': 0.59,
+            'Silver Paper - 53909': 0.69,
+            'Silver Bopp - 79248': 0.68,
+            'Paper Perm - 53272': 0.43,
+            'Matte Litho - 19958': 0.44
+        };
 
-    vm.margin = m.prop(60);
+        vm.getTools();
+        vm.selectedToolObject = m.prop(null);
+        vm.tools = m.prop([]);
+    }
 
-    vm.prepressCharges = m.prop(0);
+    //TODO: replace this with a modal
+    var notify = function(text) {
+        setTimeout(function() { alert(text); }, 0);
+    }
 
-    vm.overallCost1 = m.prop(0);
-    vm.overallCost2 = m.prop(0);
-    vm.overallCost3 = m.prop(0);
-    vm.overallCost4 = m.prop(0);
-    vm.overallCost5 = m.prop(0);
+    //block the UI until we determine what to do with quoteID information
+    vm.initializing = true;
+
+    if (m.route.param("quoteID")){
+        //if we're editing an existing quote
+        var quoteNum = m.route.param("quoteID")
+        app.service('quotes').find({query:{quote_id: quoteNum }}).then( res => {
+            if (res.data.length == 0) {
+                notify("Sorry, we don't have a quote stored with Quote #"+quoteNum+". Press OK to begin a new quote.")
+                m.route("/quote")
+            } else if (res.data.length >= 2){
+                notify("We found multiple quotes with Quote #"+quoteNum+". Press OK to edit the first one, but be sure to contact support because there is an error in the database.")
+                initWithExistingQuote(res.data[0])
+            } else {
+                initWithExistingQuote(res.data[0]);
+            }
+        });
+    } else initWithNewQuote();
 
     vm.calculateForQuantity = function(quantity) {
         var applyMargin = function(num) {
-            return num / (1 - vm.margin() / 100);
+            return num / (1 - vm.quoteObj.margin() / 100);
         }
 
         var inchesInFoot = 12;
@@ -163,7 +203,7 @@ QuoteForm.controller = function(args) {
         // Hardcoded entries based on their exact job requirements and specific machine type.
         var maxImageAreaWebWidth = 11.84;
         var maxImageAreaRepeatLength = 17.70;
-        var colorsPerFrame = vm.numColors() || 4;
+        var colorsPerFrame = vm.quoteObj.numColors() || 4;
         var acrossGutter = 0.1250;
         var aroundGutter = 0.1250;
         var prepressRateHr = 25;
@@ -183,13 +223,13 @@ QuoteForm.controller = function(args) {
         var multiColorCostImpression = 0.0201;
 
         var labelsAcrossTheWeb = Math.floor(
-            maxImageAreaWebWidth / (Number(vm.toolAcross()) + acrossGutter));
+            maxImageAreaWebWidth / (Number(vm.quoteObj.toolAcross()) + acrossGutter));
         var labelsAroundTheWeb = Math.floor(
-            maxImageAreaRepeatLength / (Number(vm.toolAround()) + aroundGutter));
+            maxImageAreaRepeatLength / (Number(vm.quoteObj.toolAround()) + aroundGutter));
 
         var labelsPerFrame = labelsAcrossTheWeb * labelsAroundTheWeb;
 
-        var repeatLength = labelsAroundTheWeb * (Number(vm.toolAround()) + aroundGutter);
+        var repeatLength = labelsAroundTheWeb * (Number(vm.quoteObj.toolAround()) + aroundGutter);
 
         var productionFrames = Math.ceil(quantity / labelsPerFrame);
         var productionLinFt = productionFrames * repeatLength / inchesInFoot;
@@ -217,48 +257,48 @@ QuoteForm.controller = function(args) {
 
         var totalDigitalConsumablesCost = multiColorCostImpression * totalImpressions;
 
-        var totalSubstrateCost = vm.substrateMSI() * msi;
-        var totalFinishingCost = vm.finishMSI() * msi;
+        var totalSubstrateCost = vm.quoteObj.substrateMSI() * msi;
+        var totalFinishingCost = vm.quoteObj.finishMSI() * msi;
 
         var totalPhysicalConsumablesCost =
             totalSubstrateCost +
             totalFinishingCost;
 
         var totalExtraneousCosts =
-            (Number(vm.numDesigns()) * Number(vm.costPerDesign())) +
-            Number(vm.prepressCharges())+
-            Number(vm.toolOverhead());
+            (Number(vm.quoteObj.numDesigns()) * Number(vm.quoteObj.costPerDesign())) +
+            Number(vm.quoteObj.prepressCharges())+
+            Number(vm.quoteObj.toolOverhead());
 
         var subTotalCost = Number(totalTimeCost) +
             Number(totalDigitalConsumablesCost) +
             Number(totalPhysicalConsumablesCost)/* +
             Number(totalExtraneousCosts);*/
 
-        var debugObject = {
-            labelsAcrossTheWeb: labelsAcrossTheWeb,
-            labelsAroundTheWeb: labelsAroundTheWeb,
-            labelsPerFrame: labelsPerFrame,
-            repeatLength: repeatLength,
-            productionFrames: productionFrames,
-            productionLinFt: productionLinFt,
-            totalLinFt: totalLinFt,
-            msi: msi,
-            totalPrePressTimeCost: totalPrePressTimeCost,
-            totalPressRunMinutes: totalPressRunMinutes,
-            totalPressRunTimeCost: totalPressRunTimeCost,
-            totalFinishingMiniutes: totalFinishingMiniutes,
-            totalFinishingTimeCost: totalFinishingTimeCost,
-            totalRewindMinutes: totalRewindMinutes,
-            totalRewindTimeCost: totalRewindTimeCost,
-            totalTimeCost: totalTimeCost,
-            totalImpressions: totalImpressions,
-            totalDigitalConsumablesCost: totalDigitalConsumablesCost,
-            totalSubstrateCost: totalSubstrateCost,
-            totalFinishingCost: totalFinishingCost,
-            totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
-            totalExtraneousCosts: totalExtraneousCosts,
-            subTotalCost: subTotalCost,
-        };
+        // var debugObject = {
+        //     labelsAcrossTheWeb: labelsAcrossTheWeb,
+        //     labelsAroundTheWeb: labelsAroundTheWeb,
+        //     labelsPerFrame: labelsPerFrame,
+        //     repeatLength: repeatLength,
+        //     productionFrames: productionFrames,
+        //     productionLinFt: productionLinFt,
+        //     totalLinFt: totalLinFt,
+        //     msi: msi,
+        //     totalPrePressTimeCost: totalPrePressTimeCost,
+        //     totalPressRunMinutes: totalPressRunMinutes,
+        //     totalPressRunTimeCost: totalPressRunTimeCost,
+        //     totalFinishingMiniutes: totalFinishingMiniutes,
+        //     totalFinishingTimeCost: totalFinishingTimeCost,
+        //     totalRewindMinutes: totalRewindMinutes,
+        //     totalRewindTimeCost: totalRewindTimeCost,
+        //     totalTimeCost: totalTimeCost,
+        //     totalImpressions: totalImpressions,
+        //     totalDigitalConsumablesCost: totalDigitalConsumablesCost,
+        //     totalSubstrateCost: totalSubstrateCost,
+        //     totalFinishingCost: totalFinishingCost,
+        //     totalPhysicalConsumablesCost: totalPhysicalConsumablesCost,
+        //     totalExtraneousCosts: totalExtraneousCosts,
+        //     subTotalCost: subTotalCost,
+        // };
         // console.debug(debugObject);
 
         // calculate in margin
@@ -269,12 +309,13 @@ QuoteForm.controller = function(args) {
     };
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
+    // TODO: fix these ugly, ugly constructions
     vm.calculate = function() {
-        vm.quantity1() != 0 ? vm.overallCost1(vm.calculateForQuantity(vm.quantity1())) : vm.overallCost1({total: 0, perLabel: 0});
-        vm.quantity2() != 0 ? vm.overallCost2(vm.calculateForQuantity(vm.quantity2())) : vm.overallCost2({total: 0, perLabel: 0});
-        vm.quantity3() != 0 ? vm.overallCost3(vm.calculateForQuantity(vm.quantity3())) : vm.overallCost3({total: 0, perLabel: 0});
-        vm.quantity4() != 0 ? vm.overallCost4(vm.calculateForQuantity(vm.quantity4())) : vm.overallCost4({total: 0, perLabel: 0});
-        vm.quantity5() != 0 ? vm.overallCost5(vm.calculateForQuantity(vm.quantity5())) : vm.overallCost5({total: 0, perLabel: 0});
+        vm.quoteObj.quantity1() != 0 ? vm.quoteObj.overallCost1(vm.calculateForQuantity(vm.quoteObj.quantity1())) : vm.quoteObj.overallCost1({total: 0, perLabel: 0});
+        vm.quoteObj.quantity2() != 0 ? vm.quoteObj.overallCost2(vm.calculateForQuantity(vm.quoteObj.quantity2())) : vm.quoteObj.overallCost2({total: 0, perLabel: 0});
+        vm.quoteObj.quantity3() != 0 ? vm.quoteObj.overallCost3(vm.calculateForQuantity(vm.quoteObj.quantity3())) : vm.quoteObj.overallCost3({total: 0, perLabel: 0});
+        vm.quoteObj.quantity4() != 0 ? vm.quoteObj.overallCost4(vm.calculateForQuantity(vm.quoteObj.quantity4())) : vm.quoteObj.overallCost4({total: 0, perLabel: 0});
+        vm.quoteObj.quantity5() != 0 ? vm.quoteObj.overallCost5(vm.calculateForQuantity(vm.quoteObj.quantity5())) : vm.quoteObj.overallCost5({total: 0, perLabel: 0});
     };
 };
 
@@ -284,8 +325,9 @@ QuoteForm.view = function(ctrl, args) {
     vm.calculate();
 
     return m('div', [
-        m('h1.title', 'ATL Order Form'),
+        m('h1.title', vm.isNewQuote ? "New Quote" : "Edit Quote " + vm.quoteObj.quote_id()),
         m('.calc.row.center.gap-5', [
+            vm.initializing ? m(".blocking", "Loading...") : undefined,
 
             // COLUMN 1: CLIENT INFO
             m('div', [
@@ -295,8 +337,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'Name'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.name),
-                        value: vm.name()
+                        onchange: m.withAttr('value', vm.quoteObj.name),
+                        value: vm.quoteObj.name()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -304,8 +346,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'Address'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressStreet),
-                        value: vm.addressStreet()
+                        onchange: m.withAttr('value', vm.quoteObj.addressStreet),
+                        value: vm.quoteObj.addressStreet()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -313,8 +355,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'City'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressCity),
-                        value: vm.addressCity()
+                        onchange: m.withAttr('value', vm.quoteObj.addressCity),
+                        value: vm.quoteObj.addressCity()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -322,8 +364,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'State'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressState),
-                        value: vm.addressState()
+                        onchange: m.withAttr('value', vm.quoteObj.addressState),
+                        value: vm.quoteObj.addressState()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -331,8 +373,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'Zip Code'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.addressZip),
-                        value: vm.addressZip()
+                        onchange: m.withAttr('value', vm.quoteObj.addressZip),
+                        value: vm.quoteObj.addressZip()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -340,8 +382,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'Phone'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.phone),
-                        value: vm.phone()
+                        onchange: m.withAttr('value', vm.quoteObj.phone),
+                        value: vm.quoteObj.phone()
                     })
                 ]),
                 m('.calc-item.col.gap-2.justify', [
@@ -349,8 +391,8 @@ QuoteForm.view = function(ctrl, args) {
                         m('.label-header', 'Email'),
                     ]),
                     m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.email),
-                        value: vm.email()
+                        onchange: m.withAttr('value', vm.quoteObj.email),
+                        value: vm.quoteObj.email()
                     })
                 ])
             ]),
@@ -358,7 +400,7 @@ QuoteForm.view = function(ctrl, args) {
             m('div', [
                 m('h1', 'Printing Details'),
                 m('.label-header', 'Shape'),
-                calc.radios(vm.shape, [{
+                calc.radios(vm.quoteObj.shape, [{
                     val: 'Rectangle',
                     label: 'Rectangle',
                 }, {
@@ -373,11 +415,11 @@ QuoteForm.view = function(ctrl, args) {
                     m('input.input-text.good.input-number', {
                         type: 'Number',
                         min: 0,
-                        value: vm.toolAcross(),
+                        value: vm.quoteObj.toolAcross(),
                         onchange: function(e) {
-                            m.withAttr('value', vm.toolAcross)(e);
+                            m.withAttr('value', vm.quoteObj.toolAcross)(e);
                             vm.getTools();
-                            vm.selectedTool(0);
+                            vm.quoteObj.selectedToolID(0);
                         }
                     }),
                 ]),
@@ -388,26 +430,14 @@ QuoteForm.view = function(ctrl, args) {
                     m('input.input-text.good.input-number', {
                         type: 'Number',
                         min: 0,
-                        value: vm.toolAround(),
+                        value: vm.quoteObj.toolAround(),
                         onchange: function(e) {
-                            m.withAttr('value', vm.toolAround)(e);
+                            m.withAttr('value', vm.quoteObj.toolAround)(e);
                             vm.getTools();
-                            vm.selectedTool(0);
+                            vm.quoteObj.selectedToolID(0);
                         }
                     }),
                 ]),
-                // m('.label-header', 'Corner Size (in)'),
-                // m.component(Select2, {
-                //     data: vm.cornerSizes,
-                //     value: vm.cornerSize,
-                //     onchange: function(val) {
-                //         vm.cornerSize(val);
-                //         vm.getTools();
-                //     },
-                //     options: {
-                //       width: '100%',
-                //     }
-                // }),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
@@ -415,16 +445,16 @@ QuoteForm.view = function(ctrl, args) {
                         if (tool.acrossWeb == null) return tool.name;
                         return `${tool.acrossWeb}x${tool.aroundWeb} — ${tool.name}`;
                     },
-                    value: vm.selectedTool,
+                    value: vm.quoteObj.selectedToolID,
                     onchange: function(val) {
                     // if a tool is chosen, then look it up (again?) and
                     // pretty sure val is _id
                       if (val && val != 0) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
-                          vm.selectedToolName(tool.name);
-                          vm.toolAcross(tool.acrossWeb);
-                          vm.toolAround(tool.aroundWeb);
+                          vm.quoteObj.selectedToolName(tool.name);
+                          vm.quoteObj.toolAcross(tool.acrossWeb);
+                          vm.quoteObj.toolAround(tool.aroundWeb);
                         });
                       }
                     },
@@ -436,29 +466,29 @@ QuoteForm.view = function(ctrl, args) {
                     header: 'Tool Overhead',
                     hint: 'E.g., if you need a new die',
                     type: 'money',
-                    val: vm.toolOverhead,
+                    val: vm.quoteObj.toolOverhead,
                     range: [0, 250, 1]
                 }),
                 m('h2', 'Colors'),
                 m('.label-header', 'Number of Colors'),
-                calc.radios(vm.numColors, _.map([4,5,6,7], function(value, key) {return {val: value, label: value}}), function(){}),
+                calc.radios(vm.quoteObj.numColors, _.map([4,5,6,7], function(value, key) {return {val: value, label: value}}), function(){}),
                 m('h2', 'Paper & Finish'),
                 m('.label-header', 'Substrate'),
-                calc.radios(vm.substrate, _.map(vm.defaultMSI, function(value, key) {
+                calc.radios(vm.quoteObj.substrate, _.map(vm.defaultMSI, function(value, key) {
                     return {
                         val: key,
                         label: key
                     };
                 }), function() {
-                    vm.substrateMSI(vm.defaultMSI[vm.substrate()]);
+                    vm.quoteObj.substrateMSI(vm.defaultMSI[vm.quoteObj.substrate()]);
                 }),
                 calc.range({
                     header: 'Substrate MSI',
-                    val: vm.substrateMSI,
+                    val: vm.quoteObj.substrateMSI,
                     range: [0.0, 1.5, 0.01]
                 }),
                 m('.label-header', 'Finish'),
-                calc.radios(vm.finish, [{
+                calc.radios(vm.quoteObj.finish, [{
                     val: 'Laminate Gloss',
                     label: 'Laminate Gloss',
                 }, {
@@ -471,15 +501,15 @@ QuoteForm.view = function(ctrl, args) {
                     val: 'UV Matte',
                     label: 'UV Matte',
                 }], function() {
-                    if (vm.finish() == 'Laminate Gloss') vm.finishMSI(0.20);
-                    else if (vm.finish() == 'Laminate Matte') vm.finishMSI(0.40);
-                    else if (vm.finish() == 'UV Gloss') vm.finishMSI(0.05);
-                    else vm.finishMSI(0.05);
+                    if (vm.quoteObj.finish() == 'Laminate Gloss') vm.quoteObj.finishMSI(0.20);
+                    else if (vm.quoteObj.finish() == 'Laminate Matte') vm.quoteObj.finishMSI(0.40);
+                    else if (vm.quoteObj.finish() == 'UV Gloss') vm.finishMSI(0.05);
+                    else vm.quoteObj.finishMSI(0.05);
                 }),
                 calc.range({
                     header: 'Finish MSI',
                     // hint: 'Each additional design causes',
-                    val: vm.finishMSI,
+                    val: vm.quoteObj.finishMSI,
                     range: [0.0, 1.5, 0.01]
                 }),
             ]),
@@ -489,31 +519,31 @@ QuoteForm.view = function(ctrl, args) {
                 m('h2', 'Label Quantities'),
                 calc.range({
                     header: 'Quantity 1',
-                    val: vm.quantity1,
+                    val: vm.quoteObj.quantity1,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
                     header: 'Quantity 2',
-                    val: vm.quantity2,
+                    val: vm.quoteObj.quantity2,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
                     header: 'Quantity 3',
-                    val: vm.quantity3,
+                    val: vm.quoteObj.quantity3,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
                     header: 'Quantity 4',
-                    val: vm.quantity4,
+                    val: vm.quoteObj.quantity4,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
                     header: 'Quantity 5',
-                    val: vm.quantity5,
+                    val: vm.quoteObj.quantity5,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
@@ -521,51 +551,54 @@ QuoteForm.view = function(ctrl, args) {
                 calc.range({
                     header: 'Number of copies',
                     // hint: 'Each additional design causes',
-                    val: vm.numDesigns,
+                    val: vm.quoteObj.numDesigns,
                     range: [1, 8, 1]
                 }),
                 calc.range({
                     header: 'Cost Per Copy',
                     type: 'money',
-                    val: vm.costPerDesign,
+                    val: vm.quoteObj.costPerDesign,
                     range: [0, 100, 1]
                 }),
                 m('h2', ''),
                 calc.range({
                     header: 'Margin',
                     type: 'percent',
-                    val: vm.margin,
+                    val: vm.quoteObj.margin,
                     range: [0, 99, 1]
                 }),
                 calc.range({
                     header: 'Prepress Charges',
                     type: 'money',
-                    val: vm.prepressCharges,
+                    val: vm.quoteObj.prepressCharges,
                     range: [0, 500, 1]
                 })
             ]),
-            // COLUMN 4: RESULTS AND SUBMISSION 
+            // COLUMN 4: RESULTS AND SUBMISSION
             m('div', {class:'costs', config: stick}, [
                 m('h1','Costs'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost1().total, 2),
-                    'Quantity 1', calc.formatMoney(vm.overallCost1().perLabel,3) + ' per label'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost2().total, 2),
-                    'Quantity 2', calc.formatMoney(vm.overallCost2().perLabel,3) + ' per label'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost3().total, 2),
-                    'Quantity 3', calc.formatMoney(vm.overallCost3().perLabel,3) + ' per label'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost4().total, 2),
-                    'Quantity 4', calc.formatMoney(vm.overallCost4().perLabel,3) + ' per label'),
-                calc.resultDisplay(calc.formatMoney(vm.overallCost5().total, 2),
-                    'Quantity 5', calc.formatMoney(vm.overallCost5().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost1().total, 2),
+                    'Quantity 1', calc.formatMoney(vm.quoteObj.overallCost1().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost2().total, 2),
+                    'Quantity 2', calc.formatMoney(vm.quoteObj.overallCost2().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost3().total, 2),
+                    'Quantity 3', calc.formatMoney(vm.quoteObj.overallCost3().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost4().total, 2),
+                    'Quantity 4', calc.formatMoney(vm.quoteObj.overallCost4().perLabel,3) + ' per label'),
+                calc.resultDisplay(calc.formatMoney(vm.quoteObj.overallCost5().total, 2),
+                    'Quantity 5', calc.formatMoney(vm.quoteObj.overallCost5().perLabel,3) + ' per label'),
                 m('button.submit', {
                     onclick: vm.submitForm
-                }, 'Generate Quote Form'),
+                }, 'Save and Review'),
+                !vm.isNewQuote ? m('button.cancel', {
+                    onclick: () => {m.route("/admin")} // TODO: make this just click the back button? E.g. window.history.back
+                }, 'Cancel') : undefined,
             ])
         ])
     ]);
 };
 
-window.QuoteForm = QuoteForm;
+module.exports = QuoteForm;
 
 var stick = function(el, notInit, context) {
     if (!notInit) {
@@ -579,7 +612,7 @@ var stick = function(el, notInit, context) {
                 }
                 else {
                     stickyColumn.css('top', '0');
-                } 
+                }
             }
         });
     }

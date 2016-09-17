@@ -4,6 +4,31 @@ body {
   padding: 30px 0;
 }
 
+.blocking{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255,.8);
+  z-index: 1;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 200px;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.modal{
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255,.8);
+}
+
 /***************
   CALCULATOR BORDER
 ***************/
@@ -76,7 +101,7 @@ body {
 }
 
 /* all code fonts */
-h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link, .submit {
+h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link, .submit, .cancel {
   font-family: "Source Code Pro", Courier, monospace;
   font-size: 16px;
   margin: 0;
@@ -380,7 +405,7 @@ svg.line-chart {
   margin-top: 1em;
   width: 100%;
   font-size: 0.9em;
-  table-layout: fixed;
+  /*table-layout: fixed;*/
 }
 
 .table-header, th {
@@ -455,6 +480,10 @@ svg.line-chart {
   width: 5em;
 }
 
+.admin-page th.edit{
+  width: 3em;
+}
+
 .admin-page th.preview{
   width: 5em;
 }
@@ -473,6 +502,26 @@ svg.line-chart {
   box-shadow: none;
   border: none;
   border-radius: 2px;
+}
+
+.submit:hover{
+  background-color: rgb(18, 140, 100);
+}
+
+.cancel{
+  text-transform: uppercase;
+  margin-top: 15px;
+  padding: 8px 0px 8px 0px;
+  width: 100%;
+  color: #333;
+  background-color: #eee;
+  box-shadow: none;
+  border: none;
+  border-radius: 2px;
+}
+
+.cancel:hover{
+  background-color: #ccc;
 }
 
 .addButton {
@@ -615,4 +664,70 @@ svg.line-chart {
   -ms-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto;
+}
+
+div#review-page{
+  background-color: white;
+  padding: 1em 0;
+}
+
+div#review-page .iframe-wrapper{
+  width: 9.5in;
+  margin: 0 auto;
+  padding: .5in;
+  background-color: #777;
+  border: solid black 3px;
+  max-height: 600px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
+
+div#review-page iframe{
+  border: none;
+  box-shadow: 0 3px 10px 0px black;
+}
+
+div#review-page h1{
+  font-size: 1.5em;
+}
+
+div#review-page div.controls{
+  text-align: center;
+}
+
+div#review-page div.controls button{
+    border: solid black 2px;
+    margin: 10px;
+    padding: 10px;
+    background-color: white;
+  font-family: "Source Code Pro", Courier, monospace;
+  font-size: 12pt;
+}
+
+div#review-page div.controls button:first-of-type{
+  width: 15em;
+}
+
+div#review-page div.controls button:hover{
+    background-color: #eee;
+}
+
+div#review-page div.controls button:active{
+    background-color: #ddd;
+}
+
+div#review-page p.flash{
+  opacity: 0;
+}
+
+div#review-page p.flash.visible{
+  width: 14em;
+    margin: 0 auto;
+    border: solid red 1px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    background-color: rgba(255,0,0,.1);
+    text-align: center;
+    opacity: 1;
 }

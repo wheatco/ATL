@@ -6,14 +6,15 @@ var m = require('mithril');
 QUOTE TABLE
 **********/
 
-function tableWithQuotes(quotes, callback) {
+function tableWithQuotes(quotes, editCallback, reviewCallback) {
   var header = [
     m('tr', [
       m('th', 'ID'),
       m('th', 'Client'),
       m('th', 'Phone'),
       m('th', 'Email'),
-      m('th', {class:"preview"}, 'Review')
+      m('th.edit', 'Edit'),
+      m('th.preview', 'Review')
     ])
   ];
   var rows = []
@@ -24,10 +25,17 @@ function tableWithQuotes(quotes, callback) {
         m('td', quote.name),
         m('td', quote.phone),
         m('td.hyphenate', quote.email),
+        m('td', [
+          m('button.previewButton', {
+            onclick: function(e) {
+              editCallback(quote);
+            }
+          }, 'edit')
+        ]),
         m('td',[
           m('button.previewButton', {
             onclick: function(e) {
-              callback(quote);
+              reviewCallback(quote);
             }
           }, 'review')
         ])
@@ -43,7 +51,7 @@ function tableWithQuotes(quotes, callback) {
 MAIN PAGE
 ********/
 
-window.AdminPage = {
+var AdminPage = {
   vm: {},
   controller: function(args) {
     var vm = AdminPage.vm;
@@ -60,10 +68,13 @@ window.AdminPage = {
       m('h1.title', 'Administration'),
       m('.calc.column.admin-page', [
         m('h2', 'Quotes'),
-        m('table', tableWithQuotes(vm.quotes(), quote => {
-          window.open('/previewQuote?q=' + quote._id);
-        }))
+        m('table', tableWithQuotes(vm.quotes(),
+          quote => { m.route("/quote/"+quote.quote_id) },
+          quote => { window.open('/previewQuote?q=' + quote._id); })
+        )
       ])
     ]);
   }
 }
+
+module.exports = AdminPage
