@@ -13,7 +13,7 @@ function tableWithQuotes(quotes, editCallback, reviewCallback) {
       m('th', 'Client'),
       m('th', 'Phone'),
       m('th', 'Email'),
-      m('th', 'Edit'),
+      m('th.edit', 'Edit'),
       m('th.preview', 'Review')
     ])
   ];

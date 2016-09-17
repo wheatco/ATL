@@ -91,9 +91,9 @@ QuoteForm.controller = function(args) {
             phone: '',
             email: '',
 
-            selectedToolID: null,
+            selectedToolID: 0,
             selectedToolName: null,
-            shape: '', // Rectangle, Circle, Triangle, Star
+            shape: 'Rectangle', // Rectangle, Circle, Triangle, Star
             corner: '',// Square, Round
             toolAround: 0,
             toolAcross: 0,
@@ -105,8 +105,8 @@ QuoteForm.controller = function(args) {
             quantity4: 0,
             quantity5: 0,
 
-            numColors: 0,
-            substrate: 'White Paper',
+            numColors: 4,
+            substrate: 'Semi Gloss AT20 - 53269',
             substrateMSI: 0.45,
             finish: 'Laminate Gloss',
             finishMSI: 0.20,
