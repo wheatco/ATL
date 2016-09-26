@@ -40,7 +40,7 @@ var ToolEntry = {
     vm.name = m.prop('');
     vm.acrossWeb = m.prop(0);
     vm.aroundWeb = m.prop(0);
-    vm.shape = m.prop('Square');
+    vm.shape = m.prop('Rectangle');
     vm.cornerSize = m.prop('1/3');
   },
   controller: function(args) {
@@ -87,11 +87,11 @@ var ToolEntry = {
         m('.calc-item.col.gap-3.justify.fill-1', [
           m('.label-header', 'Shape'),
           calc.radios(vm.shape, [{
-            val: 'Square',
-            label: 'Square',
+            val: 'Rectangle',
+            label: 'Rectangle',
           }, {
-            val: 'Round',
-            label: 'Round',
+            val: 'Circle',
+            label: 'Circle',
           }]),
           m('.label-header', 'Corner Size'),
           m.component(Select2, {

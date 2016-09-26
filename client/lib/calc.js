@@ -26,7 +26,7 @@ window.calc.checkbox = function(valProp, label, hint) {
     ]);
 };
 
-window.calc.radios = function(valProp, items, customOnClick) {
+window.calc.radios = function(valProp, items, customOnClick, customOnChange) {
     // items is obj of {val, label, hint}
 
     function runCallbacks(cb) {
@@ -44,7 +44,8 @@ window.calc.radios = function(valProp, items, customOnClick) {
                 type: 'radio',
                 checked: valProp() == item.val,
                 value: item.val,
-                onclick: runCallbacks(customOnClick)
+                onclick: runCallbacks(customOnClick),
+                onchange: runCallbacks(customOnChange)
             }),
             m('span.checkbox-dot'),
             m('div.checkbox-label', [

@@ -1,7 +1,6 @@
 'use strict';
 
 const sendQuoteEmail = require('./sendQuoteEmail');
-const previewQuote = require('./previewQuote');
 
 const addQuote = require('./addQuote');
 
@@ -20,7 +19,6 @@ module.exports = function() {
   // handling middleware should go last.
   const app = this;
 
-  app.get('/preview/:quoteId', previewQuote(app));
 
   app.get('/viewQuote',
     //set default view
@@ -32,7 +30,6 @@ module.exports = function() {
     renderQuoteHTML(app),
     renderPDF(app));
 
-  app.get('/previewQuote', previewQuote(app));
   app.post('/addQuote', addQuote(app));
 
   app.post('/sendQuoteEmail', 

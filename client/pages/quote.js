@@ -305,7 +305,7 @@ QuoteForm.controller = function(args) {
         // returns [totalCost, costPerLabel]
         return {total: Number(applyMargin(subTotalCost)+Number(totalExtraneousCosts)), perLabel: Number(applyMargin(subTotalCost) / quantity)}
 
-        // return (1 + vm.margin() / 100) * totalCost;
+        // return (1 + vm.quoteObj.margin() / 100) * totalCost;
     };
 
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
@@ -406,7 +406,7 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'Circle',
                     label: 'Circle',
-                }]),
+                }], null, function() {vm.quoteObj.selectedToolID(0);}),
                 m('h2', 'Tool'),
                 m('.calc-item.col.gap-2.justify', [
                     m('div', [
@@ -453,6 +453,9 @@ QuoteForm.view = function(ctrl, args) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
                           vm.quoteObj.selectedToolName(tool.name);
+                          vm.quoteObj.shape(tool.shape);
+                          console.log(tool);
+                          vm.quoteObj.corner(tool.corner);
                           vm.quoteObj.toolAcross(tool.acrossWeb);
                           vm.quoteObj.toolAround(tool.aroundWeb);
                         });
@@ -503,7 +506,7 @@ QuoteForm.view = function(ctrl, args) {
                 }], function() {
                     if (vm.quoteObj.finish() == 'Laminate Gloss') vm.quoteObj.finishMSI(0.20);
                     else if (vm.quoteObj.finish() == 'Laminate Matte') vm.quoteObj.finishMSI(0.40);
-                    else if (vm.quoteObj.finish() == 'UV Gloss') vm.finishMSI(0.05);
+                    else if (vm.quoteObj.finish() == 'UV Gloss') vm.quoteObj.finishMSI(0.05);
                     else vm.quoteObj.finishMSI(0.05);
                 }),
                 calc.range({
