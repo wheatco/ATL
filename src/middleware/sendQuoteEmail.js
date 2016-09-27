@@ -2,6 +2,8 @@
 
 const wkhtmltopdf = require('wkhtmltopdf');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 
 function formatDate(date) {
   return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
@@ -10,8 +12,8 @@ function formatDate(date) {
 module.exports = function(app) {
   return function(req, res, next) {
 
-    // Configure mailgun
-    const mailgun = require('mailgun-js')(app.get('mailgun'));
+    // Configure nodemailer
+    var mailer = nodemailer.createTransport(smtpTransport(app.get('nodemailer')));
 
     // From retrieveQuote
     const quote = res.data;
@@ -27,15 +29,17 @@ module.exports = function(app) {
       // Send
       writeStream.on('finish', function() {
         var mailData = {
-          from: 'American Tape and Label <postmaster@sandbox90234bbf28114475b4475f6df62e30a1.mailgun.org>',
+          from: 'American Tape and Label <joeh@at-l.com>',
           to: quote.email,
           subject: 'Your Quote From ATL',
           html: `Dear ${quote.name},<br>Please see attached for your digital label quote created ${formatDate(quote.createdAt)}.<br><br>Thanks,<br>The American Tape & Label team<br>`,
-          attachment: 'views/pdfs/quote.pdf'
+          attachments: [
+            {path: 'views/pdfs/quote.pdf'}
+          ]
         };
-        mailgun.messages().send(mailData, function(err, body) {
-          if (err) {
-            console.log(err);
+        mailer.sendMail(mailData, function(error, response) {
+          if (error) {
+            console.log(error);
             res.status(500).send("Mailing error.");
           } else {
             res.send("Complete.");

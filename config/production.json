@@ -1,7 +1,7 @@
 {
-  "host": "inv-system-app.feathersjs.com",
+  "host": "localhost",
   "port": "PORT",
-  "mongodb": "MONGODB_URI",
+  "mongodb": "mongodb://localhost:27017/invSystem",
   "public": "../public/",
   "auth": {
     "token": {
@@ -12,5 +12,15 @@
   "mailgun": {
     "apiKey": "key-d64b98f2977515ff21806fbe2c27f92b",
     "domain": "sandbox90234bbf28114475b4475f6df62e30a1.mailgun.org"
+  },
+  "nodemailer": {
+    "host": "smtp.office365.com",
+    "port": "587",
+    "auth": {
+      "user": "MAIL_USER",
+      "pass": "MAIL_PASS"
+    },
+    "secureConnection": "false",
+    "tls": { "ciphers": "SSLv3" }
   }
 }

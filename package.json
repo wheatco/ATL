@@ -18,7 +18,7 @@
   "scripts": {
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
-    "start": "node init.js",
+    "start": "node init.development.js",
     "mocha": "mocha test/ --recursive"
   },
   "dependencies": {
@@ -51,6 +51,8 @@
     "mongoose": "^4.5.0",
     "mongoose-auto-increment": "^5.0.1",
     "node-sass": "^3.7.0",
+    "nodemailer": "^2.6.4",
+    "nodemailer-smtp-transport": "^2.7.2",
     "nodemon": "^1.10.2",
     "passport": "^0.3.2",
     "pug": "^2.0.0-beta3",
