@@ -18,7 +18,7 @@
   "scripts": {
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
-    "start": "node init.js",
+    "start": "node init.development.js",
     "mocha": "mocha test/ --recursive"
   },
   "dependencies": {
