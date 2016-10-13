@@ -1,7 +1,7 @@
 {
   "host": "localhost",
   "port": "PORT",
-  "mongodb": "mongodb://localhost:27017/invSystem",
+  "mongodb": "MONGODB_URI",
   "public": "../public/",
   "auth": {
     "token": {
