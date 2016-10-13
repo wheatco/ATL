@@ -29,12 +29,12 @@ module.exports = function(app) {
       // Send
       writeStream.on('finish', function() {
         var mailData = {
-          from: 'American Tape and Label <joeh@at-l.com>',
+          from: 'American Tape and Label <quotes@at-l.com>',
           to: quote.email,
           subject: 'Your Quote From ATL',
           html: `Dear ${quote.name},<br>Please see attached for your digital label quote created ${formatDate(quote.createdAt)}.<br><br>Thanks,<br>The American Tape & Label team<br>`,
           attachments: [
-            {path: 'views/pdfs/quote.pdf'}
+            { path: 'views/pdfs/quote.pdf' }
           ]
         };
         mailer.sendMail(mailData, function(error, response) {
