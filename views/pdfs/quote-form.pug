@@ -27,52 +27,53 @@ html(lang="en")
           br
           = prettyDate(createdAt)
     main.full
-      table.column.left
-        thead
-          tr
-            th Client Info
-        tbody
-          tr
-            td Proposal For:
-            td= name
-          tr
-            td Address:
-            td= addressStreet
-          tr
-            td City, St, Zip:
-            td= addressCity + ', ' + addressState + ' ' + addressZip
-          tr
-            td Telephone:
-            td= phone
-          tr
-            td Email:
-            td= email
+      div.column.left
+        table
+          thead
+            tr
+              th.row-header Client:
+              th= name
+          tbody
+            tr
+              td.row-header Address:
+              td= addressStreet
+            tr
+              td.row-header City, St, Zip:
+              td= addressCity + ', ' + addressState + ' ' + addressZip
+            tr
+              td.row-header Telephone:
+              td= phone
+            tr
+              td.row-header Email:
+              td= email
 
-      table.column.right
-        thead
-          tr
-            th Job Info
-        tbody
-          if shape
+      div.column.right
+        table
+          thead
             tr
-              td Shape:
-              td= shape
-          if corner
+              th.row-header Project:
+              th= description
+          tbody
+            if shape
+              tr
+                td.row-header Shape:
+                td= shape
+            if corner
+              tr
+                td.row-header Corner:
+                td= corner
             tr
-              td Corner:
-              td= corner
-          tr
-            td Tool:
-            td= selectedToolName
-          tr
-            td Substrate:
-            td= substrate
-          tr
-            td Finishing:
-            td= finish
-          tr
-            td Number of designs:
-            td= numDesigns
+              td.row-header Tool:
+              td= selectedToolName
+            tr
+              td.row-header Substrate:
+              td= substrate
+            tr
+              td.row-header Finishing:
+              td= finish
+            tr
+              td.row-header No. of designs:
+              td= numDesigns
 
       table.full#price-table
         thead
@@ -104,28 +105,27 @@ html(lang="en")
             if quantity5 && overallCost5.total
               td.quantity= '$'+(overallCost5.perLabel * 1000).toFixed(2)
       ul.small-column.left
-        li= 'Cost Per Design: $' + costPerDesign
         li= 'Prepress Charges: $' +prepressCharges
 
       ul.big-column.right.price-summary
         if quantity1
-          li(style="")= 'Total Label Cost for '+quantity1+' labels: $'+overallCost1.total.toFixed(2)+' ($'+overallCost1.perLabel.toFixed(3)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity1+' labels: $' + overallCost1.total.toFixed(2) + ' ($'+(overallCost1.total / quantity1).toFixed(3)+' per label)' 
         if quantity2
-          li(style="")= 'Total Label Cost for '+quantity2+' labels: $'+overallCost2.total.toFixed(2)+' ($'+overallCost2.perLabel.toFixed(3)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity2+' labels: $' + overallCost2.total.toFixed(2) + ' ($'+(overallCost2.total / quantity2).toFixed(3)+' per label)' 
         if quantity3
-          li(style="")= 'Total Label Cost for '+quantity3+' labels: $'+overallCost3.total.toFixed(2)+' ($'+overallCost3.perLabel.toFixed(3)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity3+' labels: $' + overallCost3.total.toFixed(2) + ' ($'+(overallCost3.total / quantity3).toFixed(3)+' per label)' 
         if quantity4
-          li(style="")= 'Total Label Cost for '+quantity4+' labels: $'+overallCost4.total.toFixed(2)+' ($'+overallCost4.perLabel.toFixed(3)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity4+' labels: $' + overallCost4.total.toFixed(2) + ' ($'+(overallCost4.total / quantity4).toFixed(3)+' per label)' 
         if quantity5
-          li(style="")= 'Total Label Cost for '+quantity5+' labels: $'+overallCost5.total.toFixed(2)+' ($'+overallCost5.perLabel.toFixed(3)+' per label)' 
+          li(style="")= 'Total Label Cost for '+quantity5+' labels: $' + overallCost5.total.toFixed(2) + ' ($'+(overallCost5.total / quantity5).toFixed(3)+' per label)' 
 
     footer
       h3 DISCLAIMER:
-      p Prices are based on artwork supplied by customer. Pre Press charges may apply. Prices are subject to change. An exact quote may be given upon receiving your artwork or computer disk. Quotes are valid for 30 days. All orders are subject to a 10% over/under run unless Orders are C.O.D., MASTERCARD/VISA accepted.
+      p Prices are based on artwork supplied by customer. Prepress charges may apply. Prices are subject to change. An exact quote may be given upon receiving your artwork or computer disk. Quotes are valid for 30 days. All orders are subject to a 10% over/under run unless otherwise specified. Orders are C.O.D., MASTERCARD/VISA accepted.
 
       p AT&amp;L is in no way responsible for any (written or implied) products, labor, container, or costs incurred due to incorrect printing or material deficiencies. All proofing before and after printing is the sole responsibility of the customer. Please report any discrepancies on this ticket immediately.
 
-      p Thank You.
+      p Thank you,
 
       p Joe Heguy
 

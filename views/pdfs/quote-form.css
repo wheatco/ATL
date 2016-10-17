@@ -6,7 +6,8 @@ html, body{
 	width: 100%;
 	margin: 0;
 	background-color: white;
-	font-size: 95%;
+	font-size: 110%;
+	/*font-size: 95%;*/
 }
 
 
@@ -40,14 +41,55 @@ table#price-table tbody{
 	display: block;
 }
 
+.column table{
+	border-collapse: collapse;
+	margin: 0 auto;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.column table .row-header{
+	text-align: right;
+	padding-right: 1em;
+	vertical-align: top;
+}
+
+.column table tr th{
+	font-size: larger;
+}
+
+.column table tr th:not(.row-header){
+	font-weight: normal;
+	text-align: left;
+}
+.column table thead th{
+	border-bottom: solid black 1px;
+	padding-bottom: 7px;
+}
+
+.column table tbody tr:first-child td{
+	padding-top: 7px;
+}
+
+.column table td:not(.row-header) {
+	word-wrap: break-word;
+}
+
+.column.left table .row-header{
+	width: 5em;
+}
+
 .price-summary{
 	font-weight: bold;
 }
 
 .row-header{
-	width: 100%;
 	font-weight: bold;
 }
+
+#price-table .row-header{
+	width: 100%;
+} 
 
 .quantity{
 	padding: 10px 30px 0 0;
@@ -84,12 +126,20 @@ table#price-table tbody{
 .small-column{
 	box-sizing: border-box;
 	padding: 20px;
-	width:35%;
+	width:28%;
 }
 .big-column{
 	box-sizing: border-box;
 	padding: 20px;
-	width:65%;
+	width:72%;
+}
+
+.column.left{
+	padding-right: 2em;
+}
+
+.column.right{
+	padding-left: 2em;
 }
 
 .left{
@@ -105,6 +155,17 @@ footer{
 	left:0;
 	bottom: .5in;
 	padding: 0 .5in;
+}
+
+tr.desc th{
+	font-weight: normal;
+	font-style: italic;
+	font-size: larger;
+	text-align: left;
+}
+
+footer{
+	font-size: smaller;
 }
 
 @page {
