@@ -10,7 +10,6 @@ var QuoteReviewPage = {
 		app.service('quotes').find({query:{quote_id: vm.id}}).then(function(res){
 			vm.int_id = res.data[0]._id;
 		});
-		console.log(vm.id);
 		return {
 			sendQuote : function() {
 		        var butt = $('button.send').text("Sending...").prop("disabled",true);
