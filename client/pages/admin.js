@@ -11,7 +11,7 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
     m('tr', [
       m('th', 'ID'),
       m('th', 'Client'),
-      m('th', 'Phone'),
+      m('th', 'Description'),
       m('th', 'Email'),
       m('th.edit', 'Edit'),
       m('th.edit', 'Delete'),
@@ -24,7 +24,7 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
       return m('tr', [
         m('td', quote.quote_id),
         m('td', quote.name),
-        m('td', quote.phone),
+        m('td.hyphenate', quote.description),
         m('td.hyphenate', quote.email),
         m('td', [
           m('button.previewButton', {
@@ -71,7 +71,7 @@ var AdminPage = {
       });
     }
     this.deleteQuote = quote => {
-      if (confirm('Are you sure you want to delete this quote? This action cannot be undone.')) {
+      if (confirm('Are you sure you want to delete this quote?')) {
         app.service('quotes').remove(quote._id).then(this.reloadQuotes);
       }
     }

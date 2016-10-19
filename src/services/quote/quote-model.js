@@ -18,6 +18,7 @@ const quoteSchema = new Schema({
   addressZip: String,
   phone: String,
   email: String,
+  description: String,
 
   selectedToolID: String,
   selectedToolName: String,
