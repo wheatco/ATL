@@ -147,6 +147,7 @@ QuoteForm.controller = function(args) {
 
     var initWithExistingQuote = function(rawQuote){
         vm.quoteObj = mithrilify(rawQuote);
+        if (!vm.quoteObj.description) vm.quoteObj.description = m.prop('');
         vm.isNewQuote = false;
         initCommon();
         vm.initializing = false;
