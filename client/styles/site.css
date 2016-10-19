@@ -476,12 +476,36 @@ svg.line-chart {
      background-color: rgb(24, 196, 141);
 }
 
+.admin-page {
+  width: 50em;
+}
+
+.admin-page table{
+  table-layout: fixed;
+}
+
 .admin-page th:first-child{
   width: 5em;
 }
 
+.admin-page th.client{
+  width: 6em;
+}
+
+.admin-page th.description{
+  /*width: 6em;*/
+}
+
+.admin-page th.email{
+  /*width: 6em;*/
+}
+
 .admin-page th.edit{
-  width: 3em;
+  width: 3.7em;
+}
+
+.admin-page th.delete{
+  width: 5em;
 }
 
 .admin-page th.preview{
@@ -622,9 +646,6 @@ svg.line-chart {
   font-family: "Source Code Pro", Courier, monospace;
 }
 
-.admin-page {
-  width: 40em;
-}
 
 .checklist-label {
   border-bottom-width: 0;
