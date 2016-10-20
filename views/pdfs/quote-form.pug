@@ -64,7 +64,10 @@ html(lang="en")
                 td= corner
             tr
               td.row-header Tool:
-              td= selectedToolName
+              if selectedToolName
+                td= selectedToolName
+              else
+                td Custom Tool
             tr
               td.row-header Substrate:
               td= substrate
@@ -106,6 +109,8 @@ html(lang="en")
               td.quantity= '$'+(overallCost5.perLabel * 1000).toFixed(2)
       ul.small-column.left
         li= 'Prepress Charges: $' +prepressCharges
+        if toolOverhead
+          li= 'Tool Cost: $' +toolOverhead
 
       ul.big-column.right.price-summary
         if quantity1

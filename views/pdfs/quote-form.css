@@ -55,6 +55,7 @@ table#price-table tbody{
 
 .column table tr th{
 	font-size: larger;
+	word-wrap: break-word;
 }
 
 .column table tr th:not(.row-header){

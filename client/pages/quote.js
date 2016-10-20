@@ -456,11 +456,15 @@ QuoteForm.view = function(ctrl, args) {
                           vm.selectedToolObject(tool);
                           vm.quoteObj.selectedToolName(tool.name);
                           vm.quoteObj.shape(tool.shape);
+                          console.log("hi")
                           console.log(tool);
                           vm.quoteObj.corner(tool.corner);
                           vm.quoteObj.toolAcross(tool.acrossWeb);
                           vm.quoteObj.toolAround(tool.aroundWeb);
                         });
+                      }
+                      if (val && val == 0){
+                          vm.quoteObj.selectedToolName('Custom Tool');
                       }
                     },
                     options: {
