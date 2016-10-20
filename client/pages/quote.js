@@ -397,6 +397,15 @@ QuoteForm.view = function(ctrl, args) {
                         value: vm.quoteObj.email()
                     })
                 ]),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Description'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.quoteObj.description),
+                        value: vm.quoteObj.description()
+                    })
+                ]),
             ]),
             // COLUMN 2: EQUIPMENT / PAPER / FINISH
             m('div', [
@@ -582,13 +591,6 @@ QuoteForm.view = function(ctrl, args) {
                     val: vm.quoteObj.prepressCharges,
                     range: [0, 500, 1]
                 }),
-                m('.calc-item.col.gap-2.justify', [
-                    m('h2', 'Order Description'),
-                    m('textarea.input-text.good border', {
-                        onchange: m.withAttr('value', vm.quoteObj.description),
-                        value: vm.quoteObj.description()
-                    })
-                ]),
             ]),
             // COLUMN 4: RESULTS AND SUBMISSION
             m('div', {class:'costs', config: stick}, [
