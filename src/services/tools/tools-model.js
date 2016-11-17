@@ -13,20 +13,24 @@ const toolsSchema = new Schema({
     type: String,
     required: true
   },
+  shape: {
+    type: String,
+  },
   acrossWeb: {
     type: Number,
     required: true
   },
+  spaceAcross: Number,
   aroundWeb: {
     type: Number,
     required: true
   },
-  shape: {
-    type: String,
-  },
+  spaceAround: Number,
   cornerSize: {
     type: String,
   },
+  slot: Number,
+  description: String,
   createdAt: {
     type: Date,
     'default': Date.now
