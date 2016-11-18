@@ -17,7 +17,7 @@ var ToolTable = {
     if (vm.items().length == 0) return  m('p', 'No items yet.');
     var header = m('tr', [
         m('th', 'Shape'),
-        m('th', 'Name'),
+        m('th', 'Size'),
         m('th.client', 'Across'),
         m('th.description', 'Space Across'),
         m('th.email', 'Around'),
@@ -29,7 +29,7 @@ var ToolTable = {
     var rows = vm.items().map(function(item) { 
       return m('tr', [
         m('td', item.shape),
-        m('td', item.name),
+        m('td', item.size),
         m('td', item.acrossWeb),
         m('td', item.spaceAcross),
         m('td', item.aroundWeb),
@@ -51,7 +51,7 @@ var ToolEntry = {
   vm: {},
   init: function() {
     var vm = ToolEntry.vm;
-    vm.name = m.prop('');
+    vm.size = m.prop('');
     vm.shape = m.prop('Rectangle');
     vm.acrossWeb = m.prop(0);
     vm.spaceAcross = m.prop(0);
@@ -79,14 +79,14 @@ var ToolEntry = {
     var vm = ToolEntry.vm;
     return m('.calc-item.tool-entry.col.justify', [
       m('.row.gap-4.justify', [
-        // Name and measurements
+        // Size and measurements
         m('.calc-item.col.gap-1.justify.fill-1', [
-          m('label', 'name'),
+          m('label', 'size'),
           m('input.input-text.good border', {
             type: 'text',
             placeholder: 'New tool',
-            onchange: m.withAttr('value', vm.name),
-            value: vm.name()
+            onchange: m.withAttr('value', vm.size),
+            value: vm.size()
           }),
           m('label', 'across the web (in)'),
           m('input.input-text.good border', {
@@ -158,7 +158,7 @@ var ToolEntry = {
       m('button.addButton', {
         onclick: function() {
           var tool = {
-            name: vm.name(),
+            size: vm.size(),
             shape: vm.shape(),
             acrossWeb: vm.acrossWeb(),
             spaceAcross: vm.spaceAcross(),
@@ -169,7 +169,7 @@ var ToolEntry = {
             description: vm.description()
           };
 
-          tool.name = tool.name.length ? tool.name : "No Name"
+          tool.size = tool.size.length ? tool.size : "No size"
 
           if (args.onclick) {
             args.onclick(tool);

@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const toolsSchema = new Schema({
-  name: {
+  size: {
     type: String,
     required: true
   },
