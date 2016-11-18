@@ -41,7 +41,7 @@ var ToolTable = {
         m('td', [
           m('button.previewButton', {
             onclick: function(e) {
-              if (confirm('Delete this quote?')) args.onDelete(item)
+              if (confirm('Delete this tool?')) args.onDelete(item)
             }
           }, 'delete')
         ]),
