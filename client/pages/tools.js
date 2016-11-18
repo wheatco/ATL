@@ -18,13 +18,14 @@ var ToolTable = {
     var header = m('tr', [
         m('th', 'Shape'),
         m('th', 'Name'),
-        m('th.client', 'Across'),
-        m('th.description', 'Space Across'),
-        m('th.email', 'Around'),
-        m('th.date', 'Space Around'),
-        m('th.edit', 'Corner Radius'),
-        m('th.delete', 'Slot #'),
-        m('th.preview', 'Description')
+        m('th', 'Across'),
+        m('th', 'Space Across'),
+        m('th', 'Around'),
+        m('th', 'Space Around'),
+        m('th', 'Corner Radius'),
+        m('th', 'Slot #'),
+        m('th', 'Description'),
+        m('th.delete', 'Delete')
       ])
     var rows = vm.items().map(function(item) { 
       return m('tr', [
@@ -37,6 +38,13 @@ var ToolTable = {
         m('td', item.cornerSize),
         m('td', item.slot),
         m('td', item.description),
+        m('td', [
+          m('button.previewButton', {
+            onclick: function(e) {
+              if (confirm('Delete this quote?')) args.onDelete(item)
+            }
+          }, 'delete')
+        ]),
       ])
     })
     return m('table.calc-item', [header, rows])
@@ -228,7 +236,7 @@ var ToolsPage = {
         m('div', [
           m.component(ToolTable, {
             items: vm.tools,
-            onclick: function(item) {
+            onDelete: function(item) {
               ctrl.deleteTool(item);
             }
           }),
