@@ -2,6 +2,18 @@
 
 var m = require('mithril');
 
+function printDate(d) {
+  var date
+  try{
+    date = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear()
+  }
+  catch(e){
+    date = "";
+  }
+  if (date) return date
+  else return ""
+}
+
 /**********
 QUOTE TABLE
 **********/
@@ -13,6 +25,7 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
       m('th.client', 'Client'),
       m('th.description', 'Description'),
       m('th.email', 'Email'),
+      m('th.date', 'Date'),
       m('th.edit', 'Edit'),
       m('th.delete', 'Delete'),
       m('th.preview', 'Review')
@@ -26,6 +39,7 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
         m('td.hyphenate', quote.name),
         m('td.hyphenate', quote.description),
         m('td.hyphenate', quote.email),
+        m('td', printDate(new Date(quote.createdAt))),
         m('td', [
           m('button.previewButton', {
             onclick: function(e) {

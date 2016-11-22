@@ -9,24 +9,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const toolsSchema = new Schema({
-  name: {
+  size: {
     type: String,
-    required: true
-  },
-  acrossWeb: {
-    type: Number,
-    required: true
-  },
-  aroundWeb: {
-    type: Number,
     required: true
   },
   shape: {
     type: String,
   },
+  acrossWeb: {
+    type: Number,
+    required: true
+  },
+  spaceAcross: Number,
+  aroundWeb: {
+    type: Number,
+    required: true
+  },
+  spaceAround: Number,
   cornerSize: {
     type: String,
   },
+  slot: Number,
+  description: String,
   createdAt: {
     type: Date,
     'default': Date.now

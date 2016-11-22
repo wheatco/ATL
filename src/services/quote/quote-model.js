@@ -21,7 +21,7 @@ const quoteSchema = new Schema({
   description: String,
 
   selectedToolID: String,
-  selectedToolName: String,
+  selectedToolSize: String,
   shape: String,
   corner: String,
   toolAround: Number,

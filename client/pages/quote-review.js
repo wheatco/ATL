@@ -54,6 +54,9 @@ var QuoteReviewPage = {
 				})
 			]),
 			m('.controls',[
+				m('button.return', {
+					onclick: function(){ window.open('/viewQuote?q='+vm.int_id+'&view=pdf', '_blank', 'location=no,height=570,width=520,scrollbars=no,status=yes')}
+				}, "View PDF"),
 				m('button.send', {
 					onclick: ctrl.sendQuote
 				}, 'Send Quote to Client'),
