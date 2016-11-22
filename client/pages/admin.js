@@ -5,7 +5,7 @@ var m = require('mithril');
 function printDate(d) {
   var date
   try{
-    date = d.getDate()  + "/" + (d.getMonth()+1) + "/" + d.getFullYear()
+    date = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear()
   }
   catch(e){
     date = "";
