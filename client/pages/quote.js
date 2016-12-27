@@ -47,31 +47,33 @@ QuoteForm.vm.submitForm = function() {
     }
 };
 
+
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    app.service('tools').find().then(res => {
+    app.service('tools').find({query:{shape: vm.quoteObj.shape()}}).then(res => {
         var tools = res.data;
-        var closest = [];
-        // First, filter by corner shape and size
-        for (var i = 0; i < tools.length; i++) {
-            var tool = tools[i];
-            // Euclidean distance because why not
-            tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.quoteObj.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.quoteObj.toolAround(), 2));
-            closest.push(tool);
-        }
-        // Sort by closest
-        closest.sort(function(a, b) {
-            return a.distance - b.distance;
-        });
-        // Limit to 10
-        closest = closest.slice(0, 10);
-        // add custom tool
-        closest.push({
+        // var closest = [];
+        // // First, filter by corner shape and size
+        // for (var i = 0; i < tools.length; i++) {
+        //     var tool = tools[i];
+        //     // Euclidean distance because why not
+        //     tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.quoteObj.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.quoteObj.toolAround(), 2));
+        //     closest.push(tool);
+        // }
+        // // Sort by closest
+        // closest.sort(function(a, b) {
+        //     return a.distance - b.distance;
+        // });
+        // // Limit to 10
+        // closest = closest.slice(0, 10);
+        // // add custom tool
+        // closest.push({
+        tools.push({
           _id: 0,
           name: "Custom Die"
         });
-        vm.tools(closest);
+        vm.tools(tools);
     });
 };
 
@@ -165,9 +167,9 @@ QuoteForm.controller = function(args) {
             'Matte Litho - 19958': 0.44
         };
 
-        vm.getTools();
         vm.selectedToolObject = m.prop(null);
         vm.tools = m.prop([]);
+        vm.getTools();
     }
 
     //TODO: replace this with a modal
@@ -417,44 +419,47 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'Circle',
                     label: 'Circle',
-                }], null, function() {vm.quoteObj.selectedToolID(0);}),
+                }, {
+                    val: 'Special',
+                    label: 'Special',
+                }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0);}),
                 m('h2', 'Tool'),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Across the Web'),
-                    ]),
-                    m('input.input-text.good.input-number', {
-                        type: 'Number',
-                        min: 0,
-                        value: vm.quoteObj.toolAcross(),
-                        onchange: function(e) {
-                            m.withAttr('value', vm.quoteObj.toolAcross)(e);
-                            vm.getTools();
-                            vm.quoteObj.selectedToolID(0);
-                        }
-                    }),
-                ]),
-                m('.calc-item.col.gap-2.justify', [
-                    m('div', [
-                        m('.label-header', 'Around the Web'),
-                    ]),
-                    m('input.input-text.good.input-number', {
-                        type: 'Number',
-                        min: 0,
-                        value: vm.quoteObj.toolAround(),
-                        onchange: function(e) {
-                            m.withAttr('value', vm.quoteObj.toolAround)(e);
-                            vm.getTools();
-                            vm.quoteObj.selectedToolID(0);
-                        }
-                    }),
-                ]),
+                // m('.calc-item.col.gap-2.justify', [
+                //     m('div', [
+                //         m('.label-header', 'Across the Web'),
+                //     ]),
+                //     m('input.input-text.good.input-number', {
+                //         type: 'Number',
+                //         min: 0,
+                //         value: vm.quoteObj.toolAcross(),
+                //         onchange: function(e) {
+                //             m.withAttr('value', vm.quoteObj.toolAcross)(e);
+                //             vm.getTools();
+                //             vm.quoteObj.selectedToolID(0);
+                //         }
+                //     }),
+                // ]),
+                // m('.calc-item.col.gap-2.justify', [
+                //     m('div', [
+                //         m('.label-header', 'Around the Web'),
+                //     ]),
+                //     m('input.input-text.good.input-number', {
+                //         type: 'Number',
+                //         min: 0,
+                //         value: vm.quoteObj.toolAround(),
+                //         onchange: function(e) {
+                //             m.withAttr('value', vm.quoteObj.toolAround)(e);
+                //             vm.getTools();
+                //             vm.quoteObj.selectedToolID(0);
+                //         }
+                //     }),
+                // ]),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
                     format: function(tool) {
-                        if (tool.acrossWeb == null) return tool.name;
-                        return `${tool.acrossWeb}x${tool.aroundWeb} — ${tool.name}`;
+                        if (tool.acrossWeb == null) return tool.size;
+                        return tool.size+(tool.description ? " - " + tool.description.substring(0,10) : "");
                     },
                     value: vm.quoteObj.selectedToolID,
                     onchange: function(val) {
@@ -480,6 +485,8 @@ QuoteForm.view = function(ctrl, args) {
                       width: '100%'
                     }
                 }),
+                // m('small', {style:"padding: 5px; display: "+(!!vm.toolDesc() ? "inherit" : "none")+ "; font-weight: bold; background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -3px;"},
+                //     vm.toolDesc()),
                 calc.range({
                     header: 'Tool Overhead',
                     hint: 'E.g., if you need a new die',
