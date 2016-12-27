@@ -74,6 +74,7 @@ QuoteForm.vm.getTools = function() {
           _id: 0,
           size: "Custom Die"
         });
+        tools = tools.sort();
         vm.tools(tools);
     });
 };
