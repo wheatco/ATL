@@ -22,6 +22,7 @@ QuoteForm.vm = {};
 QuoteForm.vm.submitForm = function() {
     var vm = QuoteForm.vm;
     var rawQuote = demithrilify(vm.quoteObj);
+    console.log(rawQuote);
 
     if (vm.isNewQuote) {
         $.ajax({
@@ -71,7 +72,7 @@ QuoteForm.vm.getTools = function() {
         // closest.push({
         tools.push({
           _id: 0,
-          name: "Custom Die"
+          size: "Custom Die"
         });
         vm.tools(tools);
     });
@@ -95,7 +96,7 @@ QuoteForm.controller = function(args) {
             description: '',
 
             selectedToolID: 0,
-            selectedToolName: null,
+            selectedToolSize: "", // a string
             shape: 'Rectangle', // Rectangle, Circle, Triangle, Star
             corner: '',// Square, Round
             toolAround: 0,
@@ -168,6 +169,7 @@ QuoteForm.controller = function(args) {
         };
 
         vm.selectedToolObject = m.prop(null);
+        vm.toolDesc = m.prop(); //to hold the description for display when a particular tool is selected
         vm.tools = m.prop([]);
         vm.getTools();
     }
@@ -468,17 +470,16 @@ QuoteForm.view = function(ctrl, args) {
                       if (val && val != 0) {
                         app.service('tools').get(val).then(tool => {
                           vm.selectedToolObject(tool);
-                          vm.quoteObj.selectedToolName(tool.name);
+                          vm.quoteObj.selectedToolSize(tool.size);
                           vm.quoteObj.shape(tool.shape);
-                          console.log("hi")
-                          console.log(tool);
                           vm.quoteObj.corner(tool.corner);
                           vm.quoteObj.toolAcross(tool.acrossWeb);
                           vm.quoteObj.toolAround(tool.aroundWeb);
+                          vm.toolDesc(tool.description);
                         });
                       }
                       if (val && val == 0){
-                          vm.quoteObj.selectedToolName('Custom Tool');
+                          vm.quoteObj.selectedToolSize('Custom Tool');
                       }
                     },
                     options: {

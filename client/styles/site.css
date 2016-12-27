@@ -726,9 +726,9 @@ div#review-page div.controls button{
   font-size: 12pt;
 }
 
-div#review-page div.controls button:first-of-type{
+/*div#review-page div.controls button:first-of-type{
   width: 15em;
-}
+}*/
 
 div#review-page div.controls button:hover{
     background-color: #eee;

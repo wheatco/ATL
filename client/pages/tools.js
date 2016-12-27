@@ -6,26 +6,48 @@ var m = require('mithril');
 CHECKLIST
 ********/
 
-var Checklist = {
+var ToolTable = {
   vm: {},
   controller: function(args) {
-    var vm = Checklist.vm;
+    var vm = ToolTable.vm;
     vm.items = args.items;
   },
   view: function(ctrl, args) {
-    var vm = Checklist.vm;
+    var vm = ToolTable.vm;
     if (vm.items().length == 0) return  m('p', 'No items yet.');
-    return m('.calc-item', vm.items().map(function(item) {
-      return m('div.checklist-label.middle.row', [
-        m('button.deleteButton', {
-          onclick: function(e) {
-            return args.onclick(item);
-          }
-        }, 'x'),
-        m('div.fill-2', `${item.name.toUpperCase()}`),
-        m('div', `Across: ${item.acrossWeb} Around: ${item.aroundWeb} Shape: ${item.shape} Corner: ${item.cornerSize}`)
-      ]);
-    }));
+    var header = m('tr', [
+        m('th', 'Shape'),
+        m('th', 'Size'),
+        m('th', 'Across'),
+        m('th', 'Space Across'),
+        m('th', 'Around'),
+        m('th', 'Space Around'),
+        m('th', 'Corner Radius'),
+        m('th', 'Slot #'),
+        m('th', 'Description'),
+        m('th.delete', 'Delete')
+      ])
+    var rows = vm.items().map(function(item) { 
+      return m('tr', [
+        m('td', item.shape),
+        m('td', item.size),
+        m('td', item.acrossWeb),
+        m('td', item.spaceAcross),
+        m('td', item.aroundWeb),
+        m('td', item.spaceAround),
+        m('td', item.cornerSize),
+        m('td', item.slot),
+        m('td', item.description),
+        m('td', [
+          m('button.previewButton', {
+            onclick: function(e) {
+              if (confirm('Delete this tool?')) args.onDelete(item)
+            }
+          }, 'delete')
+        ]),
+      ])
+    })
+    return m('table.calc-item', [header, rows])
   }
 };
 
@@ -37,11 +59,15 @@ var ToolEntry = {
   vm: {},
   init: function() {
     var vm = ToolEntry.vm;
-    vm.name = m.prop('');
-    vm.acrossWeb = m.prop(0);
-    vm.aroundWeb = m.prop(0);
+    vm.size = m.prop('');
     vm.shape = m.prop('Rectangle');
+    vm.acrossWeb = m.prop(0);
+    vm.spaceAcross = m.prop(0);
+    vm.aroundWeb = m.prop(0);
+    vm.spaceAround = m.prop(0);
     vm.cornerSize = m.prop('1/3');
+    vm.slot = m.prop(0);
+    vm.description = m.prop('');
   },
   controller: function(args) {
     var vm = ToolEntry.vm;
@@ -50,8 +76,10 @@ var ToolEntry = {
       '1/4',
       '1/8',
       '1/16',
+      '1/25',
       '1/32',
-      '1/64'
+      '1/64',
+      'None'
     ]);
     ToolEntry.init();
   },
@@ -59,14 +87,14 @@ var ToolEntry = {
     var vm = ToolEntry.vm;
     return m('.calc-item.tool-entry.col.justify', [
       m('.row.gap-4.justify', [
-        // Name and measurements
+        // Size and measurements
         m('.calc-item.col.gap-1.justify.fill-1', [
-          m('label', 'name'),
+          m('label', 'size'),
           m('input.input-text.good border', {
             type: 'text',
             placeholder: 'New tool',
-            onchange: m.withAttr('value', vm.name),
-            value: vm.name()
+            onchange: m.withAttr('value', vm.size),
+            value: vm.size()
           }),
           m('label', 'across the web (in)'),
           m('input.input-text.good border', {
@@ -75,12 +103,26 @@ var ToolEntry = {
             onchange: m.withAttr('value', vm.acrossWeb),
             value: vm.acrossWeb()
           }),
+          m('label', 'space across (in)'),
+          m('input.input-text.good border', {
+            type: 'number',
+            min: 0,
+            onchange: m.withAttr('value', vm.spaceAcross),
+            value: vm.spaceAcross()
+          }),
           m('label', 'around the web (in)'),
           m('input.input-text.good border', {
             type: 'number',
             min: 0,
             onchange: m.withAttr('value', vm.aroundWeb),
             value: vm.aroundWeb()
+          }),
+          m('label', 'space around (in)'),
+          m('input.input-text.good border', {
+            type: 'number',
+            min: 0,
+            onchange: m.withAttr('value', vm.spaceAround),
+            value: vm.spaceAround()
           }),
         ]),
         // Corner shape and size
@@ -92,6 +134,9 @@ var ToolEntry = {
           }, {
             val: 'Circle',
             label: 'Circle',
+          }, {
+            val: 'Special',
+            label: 'Special',
           }]),
           m('.label-header', 'Corner Size'),
           m.component(Select2, {
@@ -102,6 +147,18 @@ var ToolEntry = {
               width: '100%'
             }
           }),
+          m('.label-header', 'Slot #'),
+          m('input.input-text.good border', {
+            type: 'number',
+            min: 0,
+            onchange: m.withAttr('value', vm.slot),
+            value: vm.slot()
+          }),
+          m('.label-header', 'Description'),
+          m('textarea.input-text.good border', {
+            onchange: m.withAttr('value', vm.description),
+            value: vm.description()
+          }),
         ]),
 
       ]),
@@ -109,14 +166,18 @@ var ToolEntry = {
       m('button.addButton', {
         onclick: function() {
           var tool = {
-            name: vm.name(),
-            acrossWeb: vm.acrossWeb(),
-            aroundWeb: vm.aroundWeb(),
+            size: vm.size(),
             shape: vm.shape(),
-            cornerSize: vm.cornerSize()
+            acrossWeb: vm.acrossWeb(),
+            spaceAcross: vm.spaceAcross(),
+            aroundWeb: vm.aroundWeb(),
+            spaceAround: vm.spaceAround(),
+            cornerSize: vm.cornerSize(),
+            slot: vm.slot(),
+            description: vm.description()
           };
 
-          tool.name = tool.name.length ? tool.name : "No Name"
+          tool.size = tool.size.length ? tool.size : "No size"
 
           if (args.onclick) {
             args.onclick(tool);
@@ -173,9 +234,9 @@ var ToolsPage = {
       m('.calc.column.admin-page', [
         m('h2', 'Tools'),
         m('div', [
-          m.component(Checklist, {
+          m.component(ToolTable, {
             items: vm.tools,
-            onclick: function(item) {
+            onDelete: function(item) {
               ctrl.deleteTool(item);
             }
           }),
