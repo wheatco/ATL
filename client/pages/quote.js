@@ -74,9 +74,11 @@ QuoteForm.vm.getTools = function() {
           _id: 0,
           size: "Custom Die"
         });
-        console.log(tools);
-        tools = tools.sort();
-        console.log(tools);
+        tools = tools.sort(function(a, b){
+            if(a.size < b.size) return -1;
+            if(a.size > b.size) return 1;
+            return 0;
+        })
         vm.tools(tools);
     });
 };
