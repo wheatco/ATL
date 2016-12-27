@@ -75,7 +75,9 @@ QuoteForm.vm.getTools = function() {
           size: "Custom Die"
         });
         tools = tools.sort(function(a, b){
-            return a.size.localeCompare(b.size);
+            if(Number(a.size.split(" ")[0]) > (Number(b.size.split(" ")[0])) return 1
+            if(Number(b.size.split(" ")[0]) > (Number(a.size.split(" ")[0])) return -1
+            return 0
         })
         vm.tools(tools);
     });
