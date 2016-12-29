@@ -9,8 +9,7 @@ global.m = m;
 // These utility functions converts server json to vm-ready objects and back:
 // - MITHRILIFY wraps each property of an object in mithrily goodness
 // - DEMITHRILIFY rips away each property's mithrily veil
-// TODO: this is a general m.prop object wrapper.
-// move to somewhere general
+// TODO: this is a general m.prop object wrapper; move to somewhere general.
 var mithrilify = obj => _.mapValues(obj, val => m.prop(val))
 var demithrilify = obj => _.mapValues(obj, val => val())
 
@@ -54,6 +53,7 @@ QuoteForm.vm.getTools = function() {
     var vm = QuoteForm.vm;
     app.service('tools').find({query:{shape: vm.quoteObj.shape()}}).then(res => {
         var tools = res.data;
+        // // Old search function:
         // var closest = [];
         // // First, filter by corner shape and size
         // for (var i = 0; i < tools.length; i++) {
@@ -75,6 +75,35 @@ QuoteForm.vm.getTools = function() {
           size: "Custom Die"
         });
         tools = tools.sort(function(a, b){
+            if (a.size.indexOf("x") == -1 || b.size.indexOf("x") == -1){
+                return a.size.localeCompare(b.size);
+            }
+
+            var parseFrac = function(fracstring) {
+                var numArray = fracstring.split(" ")
+                var decVal = 0
+                for (var i = 0; i < numArray.length; i++) {
+                    if (numArray[i].indexOf("/") > -1){
+                        var num = numArray[i].split("/")[0]
+                        var denom = numArray[i].split("/")[1]
+                        decVal += num / denom
+                    } else {
+                        decVal += Number(numArray[i]);
+                    }
+                }
+                return decVal
+            }
+
+            var asize = a.size.split("x")
+            var bsize = b.size.split("x")
+            if (parseFrac(asize[0]) > parseFrac(bsize[0])) return 1
+            else if (parseFrac(asize[0]) < parseFrac(bsize[0])) return -1
+            else {
+                if (parseFrac(asize[1]) > parseFrac(bsize[1])) return 1
+                else if (parseFrac(asize[1]) < parseFrac(bsize[1])) return -1
+                return 0
+            }
+
             return a.size.localeCompare(b.size);
         })
         vm.tools(tools);
@@ -483,12 +512,24 @@ QuoteForm.view = function(ctrl, args) {
                       }
                       if (val && val == 0){
                           vm.quoteObj.selectedToolSize('Custom Tool');
+                          vm.selectedToolObject(null);
+                          //the settimeout is there to deal with a missing null check internal to Select2.
+                          setTimeout(function(){m.redraw();});
                       }
                     },
                     options: {
                       width: '100%'
                     }
                 }),
+                vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Custom Size'),
+                    ]),
+                    m('input.input-text.good border', {
+                        onchange: m.withAttr('value', vm.quoteObj.selectedToolSize),
+                        value: vm.quoteObj.selectedToolSize()
+                    })
+                ]),
                 // m('small', {style:"padding: 5px; display: "+(!!vm.toolDesc() ? "inherit" : "none")+ "; font-weight: bold; background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -3px;"},
                 //     vm.toolDesc()),
                 calc.range({
