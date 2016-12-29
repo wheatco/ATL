@@ -1,0 +1,32 @@
+{
+  "name": "ATL",
+  "scripts": {
+  },
+  "env": {
+    "BUILDPACK_URL": {
+      "required": true
+    },
+    "MAIL_PASS": {
+      "required": true
+    },
+    "MAIL_USER": {
+      "required": true
+    },
+    "MONGODB_URI": {
+      "required": true
+    },
+    "TZ": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "mongolab"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-multi.git"
+    }
+  ]
+}
