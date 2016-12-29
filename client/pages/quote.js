@@ -128,7 +128,7 @@ QuoteForm.controller = function(args) {
             description: '',
 
             selectedToolID: 0,
-            selectedToolSize: "", // a string
+            selectedToolSize: '', // a string
             shape: 'Rectangle', // Rectangle, Circle, Triangle, Star
             corner: '',// Square, Round
             toolAround: 0,
@@ -456,7 +456,7 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'Special',
                     label: 'Special',
-                }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0);}),
+                }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0); vm.selectedToolObject(null); vm.quoteObj.selectedToolSize("")}),
                 m('h2', 'Tool'),
                 // m('.calc-item.col.gap-2.justify', [
                 //     m('div', [
@@ -511,7 +511,7 @@ QuoteForm.view = function(ctrl, args) {
                         });
                       }
                       if (val && val == 0){
-                          vm.quoteObj.selectedToolSize('Custom Tool');
+                          vm.quoteObj.selectedToolSize('');
                           vm.selectedToolObject(null);
                           //the settimeout is there to deal with a missing null check internal to Select2.
                           setTimeout(function(){m.redraw();});
