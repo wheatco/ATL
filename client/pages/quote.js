@@ -13,6 +13,21 @@ global.m = m;
 var mithrilify = obj => _.mapValues(obj, val => m.prop(val))
 var demithrilify = obj => _.mapValues(obj, val => val())
 
+var parseFrac = function(fracstring) {
+    var numArray = fracstring.split(" ")
+    var decVal = 0
+    for (var i = 0; i < numArray.length; i++) {
+        if (numArray[i].indexOf("/") > -1){
+            var num = numArray[i].split("/")[0]
+            var denom = numArray[i].split("/")[1]
+            decVal += num / denom
+        } else {
+            decVal += Number(numArray[i]);
+        }
+    }
+    return decVal
+}
+
 var QuoteForm = {};
 
 QuoteForm.vm = {};
@@ -77,21 +92,6 @@ QuoteForm.vm.getTools = function() {
         tools = tools.sort(function(a, b){
             if (a.size.indexOf("x") == -1 || b.size.indexOf("x") == -1){
                 return a.size.localeCompare(b.size);
-            }
-
-            var parseFrac = function(fracstring) {
-                var numArray = fracstring.split(" ")
-                var decVal = 0
-                for (var i = 0; i < numArray.length; i++) {
-                    if (numArray[i].indexOf("/") > -1){
-                        var num = numArray[i].split("/")[0]
-                        var denom = numArray[i].split("/")[1]
-                        decVal += num / denom
-                    } else {
-                        decVal += Number(numArray[i]);
-                    }
-                }
-                return decVal
             }
 
             var asize = a.size.split("x")
@@ -492,7 +492,7 @@ QuoteForm.view = function(ctrl, args) {
                 m.component(Select2, {
                     data: vm.tools,
                     format: function(tool) {
-                        if (tool.acrossWeb == null) return tool.size;
+                        // if (tool.acrossWeb == null) return tool.size;
                         return tool.size+(tool.description ? " - " + tool.description.substring(0,10) : "");
                     },
                     value: vm.quoteObj.selectedToolID,
@@ -505,8 +505,10 @@ QuoteForm.view = function(ctrl, args) {
                           vm.quoteObj.selectedToolSize(tool.size);
                           vm.quoteObj.shape(tool.shape);
                           vm.quoteObj.corner(tool.corner);
-                          vm.quoteObj.toolAcross(tool.acrossWeb);
-                          vm.quoteObj.toolAround(tool.aroundWeb);
+                          // vm.quoteObj.toolAcross(tool.acrossWeb);
+                          // vm.quoteObj.toolAround(tool.aroundWeb);
+                          vm.quoteObj.toolAcross(parseFrac(tool.size.split("x")[0]))
+                          vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1]))
                           vm.toolDesc(tool.description);
                         });
                       }
