@@ -507,6 +507,7 @@ QuoteForm.view = function(ctrl, args) {
                           vm.quoteObj.corner(tool.corner);
                           // vm.quoteObj.toolAcross(tool.acrossWeb);
                           // vm.quoteObj.toolAround(tool.aroundWeb);
+                          // Apparently "acrossWeb" and "aroundWeb" mean "height" and "width" to Joe, and perhaps also the pricing spreadsheet? Unclear.
                           vm.quoteObj.toolAcross(parseFrac(tool.size.split("x")[0]))
                           vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1]))
                           vm.toolDesc(tool.description);
