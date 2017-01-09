@@ -62,11 +62,10 @@ QuoteForm.vm.submitForm = function() {
     }
 };
 
-
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    app.service('tools').find({query:{shape: vm.quoteObj.shape()}}).then(res => {
+    app.service('tools').find().then(res => {
         var tools = res.data;
         // // Old search function:
         // var closest = [];
@@ -200,10 +199,10 @@ QuoteForm.controller = function(args) {
             'Matte Litho - 19958': 0.44
         };
 
+        vm.getTools();
         vm.selectedToolObject = m.prop(null);
         vm.toolDesc = m.prop(); //to hold the description for display when a particular tool is selected
         vm.tools = m.prop([]);
-        vm.getTools();
     }
 
     //TODO: replace this with a modal
@@ -458,36 +457,36 @@ QuoteForm.view = function(ctrl, args) {
                     label: 'Special',
                 }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0); vm.selectedToolObject(null); vm.quoteObj.selectedToolSize("")}),
                 m('h2', 'Tool'),
-                // m('.calc-item.col.gap-2.justify', [
-                //     m('div', [
-                //         m('.label-header', 'Across the Web'),
-                //     ]),
-                //     m('input.input-text.good.input-number', {
-                //         type: 'Number',
-                //         min: 0,
-                //         value: vm.quoteObj.toolAcross(),
-                //         onchange: function(e) {
-                //             m.withAttr('value', vm.quoteObj.toolAcross)(e);
-                //             vm.getTools();
-                //             vm.quoteObj.selectedToolID(0);
-                //         }
-                //     }),
-                // ]),
-                // m('.calc-item.col.gap-2.justify', [
-                //     m('div', [
-                //         m('.label-header', 'Around the Web'),
-                //     ]),
-                //     m('input.input-text.good.input-number', {
-                //         type: 'Number',
-                //         min: 0,
-                //         value: vm.quoteObj.toolAround(),
-                //         onchange: function(e) {
-                //             m.withAttr('value', vm.quoteObj.toolAround)(e);
-                //             vm.getTools();
-                //             vm.quoteObj.selectedToolID(0);
-                //         }
-                //     }),
-                // ]),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Across the Web'),
+                    ]),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.quoteObj.toolAcross(),
+                        onchange: function(e) {
+                            m.withAttr('value', vm.quoteObj.toolAcross)(e);
+                            vm.getTools();
+                            vm.quoteObj.selectedToolID(0);
+                        }
+                    }),
+                ]),
+                m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Around the Web'),
+                    ]),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.quoteObj.toolAround(),
+                        onchange: function(e) {
+                            m.withAttr('value', vm.quoteObj.toolAround)(e);
+                            vm.getTools();
+                            vm.quoteObj.selectedToolID(0);
+                        }
+                    }),
+                ]),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
