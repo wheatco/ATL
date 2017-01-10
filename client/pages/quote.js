@@ -469,7 +469,9 @@ QuoteForm.view = function(ctrl, args) {
                     // if a tool is chosen, then look it up (again?) and
                     // pretty sure val is _id
                       if (val && val != 0) {
+                        console.log(val)
                         app.service('tools').get(val).then(tool => {
+                          console.log(tool)
                           vm.selectedToolObject(tool);
                           vm.quoteObj.selectedToolSize(tool.size);
                           vm.quoteObj.shape(tool.shape);
@@ -478,7 +480,7 @@ QuoteForm.view = function(ctrl, args) {
                           // vm.quoteObj.toolAround(tool.aroundWeb);
                           // Apparently "acrossWeb" and "aroundWeb" mean "height" and "width" to Joe, and perhaps also the pricing spreadsheet? Unclear.
                           vm.quoteObj.toolAcross(parseFrac(tool.size.split("x")[0]))
-                          vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1]))
+                          vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1] || tool.size.split("x")[0]))
                           vm.toolDesc(tool.description);
                         });
                       }
