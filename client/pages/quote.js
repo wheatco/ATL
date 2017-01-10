@@ -457,36 +457,6 @@ QuoteForm.view = function(ctrl, args) {
                     label: 'Special',
                 }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0); vm.selectedToolObject(null); vm.quoteObj.selectedToolSize("")}),
                 m('h2', 'Tool'),
-                // m('.calc-item.col.gap-2.justify', [
-                //     m('div', [
-                //         m('.label-header', 'Across the Web'),
-                //     ]),
-                //     m('input.input-text.good.input-number', {
-                //         type: 'Number',
-                //         min: 0,
-                //         value: vm.quoteObj.toolAcross(),
-                //         onchange: function(e) {
-                //             m.withAttr('value', vm.quoteObj.toolAcross)(e);
-                //             vm.getTools();
-                //             vm.quoteObj.selectedToolID(0);
-                //         }
-                //     }),
-                // ]),
-                // m('.calc-item.col.gap-2.justify', [
-                //     m('div', [
-                //         m('.label-header', 'Around the Web'),
-                //     ]),
-                //     m('input.input-text.good.input-number', {
-                //         type: 'Number',
-                //         min: 0,
-                //         value: vm.quoteObj.toolAround(),
-                //         onchange: function(e) {
-                //             m.withAttr('value', vm.quoteObj.toolAround)(e);
-                //             vm.getTools();
-                //             vm.quoteObj.selectedToolID(0);
-                //         }
-                //     }),
-                // ]),
                 m('.label-header', 'Select Tool'),
                 m.component(Select2, {
                     data: vm.tools,
@@ -523,14 +493,42 @@ QuoteForm.view = function(ctrl, args) {
                       width: '100%'
                     }
                 }),
+                // vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
+                //     m('div', [
+                //         m('.label-header', 'Custom Size'),
+                //     ]),
+                //     m('input.input-text.good border', {
+                //         onchange: m.withAttr('value', vm.quoteObj.selectedToolSize),
+                //         value: vm.quoteObj.selectedToolSize()
+                //     })
+                // ]),
                 vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
                     m('div', [
-                        m('.label-header', 'Custom Size'),
+                        m('.label-header', 'Across the Web'),
                     ]),
-                    m('input.input-text.good border', {
-                        onchange: m.withAttr('value', vm.quoteObj.selectedToolSize),
-                        value: vm.quoteObj.selectedToolSize()
-                    })
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.quoteObj.toolAcross(),
+                        onchange: function(e) {
+                            m.withAttr('value', vm.quoteObj.toolAcross)(e);
+                            vm.quoteObj.selectedToolSize("Custom " + vm.quoteObj.toolAcross()+" x "+vm.quoteObj.toolAround())
+                        }
+                    }),
+                ]),
+                vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
+                    m('div', [
+                        m('.label-header', 'Around the Web'),
+                    ]),
+                    m('input.input-text.good.input-number', {
+                        type: 'Number',
+                        min: 0,
+                        value: vm.quoteObj.toolAround(),
+                        onchange: function(e) {
+                            m.withAttr('value', vm.quoteObj.toolAround)(e);
+                            vm.quoteObj.selectedToolSize("Custom " + vm.quoteObj.toolAcross()+" x "+vm.quoteObj.toolAround())
+                        }
+                    }),
                 ]),
                 // m('small', {style:"padding: 5px; display: "+(!!vm.toolDesc() ? "inherit" : "none")+ "; font-weight: bold; background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -3px;"},
                 //     vm.toolDesc()),
