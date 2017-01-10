@@ -480,6 +480,7 @@ QuoteForm.view = function(ctrl, args) {
                           // vm.quoteObj.toolAround(tool.aroundWeb);
                           // Apparently "acrossWeb" and "aroundWeb" mean "height" and "width" to Joe, and perhaps also the pricing spreadsheet? Unclear.
                           vm.quoteObj.toolAcross(parseFrac(tool.size.split("x")[0]))
+                          // the OR below catches the case that we're dealing with a circle
                           vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1] || tool.size.split("x")[0]))
                           vm.toolDesc(tool.description);
                         });
