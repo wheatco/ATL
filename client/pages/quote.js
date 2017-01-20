@@ -9,10 +9,24 @@ global.m = m;
 // These utility functions converts server json to vm-ready objects and back:
 // - MITHRILIFY wraps each property of an object in mithrily goodness
 // - DEMITHRILIFY rips away each property's mithrily veil
-// TODO: this is a general m.prop object wrapper.
-// move to somewhere general
+// TODO: this is a general m.prop object wrapper; move to somewhere general.
 var mithrilify = obj => _.mapValues(obj, val => m.prop(val))
 var demithrilify = obj => _.mapValues(obj, val => val())
+
+var parseFrac = function(fracstring) {
+    var numArray = fracstring.split(" ")
+    var decVal = 0
+    for (var i = 0; i < numArray.length; i++) {
+        if (numArray[i].indexOf("/") > -1){
+            var num = numArray[i].split("/")[0]
+            var denom = numArray[i].split("/")[1]
+            decVal += num / denom
+        } else {
+            decVal += Number(numArray[i]);
+        }
+    }
+    return decVal
+}
 
 var QuoteForm = {};
 
@@ -51,28 +65,47 @@ QuoteForm.vm.submitForm = function() {
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
-    app.service('tools').find().then(res => {
+    app.service('tools').find({query:{shape: vm.quoteObj.shape()}}).then(res => {
         var tools = res.data;
-        var closest = [];
-        // First, filter by corner shape and size
-        for (var i = 0; i < tools.length; i++) {
-            var tool = tools[i];
-            // Euclidean distance because why not
-            tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.quoteObj.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.quoteObj.toolAround(), 2));
-            closest.push(tool);
-        }
-        // Sort by closest
-        closest.sort(function(a, b) {
-            return a.distance - b.distance;
-        });
-        // Limit to 10
-        closest = closest.slice(0, 10);
-        // add custom tool
-        closest.push({
+        // // Old search function:
+        // var closest = [];
+        // // First, filter by corner shape and size
+        // for (var i = 0; i < tools.length; i++) {
+        //     var tool = tools[i];
+        //     // Euclidean distance because why not
+        //     tool.distance = Math.sqrt(Math.pow(tool.acrossWeb - vm.quoteObj.toolAcross(), 2) + Math.pow(tool.aroundWeb - vm.quoteObj.toolAround(), 2));
+        //     closest.push(tool);
+        // }
+        // // Sort by closest
+        // closest.sort(function(a, b) {
+        //     return a.distance - b.distance;
+        // });
+        // // Limit to 10
+        // closest = closest.slice(0, 10);
+        // // add custom tool
+        // closest.push({
+        tools.push({
           _id: 0,
           size: "Custom Die"
         });
-        vm.tools(closest);
+        tools = tools.sort(function(a, b){
+            if (a.size.indexOf("x") == -1 || b.size.indexOf("x") == -1){
+                return a.size.localeCompare(b.size);
+            }
+
+            var asize = a.size.split("x")
+            var bsize = b.size.split("x")
+            if (parseFrac(asize[0]) > parseFrac(bsize[0])) return 1
+            else if (parseFrac(asize[0]) < parseFrac(bsize[0])) return -1
+            else {
+                if (parseFrac(asize[1]) > parseFrac(bsize[1])) return 1
+                else if (parseFrac(asize[1]) < parseFrac(bsize[1])) return -1
+                return 0
+            }
+
+            return a.size.localeCompare(b.size);
+        })
+        vm.tools(tools);
     });
 };
 
@@ -94,7 +127,7 @@ QuoteForm.controller = function(args) {
             description: '',
 
             selectedToolID: 0,
-            selectedToolSize: "", // a string
+            selectedToolSize: '', // a string
             shape: 'Rectangle', // Rectangle, Circle, Triangle, Star
             corner: '',// Square, Round
             toolAround: 0,
@@ -171,10 +204,10 @@ QuoteForm.controller = function(args) {
             'Matte Litho - 19958': 0.44
         };
 
-        vm.getTools();
         vm.selectedToolObject = m.prop(null);
         vm.toolDesc = m.prop(); //to hold the description for display when a particular tool is selected
         vm.tools = m.prop([]);
+        vm.getTools();
     }
 
     //TODO: replace this with a modal
@@ -424,9 +457,60 @@ QuoteForm.view = function(ctrl, args) {
                 }, {
                     val: 'Circle',
                     label: 'Circle',
-                }], null, function() {vm.quoteObj.selectedToolID(0);}),
+                }, {
+                    val: 'Special',
+                    label: 'Special',
+                }], null, function() {vm.getTools(); vm.quoteObj.selectedToolID(0); vm.selectedToolObject(null); vm.quoteObj.selectedToolSize("")}),
                 m('h2', 'Tool'),
-                m('.calc-item.col.gap-2.justify', [
+                m('.label-header', 'Select Tool'),
+                m.component(Select2, {
+                    data: vm.tools,
+                    format: function(tool) {
+                        // if (tool.acrossWeb == null) return tool.size;
+                        return tool.size+(tool.description ? " - " + tool.description.substring(0,10) : "");
+                    },
+                    value: vm.quoteObj.selectedToolID,
+                    onchange: function(val) {
+                    // if a tool is chosen, then look it up (again?) and
+                    // pretty sure val is _id
+                      if (val && val != 0) {
+                        console.log(val)
+                        app.service('tools').get(val).then(tool => {
+                          console.log(tool)
+                          vm.selectedToolObject(tool);
+                          vm.quoteObj.selectedToolSize(tool.size);
+                          vm.quoteObj.shape(tool.shape);
+                          vm.quoteObj.corner(tool.corner);
+                          // vm.quoteObj.toolAcross(tool.acrossWeb);
+                          // vm.quoteObj.toolAround(tool.aroundWeb);
+                          // Apparently "acrossWeb" and "aroundWeb" mean "height" and "width" to Joe, and perhaps also the pricing spreadsheet? Unclear.
+                          vm.quoteObj.toolAcross(parseFrac(tool.size.split("x")[0]))
+                          // the OR below catches the case that we're dealing with a circle
+                          vm.quoteObj.toolAround(parseFrac(tool.size.split("x")[1] || tool.size.split("x")[0]))
+                          vm.toolDesc(tool.description);
+                        });
+                      }
+                      if (val && val == 0){
+                          vm.quoteObj.selectedToolSize('');
+                          vm.selectedToolObject(null);
+                          //the settimeout is there to deal with a missing null check internal to Select2.
+                          setTimeout(function(){m.redraw();});
+                      }
+                    },
+                    options: {
+                      width: '100%'
+                    }
+                }),
+                // vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
+                //     m('div', [
+                //         m('.label-header', 'Custom Size'),
+                //     ]),
+                //     m('input.input-text.good border', {
+                //         onchange: m.withAttr('value', vm.quoteObj.selectedToolSize),
+                //         value: vm.quoteObj.selectedToolSize()
+                //     })
+                // ]),
+                vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
                     m('div', [
                         m('.label-header', 'Across the Web'),
                     ]),
@@ -436,12 +520,11 @@ QuoteForm.view = function(ctrl, args) {
                         value: vm.quoteObj.toolAcross(),
                         onchange: function(e) {
                             m.withAttr('value', vm.quoteObj.toolAcross)(e);
-                            vm.getTools();
-                            vm.quoteObj.selectedToolID(0);
+                            vm.quoteObj.selectedToolSize("Custom " + vm.quoteObj.toolAcross()+" x "+vm.quoteObj.toolAround())
                         }
                     }),
                 ]),
-                m('.calc-item.col.gap-2.justify', [
+                vm.selectedToolObject() ? undefined : m('.calc-item.col.gap-2.justify', [
                     m('div', [
                         m('.label-header', 'Around the Web'),
                     ]),
@@ -451,43 +534,12 @@ QuoteForm.view = function(ctrl, args) {
                         value: vm.quoteObj.toolAround(),
                         onchange: function(e) {
                             m.withAttr('value', vm.quoteObj.toolAround)(e);
-                            vm.getTools();
-                            vm.quoteObj.selectedToolID(0);
+                            vm.quoteObj.selectedToolSize("Custom " + vm.quoteObj.toolAcross()+" x "+vm.quoteObj.toolAround())
                         }
                     }),
                 ]),
-                m('.label-header', 'Select Tool'),
-                m.component(Select2, {
-                    data: vm.tools,
-                    format: function(tool) {
-                        if (tool.acrossWeb == null) return tool.size;
-                        return `${tool.size} - ${tool.acrossWeb} around, ${tool.aroundWeb} across`;
-                    },
-                    value: vm.quoteObj.selectedToolID,
-                    onchange: function(val) {
-                    // if a tool is chosen, then look it up (again?) and
-                    // pretty sure val is _id
-                      if (val && val != 0) {
-                        app.service('tools').get(val).then(tool => {
-                          vm.selectedToolObject(tool);
-                          vm.quoteObj.selectedToolSize(tool.size);
-                          vm.quoteObj.shape(tool.shape);
-                          vm.quoteObj.corner(tool.corner);
-                          vm.quoteObj.toolAcross(tool.acrossWeb);
-                          vm.quoteObj.toolAround(tool.aroundWeb);
-                          vm.toolDesc(tool.description);
-                        });
-                      }
-                      if (val && val == 0){
-                          vm.quoteObj.selectedToolSize('Custom Tool');
-                      }
-                    },
-                    options: {
-                      width: '100%'
-                    }
-                }),
-                m('small', {style:"padding: 5px; display: "+(!!vm.toolDesc() ? "inherit" : "none")+ "; font-weight: bold; background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -3px;"},
-                    vm.toolDesc()),
+                // m('small', {style:"padding: 5px; display: "+(!!vm.toolDesc() ? "inherit" : "none")+ "; font-weight: bold; background-color: lightgray; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -3px;"},
+                //     vm.toolDesc()),
                 calc.range({
                     header: 'Tool Overhead',
                     hint: 'E.g., if you need a new die',
