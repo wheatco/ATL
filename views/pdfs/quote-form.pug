@@ -26,6 +26,8 @@ html(lang="en")
           | Opened
           br
           = prettyDate(createdAt)
+          | Updated 
+          = prettyDate(updatedAt)
     main.full
       div.column.left
         table
@@ -46,7 +48,6 @@ html(lang="en")
             tr
               td.row-header Email:
               td= email
-
       div.column.right
         table
           thead
