@@ -334,8 +334,15 @@ window.calc.range = function(opts) {
         };
     }
 
+    var calcClass = ".calc-item"
+    if (header.includes("Margin")) {
+        calcClass = ".calc-item.margin-item"
+    } else {
+        calcClass = ".calc-item"
+    }
+
     // customOnInput = customOnInput ? customOnInput(rangeVal) : m.withAttr("value", rangeVal);
-    return m(".calc-item", [
+    return m(calcClass, [
         m(".range.col.justify.gap-2", [
             m(".row.gap-3.middle", [
                 m("input.range-text.good" + (opts.range ? "" : " border"), {
@@ -356,6 +363,8 @@ window.calc.range = function(opts) {
             ]),
         ])
     ]);
+
+
 };
 
 // window.calc.calc = function(inside, opts) {
