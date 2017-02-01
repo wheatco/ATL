@@ -39,6 +39,7 @@ const quoteSchema = new Schema({
   margin3: Number,
   margin4: Number,
   margin5: Number,
+  margin: Number,
 
   numColors: Number,
   substrate: String,

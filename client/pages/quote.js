@@ -145,6 +145,7 @@ QuoteForm.controller = function(args) {
             margin3: 60,
             margin4: 60,
             margin5: 60,
+            margin: 60,
 
             numColors: 4,
             substrate: 'Semi Gloss AT20 - 53269',
