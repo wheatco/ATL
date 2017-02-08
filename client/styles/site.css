@@ -61,10 +61,6 @@ body {
   bottom: 100%;
 }*/
 
-.marginCalc {
-  padding-left: 30px;
-}
-
 .calc > div{
   padding-top: 20px;
 }
@@ -105,8 +101,7 @@ body {
 }
 
 .margin-item {
-  margin-left: 30px;
-  margin-top: 7.5px;
+  margin-top: 1px;
 }
 
 /* all code fonts */
