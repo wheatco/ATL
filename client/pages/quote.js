@@ -140,6 +140,12 @@ QuoteForm.controller = function(args) {
             quantity4: 0,
             quantity5: 0,
 
+            margin1: 60,
+            margin2: 60,
+            margin3: 60,
+            margin4: 60,
+            margin5: 60,
+
             numColors: 4,
             substrate: 'Semi Gloss AT20 - 53269',
             substrateMSI: 0.45,
@@ -229,9 +235,9 @@ QuoteForm.controller = function(args) {
         });
     } else initWithNewQuote();
 
-    vm.calculateForQuantity = function(quantity) {
+    vm.calculateForQuantity = function(quantity, margin) {
         var applyMargin = function(num) {
-            return num / (1 - vm.quoteObj.margin() / 100);
+            return num / (1 - margin / 100);
         }
 
         var inchesInFoot = 12;
@@ -348,11 +354,11 @@ QuoteForm.controller = function(args) {
     // This function synthesizes the inputs into a single cost number and sets to vm.totalChildCost()
     // TODO: fix these ugly, ugly constructions
     vm.calculate = function() {
-        vm.quoteObj.quantity1() != 0 ? vm.quoteObj.overallCost1(vm.calculateForQuantity(vm.quoteObj.quantity1())) : vm.quoteObj.overallCost1({total: 0, perLabel: 0});
-        vm.quoteObj.quantity2() != 0 ? vm.quoteObj.overallCost2(vm.calculateForQuantity(vm.quoteObj.quantity2())) : vm.quoteObj.overallCost2({total: 0, perLabel: 0});
-        vm.quoteObj.quantity3() != 0 ? vm.quoteObj.overallCost3(vm.calculateForQuantity(vm.quoteObj.quantity3())) : vm.quoteObj.overallCost3({total: 0, perLabel: 0});
-        vm.quoteObj.quantity4() != 0 ? vm.quoteObj.overallCost4(vm.calculateForQuantity(vm.quoteObj.quantity4())) : vm.quoteObj.overallCost4({total: 0, perLabel: 0});
-        vm.quoteObj.quantity5() != 0 ? vm.quoteObj.overallCost5(vm.calculateForQuantity(vm.quoteObj.quantity5())) : vm.quoteObj.overallCost5({total: 0, perLabel: 0});
+        vm.quoteObj.quantity1() != 0 ? vm.quoteObj.overallCost1(vm.calculateForQuantity(vm.quoteObj.quantity1(), vm.quoteObj.margin1())) : vm.quoteObj.overallCost1({total: 0, perLabel: 0});
+        vm.quoteObj.quantity2() != 0 ? vm.quoteObj.overallCost2(vm.calculateForQuantity(vm.quoteObj.quantity2(), vm.quoteObj.margin2())) : vm.quoteObj.overallCost2({total: 0, perLabel: 0});
+        vm.quoteObj.quantity3() != 0 ? vm.quoteObj.overallCost3(vm.calculateForQuantity(vm.quoteObj.quantity3(), vm.quoteObj.margin3())) : vm.quoteObj.overallCost3({total: 0, perLabel: 0});
+        vm.quoteObj.quantity4() != 0 ? vm.quoteObj.overallCost4(vm.calculateForQuantity(vm.quoteObj.quantity4(), vm.quoteObj.margin4())) : vm.quoteObj.overallCost4({total: 0, perLabel: 0});
+        vm.quoteObj.quantity5() != 0 ? vm.quoteObj.overallCost5(vm.calculateForQuantity(vm.quoteObj.quantity5(), vm.quoteObj.margin5())) : vm.quoteObj.overallCost5({total: 0, perLabel: 0});
     };
 };
 
@@ -597,10 +603,22 @@ QuoteForm.view = function(ctrl, args) {
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
+                    header: 'Margin 1',
+                    type: 'percent',
+                    val: vm.quoteObj.margin1,
+                    range: [0, 99, 1]
+                }),
+                calc.range({
                     header: 'Quantity 2',
                     val: vm.quoteObj.quantity2,
                     type: 'number',
                     range: [0, 1000000, 100]
+                }),
+                calc.range({
+                    header: 'Margin 2',
+                    type: 'percent',
+                    val: vm.quoteObj.margin2,
+                    range: [0, 99, 1]
                 }),
                 calc.range({
                     header: 'Quantity 3',
@@ -609,16 +627,34 @@ QuoteForm.view = function(ctrl, args) {
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
+                    header: 'Margin 3',
+                    type: 'percent',
+                    val: vm.quoteObj.margin3,
+                    range: [0, 99, 1]
+                }),
+                calc.range({
                     header: 'Quantity 4',
                     val: vm.quoteObj.quantity4,
                     type: 'number',
                     range: [0, 1000000, 100]
                 }),
                 calc.range({
+                    header: 'Margin 4',
+                    type: 'percent',
+                    val: vm.quoteObj.margin4,
+                    range: [0, 99, 1]
+                }),
+                calc.range({
                     header: 'Quantity 5',
                     val: vm.quoteObj.quantity5,
                     type: 'number',
                     range: [0, 1000000, 100]
+                }),
+                calc.range({
+                    header: 'Margin 5',
+                    type: 'percent',
+                    val: vm.quoteObj.margin5,
+                    range: [0, 99, 1]
                 }),
                 m('h2', 'Copies'),
                 calc.range({
@@ -634,12 +670,6 @@ QuoteForm.view = function(ctrl, args) {
                     range: [0, 100, 1]
                 }),
                 m('h2', ''),
-                calc.range({
-                    header: 'Margin',
-                    type: 'percent',
-                    val: vm.quoteObj.margin,
-                    range: [0, 99, 1]
-                }),
                 calc.range({
                     header: 'Prepress Charges',
                     type: 'money',

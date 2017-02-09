@@ -34,6 +34,12 @@ const quoteSchema = new Schema({
   quantity4: Number,
   quantity5: Number,
 
+  margin1: Number,
+  margin2: Number,
+  margin3: Number,
+  margin4: Number,
+  margin5: Number,
+
   numColors: Number,
   substrate: String,
   substrateMSI: Number,
