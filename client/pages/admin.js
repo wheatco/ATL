@@ -20,6 +20,7 @@ QUOTE TABLE
 **********/
 
 function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
+  console.log("In tableWithQuotes: ", quotes);
   var header = [
     m('tr', [
       m('th', 'ID'),
@@ -84,7 +85,6 @@ var AdminPage = {
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
         vm.quotes(quotes.data);
-        console.log("This is the quotes: ", vm.quotes());
       });
     }
     this.deleteQuote = quote => {
