@@ -1,6 +1,7 @@
 // Mithril component for quote review
 
 var m = require('mithril');
+import $ from 'jquery';
 
 function printDate(d) {
   var date
