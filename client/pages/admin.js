@@ -83,8 +83,8 @@ var AdminPage = {
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
-        console.log("This is the quotes: ", quotes.data);
         vm.quotes(quotes.data);
+        console.log("This is the quotes: ", vm.quotes());
       });
     }
     this.deleteQuote = quote => {
@@ -96,6 +96,7 @@ var AdminPage = {
   },
   view: function(ctrl, args) {
     var vm = AdminPage.vm;
+    console.log("making admin page)")
     return m('div', [
       m('h1.title', 'Administration'),
       m('.calc.column.admin-page', [
