@@ -81,11 +81,12 @@ var AdminPage = {
   controller: function(args) {
     var vm = AdminPage.vm;
     const app = window.app;
-    // vm.quotes = m.prop([]);
+    vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
-        // vm.quotes(quotes.data);
-        vm.quotes = m.prop(quotes.data);
+        for (var i in quotes.data) {
+          vm.quotes.push(quotes.data[i])
+        }
       });
     }
     this.deleteQuote = quote => {
