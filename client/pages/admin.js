@@ -84,9 +84,8 @@ var AdminPage = {
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
-        for (var i in quotes.data) {
-          vm.quotes.push(quotes.data[i])
-        }
+        vm.quotes(quotes.data);
+        console.log("This is the quotes property of vm: ", vm.quotes());
       });
     }
     this.deleteQuote = quote => {
