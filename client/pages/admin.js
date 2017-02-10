@@ -35,6 +35,7 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
   var rows = []
   if (quotes) {
     rows = quotes.map(function(quote) {
+      console.log("this is the quote to print: ", quote);
       return m('tr', [
         m('td', quote.quote_id),
         m('td.hyphenate', quote.name),
@@ -81,17 +82,6 @@ var AdminPage = {
     const app = window.app;
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
-      // $.ajax({
-      //     url: '/quotes',
-      //     type: 'GET',
-      //     error: function (err) {
-      //         console.log(err);
-      //         $('.flash').html("Failed to retrieve quotes: " + err.responseText).addClass("visible");
-      //     },
-      //     success: function(res) {
-      //       vm.quotes(res.data)
-      //     }
-      // });
       app.service('quotes').find().then(quotes => {
         console.log("This is the quotes: ", quotes.data);
         vm.quotes(quotes.data);
