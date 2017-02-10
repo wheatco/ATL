@@ -81,20 +81,21 @@ var AdminPage = {
     const app = window.app;
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
-      $.ajax({
-          url: '/quotes',
-          type: 'GET',
-          error: function (err) {
-              console.log(err);
-              $('.flash').html("Failed to retrieve quotes: " + err.responseText).addClass("visible");
-          },
-          success: function(res) {
-            vm.quotes(res.data)
-          }
-      });
-      // app.service('quotes').find().then(quotes => {
-      //   vm.quotes(quotes.data);
+      // $.ajax({
+      //     url: '/quotes',
+      //     type: 'GET',
+      //     error: function (err) {
+      //         console.log(err);
+      //         $('.flash').html("Failed to retrieve quotes: " + err.responseText).addClass("visible");
+      //     },
+      //     success: function(res) {
+      //       vm.quotes(res.data)
+      //     }
       // });
+      app.service('quotes').find().then(quotes => {
+        console.log("This is the quotes: ", quotes.data);
+        vm.quotes(quotes.data);
+      });
     }
     this.deleteQuote = quote => {
       if (confirm('Are you sure you want to delete this quote?')) {
