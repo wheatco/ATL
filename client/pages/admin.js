@@ -1,7 +1,6 @@
 // Mithril component for quote review
 
 var m = require('mithril');
-import $ from 'jquery';
 
 function printDate(d) {
   var date
@@ -85,8 +84,8 @@ var AdminPage = {
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
         vm.quotes(quotes.data);
-        console.log("This is the quotes property of vm: ", vm.quotes());
       });
+      console.log("This is the quotes property of vm: ", vm.quotes());
     }
     this.deleteQuote = quote => {
       if (confirm('Are you sure you want to delete this quote?')) {
@@ -96,7 +95,9 @@ var AdminPage = {
     this.reloadQuotes();
   },
   view: function(ctrl, args) {
+    AdminPage.controller.reloadQuotes()
     var vm = AdminPage.vm;
+
     console.log("making admin page with these quotes: ", vm.quotes())
     return m('div', [
       m('h1.title', 'Administration'),
