@@ -84,7 +84,7 @@ var AdminPage = {
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
       app.service('quotes').find().then(quotes => {
-        vm.quotes(quotes.data);
+        vm.quotes() = quotes.data;
       });
     }
     this.deleteQuote = quote => {
