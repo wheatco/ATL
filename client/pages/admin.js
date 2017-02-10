@@ -96,7 +96,7 @@ var AdminPage = {
   },
   view: function(ctrl, args) {
     var vm = AdminPage.vm;
-    console.log("making admin page)")
+    console.log("making admin page with these quotes: ", vm.quotes())
     return m('div', [
       m('h1.title', 'Administration'),
       m('.calc.column.admin-page', [
