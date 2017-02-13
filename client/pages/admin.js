@@ -34,7 +34,6 @@ function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
   var rows = []
   if (quotes) {
     rows = quotes.map(function(quote) {
-      console.log("this is the quote to print: ", quote);
       return m('tr', [
         m('td', quote.quote_id),
         m('td.hyphenate', quote.name),
@@ -81,10 +80,8 @@ var AdminPage = {
     const app = window.app;
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
-      console.log("reloading quotes");
       app.service('quotes').find().then(quotes => {
         vm.quotes(quotes.data);
-        console.log("This is in vm.quotes: ", vm.quotes());
         m.redraw();
       });
     }
@@ -97,7 +94,6 @@ var AdminPage = {
   },
   view: function(ctrl, args) {
     var vm = AdminPage.vm;
-    console.log("making admin page with these quotes: ", vm.quotes())
     return m('div', [
       m('h1.title', 'Administration'),
       m('.calc.column.admin-page', [
