@@ -19,7 +19,6 @@ QUOTE TABLE
 **********/
 
 function tableWithQuotes(quotes, editCallback, deleteCallback, reviewCallback) {
-  console.log("In tableWithQuotes: ", quotes);
   var header = [
     m('tr', [
       m('th', 'ID'),
@@ -82,72 +81,12 @@ var AdminPage = {
     const app = window.app;
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
-      // app.service('quotes').find().then(quotes => {
-      //   vm.quotes(quotes.data);
-      // });
-    vm.quotes([{
-        "_id": "57dfeded4fa8e71d00848e23",
-        "description": "",
-        "__v": 0,
-        "prepressCharges": 0,
-        "margin": 60,
-        "costPerDesign": 15,
-        "numDesigns": 1,
-        "finishMSI": 0.2,
-        "finish": "Laminate Gloss",
-        "substrateMSI": 0.57,
-        "substrate": "White Bopp - 79536",
-        "numColors": 4,
-        "quantity5": 0,
-        "quantity4": 0,
-        "quantity3": 0,
-        "quantity2": 0,
-        "quantity1": 200,
-        "toolOverhead": 200,
-        "toolAcross": 2.5,
-        "toolAround": 2.5,
-        "corner": "",
-        "shape": "Rectangle",
-        "selectedToolID": "0",
-        "email": "joeh@at-l.com",
-        "phone": "",
-        "addressZip": "14411",
-        "addressState": "NY",
-        "addressCity": "Albion",
-        "addressStreet": "27 e bank st ",
-        "name": "joie de vivre ",
-        "quote_id": 1,
-        "selectedToolSize": "",
-        "margin1": 60,
-        "margin2": 60,
-        "margin3": 60,
-        "margin4": 60,
-        "margin5": 60,
-        "updatedAt": "2017-02-08T21:15:15.776Z",
-        "createdAt": "2016-09-19T13:53:49.458Z",
-        "overallCost5": {
-          "perLabel": 0,
-          "total": 0
-        },
-        "overallCost4": {
-          "perLabel": 0,
-          "total": 0
-        },
-        "overallCost3": {
-          "perLabel": 0,
-          "total": 0
-        },
-        "overallCost2": {
-          "perLabel": 0,
-          "total": 0
-        },
-        "overallCost1": {
-          "perLabel": 1.1554048030089894,
-          "total": 446.08096060179787
-        }
-      }]);
+      console.log("reloading quotes");
+      app.service('quotes').find().then(quotes => {
+        vm.quotes(quotes.data);
+        console.log("This is in vm.quotes: ", vm.quotes());
+      });
     }
-    console.log(vm.quotes());
     this.deleteQuote = quote => {
       if (confirm('Are you sure you want to delete this quote?')) {
         app.service('quotes').remove(quote._id).then(this.reloadQuotes);
