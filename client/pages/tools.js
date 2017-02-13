@@ -212,6 +212,7 @@ var ToolsPage = {
         // TODO: make this update automatic
         app.service('tools').find().then(tools => {
           vm.tools(tools.data);
+          m.redraw();
         });
       });
     }
