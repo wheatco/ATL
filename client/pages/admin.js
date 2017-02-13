@@ -99,7 +99,7 @@ var AdminPage = {
       m('.calc.column.admin-page', [
         m('h2', 'Quotes'),
         m('table', tableWithQuotes(vm.quotes(),
-          quote => { m.route("/quote/"+quote.quote_id) },
+          quote => { m.route('/quote/' + quote.quote_id) },
           ctrl.deleteQuote,
           quote => { m.route('/review/' + quote.quote_id) })
         )

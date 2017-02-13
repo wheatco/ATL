@@ -51,7 +51,7 @@ QuoteForm.vm.submitForm = function() {
     } else {
         rawQuote.updatedAt = Date.now();
         $.ajax({
-            url: '/quotes/'+rawQuote._id,
+            url: '/quotes/' + rawQuote._id,
             type: 'PUT',
             data: rawQuote,
             dataType: 'json',
