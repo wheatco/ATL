@@ -203,6 +203,7 @@ var ToolsPage = {
     vm.tools = m.prop([]);
     app.service('tools').find().then(tools => {
       vm.tools(tools.data);
+      m.redraw();
     });
 
     // Helpers
@@ -212,7 +213,6 @@ var ToolsPage = {
         // TODO: make this update automatic
         app.service('tools').find().then(tools => {
           vm.tools(tools.data);
-          m.redraw();
         });
       });
     }
