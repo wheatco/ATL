@@ -65,6 +65,7 @@ QuoteForm.vm.submitForm = function() {
 QuoteForm.vm.getTools = function() {
     // TODO: make this a mongo query?
     var vm = QuoteForm.vm;
+    console.log("Finding die for shape:", vm.quoteObj.shape());
     app.service('tools').find({query:{shape: vm.quoteObj.shape()}}).then(res => {
         var tools = res.data;
         // // Old search function:
@@ -105,6 +106,7 @@ QuoteForm.vm.getTools = function() {
 
             return a.size.localeCompare(b.size);
         })
+        console.log("These are the tools to be displayed: ", tools);
         vm.tools(tools);
     });
 };
