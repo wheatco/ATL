@@ -108,6 +108,7 @@ QuoteForm.vm.getTools = function() {
         })
         console.log("These are the tools to be displayed: ", tools);
         vm.tools(tools);
+        m.redraw();
     });
 };
 
