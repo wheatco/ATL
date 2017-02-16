@@ -100,6 +100,10 @@ body {
   margin-top: 15px;
 }
 
+.margin-item {
+  margin-top: 1px;
+}
+
 /* all code fonts */
 h1, h2, h3, .checkbox-label>strong, .range-header, .calc-total, .range-text, .input-text, .legend, .table-header, .result-text, .table-expand-link, .table-collapse-link, .submit, .cancel {
   font-family: "Source Code Pro", Courier, monospace;
