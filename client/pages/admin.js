@@ -80,7 +80,7 @@ var AdminPage = {
     const app = window.app;
     vm.quotes = m.prop([]);
     this.reloadQuotes = () => {
-      app.service('quotes').find().then(quotes => {
+      app.service('quotes').find({$sort: { name: 1}}).then(quotes => {
         vm.quotes(quotes.data);
         m.redraw();
       });
