@@ -12,7 +12,8 @@ module.exports = function() {
     paginate: {
       default: 1000,
       max: 1000
-    }
+    },
+    sort: { name: 1, createdAt: 1}
   };
 
   // Initialize our service with any options it requires
